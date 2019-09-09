@@ -118,7 +118,7 @@ $ sudo docker-compose run kong kong migrations bootstrap
 
 ##### 三、配置Kong
 
-输入http://ip:9000进入kong_dashboard的界面，注册账号密码
+输入http://ip:9000 进入kong_dashboard的界面，注册账号密码
 
 ```yml
 username: admin
