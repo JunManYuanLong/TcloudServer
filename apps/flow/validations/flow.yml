@@ -1,0 +1,152 @@
+flow_create:
+  name:
+    required: True
+    type: basestring
+  flow_type:
+    required: True
+    type: int
+  requirement_list:
+    type: basestring
+  flow_assemble_id:
+    required: True
+    type: int
+  priority:
+    type: int
+  project_id:
+    type: int
+  version_id:
+    type: int
+  creator:
+    type: int
+  user_dev:
+    required: True
+    type: list
+  user_prod:
+    required: True
+    type: list
+  user_test:
+    required: True
+    type: list
+  user_owner:
+    required: True
+    type: list
+  action:
+    type: basestring
+  weight:
+    type: int
+  comment:
+    type: basestring
+  platform:
+    # TODO 正式版本需要解除注释
+#    required: True
+    type: list
+  dependence:
+    type: basestring
+  returnvalue:
+    - name
+    - flow_type
+    - requirement_list
+    - flow_assemble_id
+    - priority
+    - project_id
+    - version_id
+    - creator
+    - user_dev
+    - user_prod
+    - user_test
+    - user_owner
+    - action
+    - weight
+    - comment
+    - platform
+    - dependence
+
+flow_modify:
+  name:
+    required: True
+    type: basestring
+  priority:
+    type: int
+  user_dev:
+    required: True
+    type: list
+  user_prod:
+    required: True
+    type: list
+  user_test:
+    required: True
+    type: list
+  user_owner:
+    required: True
+    type: list
+  weight:
+    type: int
+  comment:
+    type: basestring
+  dependence:
+    type: basestring
+  returnvalue:
+    - name
+    - priority
+    - user_dev
+    - user_prod
+    - user_test
+    - user_owner
+    - weight
+    - comment
+    - dependence
+
+flow_next:
+  id:
+    required: True
+    type: int
+  name:
+    type: basestring
+  result:
+    required: True
+    type: basestring
+  comment:
+    type: basestring
+  returnvalue:
+    - id
+    - name
+    - result
+    - comment
+
+flowdashboard:
+  project_id:
+    required: True
+    type: int
+  start_date:
+    required: True
+    type: basestring
+  end_date:
+    required: True
+    type: basestring
+  returnvalue:
+    - project_id
+    - start_date
+    - end_date
+
+flowsource:
+  project_id:
+    required: True
+    type: int
+  user_ids:
+    required: True
+    type: basestring
+  returnvalue:
+    - project_id
+    - user_ids
+
+
+getflowsource:
+  project_id:
+    required: True
+    type: int
+  user_id:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+    - user_id

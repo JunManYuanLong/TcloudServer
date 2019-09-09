@@ -1,0 +1,6 @@
+jobs_get:
+  test:
+    type: basestring
+
+  returnvalue:
+    test

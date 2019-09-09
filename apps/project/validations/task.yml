@@ -1,0 +1,283 @@
+task_create:
+  name:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  tmethod:
+    type: basestring
+  ttype:
+    type: basestring
+  creator:
+    type: int
+  executor:
+    type: int
+  start_time:
+    type: basestring
+  end_time:
+    type: basestring
+  project_id:
+    type: int
+  version:
+    required: True
+    type: int
+  priority:
+    required: True
+    type: int
+  case_list:
+    required: True
+    type: list
+  testreport:
+    type: basestring
+  attach:
+    type: basestring
+  tag:
+    type: basestring
+  attachment:
+    type: basestring
+
+  returnvalue:
+    - name
+    - description
+    - tmethod
+    - ttype
+    - creator
+    - executor
+    - start_time
+    - end_time
+    - priority
+    - project_id
+    - version
+    - case_list
+    - testreport
+    - attach
+    - tag
+    - attachment
+
+task_modify:
+  name:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  tmethod:
+    type: basestring
+  ttype:
+    type: basestring
+  executor:
+    type: int
+  start_time:
+    type: basestring
+  end_time:
+    type: basestring
+  priority:
+    required: True
+    type: int
+  case_list:
+    required: True
+    type: list
+  testreport:
+    type: basestring
+  attach:
+    type: basestring
+  tag:
+    type: basestring
+  attachment:
+    type: basestring
+    
+  returnvalue:
+    - name
+    - description
+    - tmethod
+    - ttype
+    - executor
+    - start_time
+    - end_time
+    - priority
+    - case_list
+    - testreport
+    - attach
+    - tag
+    - attachment
+
+
+task_case_modify:
+  module_id:
+    required: True
+    type: int
+  project_id:
+    type: int
+  version:
+    required: True
+    type: int
+  executor:
+    type: int
+  exe_way:
+    type: int
+  ctype:
+    type: basestring
+  title:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  precondition:
+    type: basestring
+  step_result:
+    type: basestring
+  is_auto:
+    type: int
+  status:
+    type: int
+  comment:
+    type: basestring
+  priority:
+    type: int
+  returnvalue:
+    - module_id
+    - project_id
+    - version
+    - executor
+    - exe_way
+    - ctype
+    - title
+    - description
+    - precondition
+    - step_result
+    - is_auto
+    - status
+    - comment
+    - priority
+
+task_board:
+  user:
+    type: int
+  start_time:
+    type: basestring
+  end_time:
+    type: basestring
+  project_id:
+    type: int
+  version:
+    type: int
+  returnvalue:
+    - user
+    - start_time
+    - end_time
+    - project_id
+    - version
+
+task_case_board:
+  user:
+    type: int
+  task_id:
+    type: int
+  project_id:
+    type: int
+  version:
+    type: int
+  returnvalue:
+    - user
+    - task_id
+    - project_id
+    - version
+
+task_status:
+  status:
+    required: True
+    type: int
+  returnvalue:
+    - status
+
+task_testreport:
+  testreport:
+    required: True
+    type: basestring
+  attach:
+    type: basestring
+  returnvalue:
+    - testreport
+    - attach
+
+assign_task_case:
+  project_id:
+    required: True
+    type: int
+  case_list:
+    required: True
+    type: list
+  handler:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+    - case_list
+    - handler
+
+case_relation_issue:
+  task_case_id:
+    required: True
+    type: int
+  issue_id:
+    required: True
+    type: int
+  returnvalue:
+    - task_case_id
+    - issue_id
+
+priority_batch_switch:
+  project_id:
+    required: True
+    type: int
+  priority:
+    required: True
+    type: int
+  case_list:
+    required: True
+    type: list
+  returnvalue:
+    - project_id
+    - case_list
+    - priority
+
+taskupdatetag:
+  tag:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+    type: int
+  description:
+    type: basestring
+  tag_type:
+    type: basestring
+  returnvalue:
+    - tag
+    - project_id
+    - description
+    - tag_type
+
+taskgaintag:
+  project_id:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+
+task_priority:
+  priority:
+    required: True
+    type: int
+  returnvalue:
+    - priority
+
+taskcase_export:
+  project_id:
+    required: True
+    type: int
+  task_id:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+    - task_id

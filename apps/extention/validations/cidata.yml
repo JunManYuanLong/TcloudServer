@@ -1,0 +1,29 @@
+cidatarunandreport:
+  project_id:
+    required: True
+    type: int
+  run_list:
+    required: True
+    type: list
+  returnvalue:
+    - project_id
+    - run_list
+
+#cidatareport:
+#  project_id:
+#    required: True
+#    type: int
+#  run_list:
+#    required: True
+#    type: list
+#  returnvalue:
+#    - project_id
+#    - run_list
+    
+configinfo:
+  project_id:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+

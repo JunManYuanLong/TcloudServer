@@ -1,0 +1,195 @@
+phone_create:
+  name:
+    required: True
+    type: basestring
+  asset_id:
+    required: True
+    type: basestring
+  vendor:
+    required: True
+    type: basestring
+  device_number:
+    required: True
+    type: basestring
+  os:
+    required: True
+    type: basestring
+  cpu:
+    required: True
+    type: basestring
+  core:
+    required: True
+    type: int
+  ram:
+    required: True
+    type: int
+  rom:
+    required: True
+    type: int
+  resolution:
+    required: True
+    type: basestring
+  buy_date:
+    required: True
+    type: basestring
+  region:
+    required: True
+    type: basestring
+  borrow_id:
+    required: True
+    type: int
+  creator_id:
+    type: int
+    required: True
+  device_source:
+    required: True
+    type: basestring
+  device_belong:
+    required: True
+    type: basestring
+
+  returnvalue:
+    - name
+    - asset_id
+    - vendor
+    - device_number
+    - os
+    - cpu
+    - core
+    - ram
+    - rom
+    - resolution
+    - buy_date
+    - region
+    - borrow_id
+    - device_source
+    - device_belong
+    - creator_id
+
+phone_update:
+  name:
+    required: True
+    type: basestring
+  asset_id:
+    required: True
+    type: basestring
+  vendor:
+    required: True
+    type: basestring
+  device_number:
+    required: True
+    type: basestring
+  os:
+    required: True
+    type: basestring
+  cpu:
+    required: True
+    type: basestring
+  core:
+    required: True
+    type: int
+  ram:
+    required: True
+    type: int
+  rom:
+    required: True
+    type: int
+  resolution:
+    required: True
+    type: basestring
+  buy_date:
+    required: True
+    type: basestring
+  region:
+    required: True
+    type: basestring
+  borrow_id:
+    required: True
+    type: int
+  creator_id:
+    type: int
+    required: True
+  device_source:
+    required: True
+    type: basestring
+  device_belong:
+    required: True
+    type: basestring
+
+  returnvalue:
+    - name
+    - asset_id
+    - vendor
+    - device_number
+    - os
+    - cpu
+    - core
+    - ram
+    - rom
+    - resolution
+    - buy_date
+    - region
+    - borrow_id
+    - device_source
+    - device_belong
+    - creator_id
+
+phone_move:
+  borrow_id:
+    required: True
+    type: int
+
+  returnvalue:
+    - borrow_id
+
+virtual_asset_create:
+  asset_id:
+    required: True
+    type: basestring
+  passwd:
+    type: basestring
+  administrator:
+    type: basestring
+  bind_tel:
+    type: basestring
+  idcard:
+    type: basestring
+  asset_type:
+    required: True
+    type: int
+  operator:
+    type: basestring
+  returnvalue:
+    - asset_id
+    - passwd
+    - administrator
+    - bind_tel
+    - idcard
+    - asset_type
+    - operator
+
+virtual_asset_update:
+  asset_id:
+    required: True
+    type: basestring
+  passwd:
+    type: basestring
+  administrator:
+    type: basestring
+  bind_tel:
+    type: basestring
+  idcard:
+    type: basestring
+  asset_type:
+    required: True
+    type: int
+  operator:
+    type: basestring
+  returnvalue:
+    - asset_id
+    - passwd
+    - administrator
+    - bind_tel
+    - idcard
+    - asset_type
+    - operator

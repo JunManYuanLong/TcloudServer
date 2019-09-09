@@ -1,0 +1,53 @@
+addinterfaceproject:
+  name:
+    required: True
+    type: basestring
+  host:
+    type: basestring
+  host_two:
+    type: basestring
+  host_three:
+    type: basestring
+  host_four:
+    type: basestring
+  principal:
+    type: basestring
+  variables:
+    type: basestring
+  headers:
+    type: basestring
+  description:
+    type: basestring
+  returnvalue:
+    - name
+    - host
+    - host_two
+    - host_three
+    - host_four
+    - principal
+    - variables
+    - headers
+    - description
+
+
+modifyinterfaceproject:
+  name:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  weight:
+    type: int
+  returnvalue:
+    - name
+    - description
+    - weight
+
+interfaceprojectbindusers:
+  project_id:
+    type: int
+  user_ids:
+    type: list
+  returnvalue:
+    - project_id
+    - user_ids

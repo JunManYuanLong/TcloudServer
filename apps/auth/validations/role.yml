@@ -1,0 +1,38 @@
+addrole:
+  name:
+    required: True
+    type: basestring
+  comment:
+    type: basestring
+  ability_ids:
+    type: list
+  returnvalue:
+    - name
+    - comment
+    - ability_ids
+
+
+modifyrole:
+  name:
+    required: True
+    type: basestring
+  comment:
+    type: basestring
+  ability_ids:
+    type: list
+  returnvalue:
+    - name
+    - comment
+    - ability_ids
+
+
+rolebindability:
+  role_id:
+    required: True
+    type: int
+  ability_ids:
+    required: True
+    type: list
+  returnvalue:
+    - role_id
+    - ability_ids

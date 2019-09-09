@@ -1,0 +1,33 @@
+fileimport:
+  url:
+    required: True
+    type: basestring
+  creator:
+    required: True
+    type: int
+  project_id:
+    required: True
+    type: int
+  module_id:
+    required: True
+    type: int
+  returnvalue:
+    - url
+    - creator
+    - project_id
+    - module_id
+
+fileexport:
+  project_id:
+    required: True
+    type: int
+  module_data:
+    required: True
+    type: list
+  user_id:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+    - module_data
+    - user_id

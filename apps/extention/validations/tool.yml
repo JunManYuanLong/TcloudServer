@@ -1,0 +1,10 @@
+tool_apk_analysis_upload:
+  apk_download_url:
+    required: true
+    type: basestring
+  type:
+    type: basestring
+
+  returnvalue:
+    - apk_download_url
+    - type

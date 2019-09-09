@@ -1,0 +1,43 @@
+tc_devices:
+  use_type:
+    required: True
+    type: int
+  manufacturer:
+    required: True
+    type: basestring
+  model:
+    required: True
+    type: basestring
+  platform:
+    required: True
+    type: basestring
+  version:
+    required: True
+    type: basestring
+  serial:
+    required: True
+    type: basestring
+  resolution:
+    required: True
+    type: basestring
+  uuid:
+    type: basestring
+  returnvalue:
+    - use_type
+    - manufacturer
+    - model
+    - platform
+    - version
+    - serial
+    - resolution
+    - uuid
+
+disconnect_devices:
+  userid:
+    type: int
+  serial:
+    required: True
+    type: basestring
+  returnvalue:
+    - userid
+    - serial

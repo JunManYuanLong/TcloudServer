@@ -1,0 +1,70 @@
+addproject:
+  name:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  logo:
+    type: basestring
+  returnvalue:
+    - name
+    - description
+    - logo
+
+
+modifyproject:
+  name:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  weight:
+    type: int
+  logo:
+    type: basestring
+  returnvalue:
+    - name
+    - description
+    - weight
+    - logo
+
+projectbindusers:
+  project_id:
+    type: int
+  user_ids:
+    type: list
+  returnvalue:
+    - project_id
+    - user_ids
+
+projectdetachusers:
+  project_id:
+    required: True
+    type: int
+  user_id:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+    - user_id
+
+projectadduser:
+  project_id:
+    required: True
+    type: int
+  user_list:
+    required: True
+    type: list
+  returnvalue:
+    - project_id
+    - user_list
+
+
+projectalldetachusers:
+  user_id:
+    required: True
+    type: int
+  returnvalue:
+    - user_id
+
+

@@ -1,0 +1,39 @@
+versioncreate:
+  title:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+    type: int
+  start_time:
+    required: True
+    type: basestring
+  end_time:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  returnvalue:
+    - title
+    - project_id
+    - start_time
+    - end_time
+    - description
+
+versionmodify:
+  title:
+    required: True
+    type: basestring
+  start_time:
+    required: True
+    type: basestring
+  end_time:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  returnvalue:
+    - title
+    - start_time
+    - end_time
+    - description

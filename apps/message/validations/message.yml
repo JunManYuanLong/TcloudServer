@@ -1,0 +1,21 @@
+message_create:
+  send_id:
+    required: True
+    type: int
+  rec_id:
+    required: True
+    type: list
+  content:
+    required: True
+    type: basestring
+  message_type:
+    type: int
+  group:
+    type: basestring
+
+  returnvalue:
+    - send_id
+    - rec_id
+    - content
+    - message_type
+    - group

@@ -1,0 +1,67 @@
+flow_create:
+  name:
+    required: True
+    type: basestring
+  flow_type:
+    required: True
+    type: int
+  requirement_list:
+    # 这里 传1个 JIRA-ISSUE KEY
+    type: basestring
+  flow_assemble_id:
+    required: True
+    type: int
+  priority:
+    # 不存在
+    type: int
+  project_id:
+    # 写死 MT
+    type: int
+  version_id:
+    # 版本号
+    type: int
+  creator:
+    # 创建人
+    type: int
+  user_dev:
+    required: True
+    type: list
+  user_prod:
+    required: True
+    type: list
+  user_test:
+    required: True
+    type: list
+  user_owner:
+    required: True
+    type: list
+  action:
+    type: basestring
+  weight:
+    type: int
+  comment:
+    type: basestring
+  platform:
+    # TODO 正式版本需要解除注释
+    #    required: True
+    type: list
+  dependence:
+    type: basestring
+  returnvalue:
+    - name
+    - flow_type
+    - requirement_list
+    - flow_assemble_id
+    - priority
+    - project_id
+    - version_id
+    - creator
+    - user_dev
+    - user_prod
+    - user_test
+    - user_owner
+    - action
+    - weight
+    - comment
+    - platform
+    - dependence

@@ -1,0 +1,19 @@
+updatetag:
+  tag:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+    type: int
+  description:
+    type: basestring
+  tag_type:
+    type: int
+  returnvalue:
+    - tag
+    - project_id
+    - description
+    - tag_type
+
+
+

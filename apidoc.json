@@ -1,0 +1,22 @@
+{
+  "name": "Tcloud API",
+  "version": "0.0.1",
+  "description": "云测平台接口文档",
+  "url": "http://tcloud-url-api.com",
+  "template": {
+    "withCompare": true,
+    "withGenerator": true
+  },
+  "order": [
+    "用户",
+    "自动化测试",
+    "拓展",
+    "流程",
+    "接口自动化",
+    "任务调度",
+    "站内信",
+    "项目",
+    "公共",
+    "云真机"
+  ]
+}

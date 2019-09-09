@@ -1,0 +1,13 @@
+wxmessage_create:
+  user_ids:
+    type: list
+  text:
+    required: True
+    type: basestring
+  user_emails:
+    type: basestring
+
+  returnvalue:
+    - user_ids
+    - text
+    - user_emails

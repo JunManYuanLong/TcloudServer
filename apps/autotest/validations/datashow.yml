@@ -1,0 +1,189 @@
+data_show_filed_create:
+  data_type:
+    type: int
+    required: true
+  data_value:
+    type: basestring
+    required: true
+
+  returnvalue:
+    - data_type
+    - data_value
+
+
+data_show_response_kernel_record_create:
+  data_source:
+    type: int
+    required: true
+  phone_model:
+    type: int
+    required: true
+  apk_version:
+    type: int
+    required: true
+  kernel_version:
+    type: int
+    required: true
+  system_version:
+    type: int
+    required: true
+  thesaurus_version:
+    type: int
+    required: true
+  corpus_version:
+    type: int
+    required: true
+  key_9_and_26:
+    type: basestring
+    required: true
+  average:
+    type: basestring
+    required: true
+  line_90_percent:
+    type: basestring
+    required: true
+  line_95_percent:
+    type: basestring
+    required: true
+  comment:
+    type: basestring
+    required: true
+  show_in_chart:
+    type: int
+    required: true
+  returnvalue:
+    - data_source
+    - phone_model
+    - apk_version
+    - kernel_version
+    - system_version
+    - thesaurus_version
+    - corpus_version
+    - key_9_and_26
+    - average
+    - line_90_percent
+    - line_95_percent
+    - comment
+    - show_in_chart
+
+
+data_show_first_page_first_word_correct_rate_create:
+  data_source:
+    type: int
+    required: true
+  phone_model:
+    type: int
+    required: true
+  apk_version:
+    type: int
+    required: true
+  kernel_version:
+    type: int
+    required: true
+  system_version:
+    type: int
+    required: true
+  thesaurus_version:
+    type: int
+    required: true
+  corpus_version:
+    type: int
+    required: true
+  key_9_and_26:
+    type: basestring
+    required: true
+  first_word_correct_rate:
+    type: basestring
+    required: true
+  first_page_correct_rate:
+    type: basestring
+    required: true
+  comment:
+    type: basestring
+    required: true
+  show_in_chart:
+    type: int
+    required: true
+
+  returnvalue:
+    - data_source
+    - phone_model
+    - apk_version
+    - kernel_version
+    - system_version
+    - thesaurus_version
+    - corpus_version
+    - key_9_and_26
+    - first_word_correct_rate
+    - first_page_correct_rate
+    - comment
+    - show_in_chart
+
+
+data_show_response_log:
+  data_source:
+    type: int
+    required: true
+  phone_model:
+    type: int
+    required: true
+  apk_version:
+    type: int
+    required: true
+  kernel_version:
+    type: int
+    required: true
+  system_version:
+    type: int
+    required: true
+  thesaurus_version:
+    type: int
+    required: true
+  corpus_version:
+    type: int
+    required: true
+  key_9_kernel_click_time_average:
+    type: basestring
+    required: true
+  key_26_kernel_click_time_average:
+    type: basestring
+    required: true
+  key_9_kernel_response_time:
+    type: basestring
+    required: true
+  key_26_kernel_response_time:
+    type: basestring
+    required: true
+  cpu_average:
+    type: basestring
+    required: true
+  ram_average:
+    type: basestring
+    required: true
+  battery_use:
+    type: basestring
+    required: true
+  comment:
+    type: basestring
+    required: true
+  show_in_chart:
+    type: int
+    required: true
+
+  returnvalue:
+    - data_source
+    - phone_model
+    - apk_version
+    - kernel_version
+    - system_version
+    - thesaurus_version
+    - corpus_version
+    - key_9_kernel_click_time_average
+    - key_26_kernel_click_time_average
+    - key_9_kernel_response_time
+    - key_26_kernel_response_time
+    - cpu_average
+    - ram_average
+    - battery_use
+    - comment
+    - show_in_chart

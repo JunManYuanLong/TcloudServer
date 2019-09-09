@@ -1,0 +1,97 @@
+track_evnet_create:
+  projectId:
+    required: True
+    type: int
+  version:
+    type: basestring
+  updateComment:
+    type: basestring
+  platformList:
+    type: list
+  paramList:
+    type: list
+  name:
+    type: basestring
+  description:
+    type: basestring
+
+  returnvalue:
+    - projectId
+    - version
+    - updateComment
+    - platformList
+    - paramList
+    - name
+    - description
+
+
+track_modify:
+  create_at:
+    type:  basestring
+  creator:
+    type: basestring
+  delete_comment:
+    type: basestring
+  description:
+    type: basestring
+  id:
+    type: int
+  name:
+    type: basestring
+  paramList:
+    type: list
+  platform:
+    type: basestring
+  platformList:
+    type: list
+  projectId:
+    type: int
+  project_id:
+    type: int
+  status:
+    type: int
+  updateComment:
+    type: basestring
+  update_at:
+    type: basestring
+  update_comment:
+    type: basestring
+  updator:
+    type: basestring
+  version:
+    type: basestring
+
+  returnvalue:
+    - create_at
+    - creator
+    - delete_comment
+    - description
+    - id
+    - name
+    - paramList
+    - platform
+    - platformList
+    - projectId
+    - project_id
+    - status
+    - updateComment
+    - update_at
+    - update_comment
+    - updator
+    - version
+
+
+track_device_create:
+  project_id:
+    type: int
+  user_id:
+    type: int
+  device_typename:
+    type: basestring
+  device_number:
+    type: basestring
+  returnvalue:
+    - project_id
+    - user_id
+    - device_typename
+    - device_number

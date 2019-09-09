@@ -1,0 +1,30 @@
+interfacemodulecreate:
+  name:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+    type: int
+  num:
+    type: int
+  returnvalue:
+    - name
+    - project_id
+    - num
+
+
+interfacemodulemodify:
+  name:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+  num:
+    type: int
+  weight:
+    type: int
+  returnvalue:
+    - name
+    - project_id
+    - num
+    - weight

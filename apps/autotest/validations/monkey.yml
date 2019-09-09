@@ -1,0 +1,321 @@
+monkey_create:
+  app_name:
+    required: True
+    type: basestring
+  package_name:
+    required: True
+    type: basestring
+  user_id:
+    required: True
+    type: int
+  begin_time:
+    type: basestring
+  end_time:
+    type: basestring
+  jenkins_url:
+    required: True
+    type: basestring
+  report_url:
+    required: True
+    type: basestring
+  mobile_ids:
+    required: True
+    type: list
+  parameters:
+    required: True
+    type: basestring
+  process:
+    type: int
+  type_id:
+    required: True
+    type: int
+  run_time:
+    required: True
+    type: int
+  returnvalue:
+    - app_name
+    - package_name
+    - user_id
+    - begin_time
+    - end_time
+    - jenkins_url
+    - report_url
+    - mobile_id
+    - parameters
+    - process
+    - type_id
+    - run_time
+
+
+monkey_start:
+  user_id:
+    required: True
+    type: int
+  type_id:
+    required: True
+    type: int
+  run_time:
+    required: True
+    type: int
+  system_device:
+    required: True
+    type: int
+  login_required:
+    required: True
+    type: int
+  login_username:
+    required: True
+    type: basestring
+  login_password:
+    required: True
+    type: basestring
+  app_id:
+    required: True
+    type: int
+  mobile_infos:
+    type: list
+    required: True
+  app_install_required:
+    type: int
+    required: true
+
+  returnvalue:
+    - user_id
+    - mobile_infos
+    - type_id
+    - run_time
+    - system_device
+    - login_required
+    - login_username
+    - login_password
+    - app_id
+    - app_install_required
+
+
+monkey_update:
+  end_time:
+    type: basestring
+  process:
+    type: int
+  status:
+    type: int
+  jenkins_url:
+    type: basestring
+  app_version:
+    type: basestring
+  begin_time:
+    type: basestring
+  report_url:
+    type: basestring
+  run_time:
+    type: int
+  actual_run_time:
+    type: int
+  download_app_status:
+    type: int
+  returnvalue:
+    - end_time
+    - process
+    - jenkins_url
+    - status
+    - app_version
+    - begin_time
+    - report_url
+    - run_time
+    - actual_run_time
+    - download_app_status
+
+
+monkey_error_log_create:
+  monkey_id:
+    required: True
+    type: int
+  task_id:
+    required: True
+    type: int
+  error_type:
+    required: True
+    type: basestring
+  error_message:
+    required: True
+    type: basestring
+  error_count:
+    required: True
+    type: int
+
+  returnvalue:
+    - monkey_id
+    - task_id
+    - error_type
+    - error_message
+    - error_count
+
+
+monkey_report_create:
+  monkey_id:
+    required: True
+    type: int
+  task_id:
+    required: True
+    type: int
+  report_type:
+    required: True
+    type: int
+  report_url:
+    required: True
+    type: basestring
+
+  returnvalue:
+    - monkey_id
+    - task_id
+    - report_type
+    - report_url
+
+
+monkey_report_update:
+  monkey_id:
+    type: int
+  task_id:
+    type: int
+  report_type:
+    type: int
+  report_url:
+    type: basestring
+
+  returnvalue:
+    - monkey_id
+    - task_id
+    - report_type
+    - report_url
+
+
+monkey_device_status_update:
+  process:
+    type: int
+  activity_count:
+    type: int
+  activity_tested_count:
+    type: int
+  activity_all:
+    type: basestring
+  activity_tested:
+    type: basestring
+  anr_count:
+    type: int
+  crash_count:
+    type: int
+  crash_rate:
+    type: int
+  exception_count:
+    type: int
+  exception_run_time:
+    type: int
+  setup_install_app_status:
+    type: int
+  setup_uninstall_app_status:
+    type: int
+  start_app_status:
+    type: int
+  begin_time:
+    type: basestring
+  login_app_status:
+    type: int
+  running_status:
+    type: int
+  teardown_uninstall_app_status:
+    type: int
+  end_time:
+    type: basestring
+  run_time:
+    type: int
+  device_connect_status:
+    type: int
+  screen_lock_status:
+    type: int
+  current_stage:
+    type: int
+  running_error_reason:
+    type: basestring
+  mobile_resolution:
+    type: basestring
+
+  returnvalue:
+    - process
+    - activity_count
+    - activity_tested_count
+    - activity_all
+    - activity_tested
+    - anr_count
+    - crash_count
+    - crash_rate
+    - exception_count
+    - exception_run_time
+    - setup_install_app_status
+    - setup_uninstall_app_status
+    - start_app_status
+    - begin_time
+    - login_app_status
+    - running_status
+    - teardown_uninstall_app_status
+    - end_time
+    - run_time
+    - device_connect_status
+    - screen_lock_status
+    - current_stage
+    - running_error_reason
+    - mobile_resolution
+
+
+monkey_package_create:
+  name:
+    type: basestring
+  package_name:
+    type: basestring
+  oss_url:
+    type: basestring
+    required: true
+  version:
+    type: basestring
+  picture:
+    type: basestring
+  default_activity:
+    type: basestring
+  user_id:
+    type: int
+    required: true
+  returnvalue:
+    - name
+    - package_name
+    - oss_url
+    - version
+    - picture
+    - default_activity
+    - user_id
+
+
+monkey_cancel:
+  monkey_id:
+    type: int
+  task_id:
+    type: int
+
+  returnvalue:
+    - monkey_id
+    - task_id
+
+
+monkey_device_using:
+  serial:
+    type: basestring
+    required: true
+
+  returnvalue:
+    - serial
+
+monkey_device_release:
+  serial:
+    type: basestring
+    required: true
+
+  returnvalue:
+    - serial

@@ -1,0 +1,10 @@
+boardconfig:
+  issue:
+    required: False
+    type: basestring
+  requirement:
+    required: False
+    type: basestring
+  returnvalue:
+    - issue
+    - requirement

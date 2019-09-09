@@ -1,0 +1,27 @@
+credit_create:
+  user_id:
+    required: True
+    type: int
+  score:
+    type: int
+  status:
+    type: int
+
+  returnvalue:
+    - user_id
+
+
+credit_update:
+  user_id:
+    required: True
+    type: int
+  score:
+    required: True
+    type: int
+  status:
+    required: True
+    type: int
+
+  returnvalue:
+    - score
+    - status

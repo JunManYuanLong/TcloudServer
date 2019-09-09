@@ -1,0 +1,292 @@
+requirementcreate:
+  title:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+    type: int
+  version:
+    type: int
+  handler:
+    type: int
+  priority:
+    type: int
+  requirement_type:
+    type: int
+  attach:
+    type: basestring
+  board_status:
+    type: int
+  description:
+    type: basestring
+  comment:
+    type: basestring
+  jira_id:
+    type: basestring
+  worth:
+    type: int
+  report_time:
+    type: basestring
+  report_expect:
+    type: basestring
+  report_real:
+    type: basestring
+  worth_sure:
+    type: int
+  case_ids:
+    type: list
+  expect_time:
+    type: basestring
+  returnvalue:
+    - title
+    - project_id
+    - version
+    - handler
+    - priority
+    - requirement_type
+    - attach
+    - board_status
+    - description
+    - comment
+    - jira_id
+    - worth
+    - report_time
+    - report_expect
+    - report_real
+    - worth_sure
+    - case_ids
+    - expect_time
+
+
+childrenrequirementcreate:
+  title:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+    type: int
+  version:
+    type: int
+  handler:
+    type: int
+  priority:
+    type: int
+  requirement_type:
+    type: int
+  attach:
+    type: basestring
+  board_status:
+    type: int
+  description:
+    type: basestring
+  comment:
+    type: basestring
+  parent_id:
+    required: True
+    type: int
+  jira_id:
+    type: basestring
+  worth:
+    type: int
+  report_time:
+    type: basestring
+  report_expect:
+    type: basestring
+  report_real:
+    type: basestring
+  worth_sure:
+    type: int
+  case_ids:
+    type: list
+  expect_time:
+    type: basestring
+  returnvalue:
+    - title
+    - project_id
+    - version
+    - handler
+    - priority
+    - requirement_type
+    - attach
+    - board_status
+    - description
+    - comment
+    - parent_id
+    - jira_id
+    - worth
+    - report_time
+    - report_expect
+    - report_real
+    - worth_sure
+    - case_ids
+    - expect_time
+
+requirementmodify:
+  title:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+    type: int
+  version:
+    type: int
+  priority:
+    type: int
+  requirement_type:
+    type: int
+  attach:
+    type: basestring
+  handler:
+    type: int
+  board_status:
+    type: int
+  description:
+    type: basestring
+  comment:
+    type: basestring
+  parent_id:
+    required: True
+    type: int
+  jira_id:
+    type: basestring
+  worth:
+    type: int
+  report_time:
+    type: basestring
+  report_expect:
+    type: basestring
+  report_real:
+    type: basestring
+  worth_sure:
+    type: int
+  case_ids:
+    type: list
+  expect_time:
+    type: basestring
+  returnvalue:
+    - title
+    - project_id
+    - version
+    - priority
+    - requirement_type
+    - attach
+    - handler
+    - board_status
+    - description
+    - comment
+    - parent_id
+    - jira_id
+    - worth
+    - report_time
+    - report_expect
+    - report_real
+    - worth_sure
+    - case_ids
+    - expect_time
+
+board_status:
+  board_status:
+    required: True
+    type: int
+  returnvalue:
+    - board_status
+
+
+gain_children_requirement:
+  requirement_id:
+    required: True
+    type: int
+  project_id:
+    required: True
+    type: int
+  version:
+    type: int
+  returnvalue:
+    - requirement_id
+    - project_id
+    - version
+
+
+review_create:
+  title:
+    type: basestring
+  requirement_list:
+    type: basestring
+  project_id:
+    type: int
+  version_id:
+    type: int
+  creator:
+    type: int
+  modifier:
+    type: int
+  reviewer:
+    type: basestring
+  status:
+    type: int
+  attach:
+    type: basestring
+  comment:
+    type: basestring
+  weight:
+    type: int
+  review_status:
+    type: int
+  returnvalue:
+    - title
+    - requirement_list
+    - project_id
+    - version_id
+    - creator
+    - modifier
+    - reviewer
+    - status
+    - attach
+    - comment
+    - weight
+    - review_status
+
+review_comment:
+  comment:
+    type: basestring
+  result:
+    type: dict
+  returnvalue:
+    - comment
+    - result
+
+update_review_status:
+  requirement_id:
+    required: True
+    type: int
+  returnvalue:
+    - requirement_id
+
+
+requirement_handler_switch:
+  handler:
+    required: True
+    type: int
+  returnvalue:
+    - handler
+
+requirement_priority_switch:
+  priority:
+    required: True
+    type: int
+  returnvalue:
+    - priority
+
+requirement_add_comment:
+  comment:
+    required: True
+    type: basestring
+  returnvalue:
+    - comment
+
+requirement_status:
+  status:
+    required: True
+    type: int
+  returnvalue:
+    - status

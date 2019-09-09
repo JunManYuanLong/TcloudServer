@@ -1,0 +1,195 @@
+issue_create:
+  system:
+    type: int
+  version:
+    required: True
+    type: int
+  module_id:
+    type: int
+  project_id:
+    type: int
+  creator:
+    type: int
+  modifier:
+    type: int
+  handler:
+    type: int
+  issue_type:
+    type: int
+  chance:
+    required: True
+    type: int
+  level:
+    required: True
+    type: int
+  priority:
+    required: True
+    type: int
+  stage:
+    type: int
+  title:
+    required: True
+    type: basestring
+  attach:
+    type: basestring
+  handle_status:
+    type: int
+  description:
+    type: basestring
+  comment:
+    type: basestring
+  detection_chance:
+    type: int
+  requirement_id:
+    type: int
+  case_covered:
+    type: int
+  returnvalue:
+    - system
+    - version
+    - project_id
+    - module_id
+    - creator
+    - modifier
+    - handler
+    - issue_type
+    - chance
+    - level
+    - priority
+    - stage
+    - title
+    - attach
+    - handle_status
+    - description
+    - comment
+    - detection_chance
+    - requirement_id
+    - case_covered
+
+issue_modify:
+  system:
+    type: int
+  version:
+    required: True
+    type: int
+  module_id:
+    type: int
+  project_id:
+    type: int
+  modifier:
+    type: int
+  handler:
+    type: int
+  issue_type:
+    type: int
+  chance:
+    required: True
+    type: int
+  level:
+    required: True
+    type: int
+  priority:
+    required: True
+    type: int
+  stage:
+    type: int
+  title:
+    required: True
+    type: basestring
+  attach:
+    type: basestring
+  handle_status:
+    required: True
+    type: int
+  description:
+    type: basestring
+  comment:
+    type: basestring
+  detection_chance:
+    type: int
+  requirement_id:
+    type: int
+  case_covered:
+    type: int
+  returnvalue:
+    - system
+    - version
+    - project_id
+    - module_id
+    - modifier
+    - handler
+    - issue_type
+    - chance
+    - level
+    - priority
+    - stage
+    - title
+    - attach
+    - handle_status
+    - description
+    - comment
+    - detection_chance
+    - requirement_id
+    - case_covered
+
+issue_dashboard:
+  start_date:
+    required: True
+    type: basestring
+  end_date:
+    required: True
+    type: basestring
+  returnvalue:
+    - start_date
+    - end_date
+
+handler_switch:
+  handler:
+    required: True
+    type: int
+  returnvalue:
+    - handler
+
+
+handle_status:
+  handle_status:
+    required: True
+    type: int
+  returnvalue:
+    - handle_status
+
+level_switch:
+  level:
+    required: True
+    type: int
+  returnvalue:
+    - level
+
+priority_switch:
+  priority:
+    required: True
+    type: int
+  returnvalue:
+    - priority
+
+add_comment:
+  comment:
+    required: True
+    type: basestring
+  returnvalue:
+    - comment
+
+
+issue_bind_requirement:
+  issue_id:
+    required: True
+    type: int
+  requirement_id:
+    required: True
+    type: int
+
+  returnvalue:
+    - requirement_id
+    - issue_id
+
+

@@ -1,0 +1,10 @@
+feedback_create:
+  contact:
+    type: basestring
+  comment:
+    required: True
+    type: basestring
+  returnvalue:
+    - contact
+    - comment
+

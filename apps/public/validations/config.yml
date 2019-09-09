@@ -1,0 +1,42 @@
+config_create:
+  module:
+    type: basestring
+    required: True
+  module_type:
+    type: int
+  content:
+    type: dict
+    required: True
+  description:
+    type: basestring
+  project_id:
+    type: int
+    required: True
+
+  returnvalue:
+    - module
+    - module_type
+    - content
+    - description
+    - project_id
+
+
+config_update:
+  module:
+    type: basestring
+  module_type:
+    type: int
+  content:
+    type: dict
+  description:
+    type: basestring
+  project_id:
+    type: int
+
+  returnvalue:
+    - module
+    - module_type
+    - content
+    - description
+    - project_id
+

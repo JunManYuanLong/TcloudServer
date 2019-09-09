@@ -1,0 +1,170 @@
+adduser:
+  username:
+    required: True
+    type: basestring
+  nickname:
+    required: True
+    type: basestring
+  password:
+    required: True
+    type: basestring
+  email:
+    required: True
+    type: basestring
+  telephone:
+    type: basestring
+  returnvalue:
+    - username
+    - nickname
+    - password
+    - email
+    - telephone
+
+deleteuser:
+  userid:
+    required: True
+    type: int
+  returnvalue:
+    - userid
+
+
+modifypassword:
+  oldpassword:
+    required: True
+    type: basestring
+  newpassword:
+    required: True
+    type: basestring
+  returnvalue:
+    - oldpassword
+    - newpassword
+
+resetpassword:
+  userid:
+    required: True
+    type: int
+  newpassword:
+    required: True
+    type: basestring
+  returnvalue:
+    - userid
+    - newpassword
+
+
+userbindroles:
+  userid:
+    required: True
+    type: int
+  roleids:
+    required: True
+    type: list
+  project_id:
+    required: True
+    type: int
+  returnvalue:
+    - userid
+    - roleids
+    - project_id
+
+
+userbindprojects:
+  user_id:
+    required: True
+    type: int
+  project_ids:
+    required: True
+    type: list
+  returnvalue:
+    - user_id
+    - project_ids
+
+
+login:
+  username:
+    required: True
+    type: basestring
+  password:
+    required: True
+    type: basestring
+  returnvalue:
+    - username
+    - password
+
+
+wx_user_code:
+  user_code:
+    required: True
+    type: basestring
+  returnvalue:
+    - user_code
+
+modifyname:
+  userid:
+    required: True
+    type: int
+  username:
+    required: True
+    type: basestring
+  returnvalue:
+    - userid
+    - username
+
+wxbinduser:
+  userid:
+    required: True
+    type: int
+  wxuserid:
+    required: True
+    type: int
+  returnvalue:
+    - userid
+    - wxuserid
+
+
+userbindall:
+  user_id:
+    required: True
+    type: int
+  role_ids:
+    required: True
+    type: list
+  project_ids:
+    required: True
+    type: list
+  returnvalue:
+    - user_id
+    - role_ids
+    - project_ids
+
+modifynickname:
+  userid:
+    required: True
+    type: int
+  nickname:
+    required: True
+    type: basestring
+  returnvalue:
+    - userid
+    - nickname
+
+projectdetachusers:
+  project_id:
+    required: True
+    type: int
+  user_id:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+    - user_id
+
+projectadduser:
+  project_id:
+    required: True
+    type: int
+  user_list:
+    required: True
+    type: list
+  returnvalue:
+    - project_id
+    - user_list

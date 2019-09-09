@@ -1,0 +1,79 @@
+deploy_server:
+  project_id:
+    required: True
+    type: int
+  page:
+    type: int
+  page_size:
+    type: int
+  returnvalue:
+    - project_id
+    - page
+    - page_size
+
+deploy_status:
+  service_id:
+    required: True
+    type: int
+  node_id:
+    required: True
+    type: int
+  returnvalue:
+    - service_id
+    - node_id
+
+deploy_one_key:
+  branch:
+    required: True
+    type: basestring
+  node_id_list:
+    required: True
+    type: list
+  service_list:
+    required: True
+    type: list
+  returnvalue:
+    - branch
+    - node_id_list
+    - service_list
+
+deploy_create:
+  project_id:
+    required: True
+    type: int
+  server_list:
+    required: True
+    type: list
+  node_list:
+    required: True
+    type: list
+  branch:
+    required: True
+    type: basestring
+  flow_id:
+    required: True
+    type: int
+  returnvalue:
+    - project_id
+    - server_list
+    - node_list
+    - branch
+    - flow_id
+
+deploy_result:
+  deploy_id:
+    required: True
+    type: int
+  result:
+    required: True
+    type: list
+  returnvalue:
+    - deploy_id
+    - result
+    
+
+
+
+
+
+

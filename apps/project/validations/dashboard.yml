@@ -1,0 +1,10 @@
+tester_work_dashboard:
+  begin_date:
+    required: True
+    type: basestring
+  end_date:
+    required: True
+    type: basestring
+  returnvalue:
+    - begin_date
+    - end_date

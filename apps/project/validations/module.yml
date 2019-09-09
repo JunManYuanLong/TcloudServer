@@ -1,0 +1,33 @@
+modulecreate:
+  name:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+    type: int
+  description:
+    type: basestring
+  parent_id:
+    type: int
+  returnvalue:
+    - name
+    - project_id
+    - description
+    - parent_id
+
+
+modulemodify:
+  name:
+    required: True
+    type: basestring
+  project_id:
+    required: True
+  description:
+    type: basestring
+  weight:
+    type: int
+  returnvalue:
+    - name
+    - project_id
+    - description
+    - weight
