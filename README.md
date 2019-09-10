@@ -134,4 +134,10 @@ email   : admin@tcloud.com
 password: 123456
 ```
 
+#### 联系我们
+欢迎扫描下方二维码关注我们
+
+![image](http://tcloud-static.oss-cn-beijing.aliyuncs.com/tcloud_git/tc.jpg)
+
+QQ群：839084842
 
