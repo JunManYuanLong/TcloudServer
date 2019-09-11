@@ -2278,10 +2278,7 @@ CREATE TABLE `user` (
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1152, NULL, '2019-09-02 03:39:01', 'admin', 'admin', NULL, '7133befcaa96ce75df05038e4c8bf0d9', 0, NULL, NULL, 1, NULL, NULL);
-INSERT INTO `user` VALUES (1153, '2019-09-03 12:49:12', '2019-09-03 21:00:29', 'zy1', '张宇', NULL, '7133befcaa96ce75df05038e4c8bf0d9', 0, 'zy1@ass.com', '', 1, NULL, NULL);
-INSERT INTO `user` VALUES (1154, '2019-09-03 12:59:22', '2019-09-03 20:59:21', 'test', '测试', NULL, '7133befcaa96ce75df05038e4c8bf0d9', 0, 'test@test.com', '', 1, NULL, NULL);
-INSERT INTO `user` VALUES (1155, '2019-09-03 12:59:56', '2019-09-03 20:59:55', 'dev', '开发', NULL, '7133befcaa96ce75df05038e4c8bf0d9', 0, 'dev@tcloud.com', '', 1, NULL, NULL);
+INSERT INTO `user` VALUES (1152, NULL, '2019-09-02 03:39:01', 'admin', 'admin', NULL, 'b8d65d4bd2d9416ec6300da8797e0284', 0, NULL, NULL, 1, NULL, NULL);
 COMMIT;
 
 -- ----------------------------

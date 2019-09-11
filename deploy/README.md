@@ -88,13 +88,14 @@ $ sudo docker-compose up -d
 查看启动状态
 
 ```
-$ sudo docker-compos ps
+$ sudo docker-compose ps
 ```
 
 如果所有状态均为up，则运行正常，否则`sudo docker logs <name>`查看日志
 
 打开konga(kong的管理页面)，注册账号并登录，再新建连接，地址为`http://kong:8001`，成功后，进入SNAPSHOT页面，点击IMPORT FROM FILE，选择我们的`snapshot_2.json`文件，并进入DETAILS中RESTORE，可能会出错，再执行一次即可，此时我们的后端已经运行完成，地址为`http://localhost:9000`
 
+ps: 数据库初始化文件是init/init.sql，可以通过`sudo docker-compose down -v`再`sudo docker-compose up -d`来重新初始化数据库
 
 
 ### 3、部署前端
