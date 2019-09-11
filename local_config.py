@@ -10,7 +10,7 @@ SQLALCHEMY_DATABASE_URI = 'mysql://username:password@192.168.0.100:3306/tcloud?c
 SECRET = '####'
 ALGORITHM = 'HS256'
 TSECRET = '####'
-SALT = "####"
+SALT = 'asjdia8938jf9wf8923'
 
 # 任务设置
 JOBS = [
