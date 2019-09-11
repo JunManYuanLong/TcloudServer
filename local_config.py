@@ -36,6 +36,12 @@ OSS_BUCTET_NAME = 'oss-name'
 OSSHost = 'http://tcloud.test.com'
 CMSHost = 'http://tcloud.test.com'
 
+# 测试环境数据上报
+CID = ""
+SIGN_KEY = ""
+RAND = ""
+LOG_REPORT_URL = ""
+
 # jenkins 配置
 CI_AUTO_MAN_JENKINS_URL = 'http://jenkins_url.com'
 CI_AUTO_MAN_JENKINS_AUTH = {
@@ -54,3 +60,4 @@ JIRA_AUTH = ('tcloud', 'tcloud')
 CORP_ID = 'secret'
 # 企业微信发送url，需要企业进行配置
 QYWXHost = 'https://qywxurl/'
+WX_MESSAGE_URL = ''

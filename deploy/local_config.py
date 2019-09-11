@@ -14,13 +14,13 @@ SALT = "####"
 
 # 任务设置
 JOBS = [
-    {  # 任务 例子：资产配置检查
+        {  # 任务 例子：资产配置检查
         'id': 'credit-check-daily',  # 任务 id, 唯一
         'func': 'apps.jobs.business.jobs:JobsBusiness.credit_check_daily',  # 路径
         'args': None,  # 参数
         'trigger': 'interval',  # 启动方式， 时间间隔
         'seconds': 1000 # 秒数
-    }]
+        }]
 
 # redis 配置
 REDIS_HOST = 'localhost'
@@ -35,6 +35,12 @@ OSS_ENDPOINT = 'http://oss.test.com'
 OSS_BUCTET_NAME = 'oss-name'
 OSSHost = 'http://tcloud.test.com'
 CMSHost = 'http://tcloud.test.com'
+
+# 测试环境数据上报
+CID = ""
+SIGN_KEY = ""
+RAND = ""
+LOG_REPORT_URL = ""
 
 # jenkins 配置
 CI_AUTO_MAN_JENKINS_URL = 'http://jenkins_url.com'
@@ -54,3 +60,4 @@ JIRA_AUTH = ('tcloud', 'tcloud')
 CORP_ID = 'secret'
 # 企业微信发送url，需要企业进行配置
 QYWXHost = 'https://qywxurl/'
+WX_MESSAGE_URL = ''
