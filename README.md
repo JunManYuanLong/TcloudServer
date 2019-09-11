@@ -66,6 +66,7 @@
 #### 环境
 python => 3.7
 推荐使用pipenv管理python环境，安装Pipfile中的依赖包，注意版本问题
+或者直接使用`pip install -r requirement.txt -i https://mirrors.aliyun.com/pypi/simple`安装依赖包，最好先新建一个虚拟环境`virtualenv`
 可配置文件为local_config.py文件，这里的配置需要根据自己环境进行修改
 
 #### 服务端口
