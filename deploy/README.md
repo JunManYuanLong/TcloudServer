@@ -58,3 +58,45 @@ To generate this message, Docker took the following steps:
 官网有详细安装[https://docs.docker.com/compose/install/](https://docs.docker.com/compose/install/)  ，根据平台不同有不同的安装方式
 
 
+
+### 2、部署项目
+
+转到deploy目录下，拉取所有镜像
+
+```
+$ sudo docker-compose pull
+```
+
+然后修改`local_config.py`文件，再初始化kong的数据库
+
+```
+$ sudo docker-compose run kong kong migrations bootstrap
+```
+
+然后启动所有项目
+
+```
+$ sudo docker-compose up -d
+```
+
+查看启动状态
+
+```
+$ sudo docker-compos ps
+```
+
+如果所有状态均为up，则运行正常，否则`sudo docker logs <name>`查看日志
+
+打开konga(kong的管理页面)，注册账号并登录，再新建连接，地址为`http://kong:8001`，成功后，进入SNAPSHOT页面，点击IMPORT FROM FILE，选择我们的`snapshot_2.json`文件，并进入DETAILS中RESTORE，可能会出错，再执行一次即可，此时我们的后端已经运行完成，地址为`http://localhost:9000`
+
+
+
+### 3、部署前端
+
+1、安装node环境
+
+2、在前端项目根目录下`npm install`，稍等片刻安装依赖包
+
+3、修改`config/dev.env.js`中的`BASE_URL`地址为上面的后端地址`http://localhost:9000`
+
+4、运行`npm run dev`即可打开本项目
