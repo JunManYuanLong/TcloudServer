@@ -63,6 +63,10 @@
 
 
 # 四、安装介绍
+#### docker部署
+
+点击查看: [deploy](deploy/README.md)
+
 #### 环境
 python => 3.7
 推荐使用pipenv管理python环境，安装Pipfile中的依赖包，注意版本问题
@@ -73,17 +77,17 @@ python => 3.7
 
 | id | service name | port |
 |:---- |:---- |:---- |
-| 1 | auth | 9020 |  
-| 2 | autotest	| 9022 |  
-| 3 | extention | 9024 |  
-| 4 | flow | 9026 |   
-| 5 | interface	| 9028 |  
-| 6 | message | 9030 |  
-| 7 | project |	9032 |  
-| 8 | public | 9034 |  
-| 9 | tcdevices	| 9036 |  
-| 10 | jobs	| 9038 |  
-| 11 | ws	| 9040 |  
+| 1 | auth | 9020 |
+| 2 | autotest	| 9022 |
+| 3 | extention | 9024 |
+| 4 | flow | 9026 |
+| 5 | interface	| 9028 |
+| 6 | message | 9030 |
+| 7 | project |	9032 |
+| 8 | public | 9034 |
+| 9 | tcdevices	| 9036 |
+| 10 | jobs	| 9038 |
+| 11 | ws	| 9040 |
 
 
 
@@ -96,7 +100,7 @@ python => 3.7
 ```
     user_trpc = Trpc('auth')   # using with service name
     user_trpc.requests(method='get', path='/user')
-``` 
+```
 
 #### 一、启动服务
 
