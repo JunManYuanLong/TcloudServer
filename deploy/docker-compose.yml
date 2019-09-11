@@ -6,15 +6,15 @@ services:
     volumes:
       - "./local_config.py:/tcloud/local_config.py"
 
- mysql:
-   image: mysql:5.7
-   restart: always
-   environment:
-     MYSQL_ROOT_PASSWORD: "tc123456"
-   volumes:
-     - "./init:/docker-entrypoint-initdb.d/"
-   ports:
-     - 3306:3306
+  mysql:
+    image: mysql:5.7
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "tc123456"
+    volumes:
+      - "./init:/docker-entrypoint-initdb.d/"
+    ports:
+      - 3306:3306
 
 
   kong:

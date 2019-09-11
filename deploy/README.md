@@ -67,10 +67,16 @@ To generate this message, Docker took the following steps:
 $ sudo docker-compose pull
 ```
 
-然后修改`local_config.py`文件，再初始化kong的数据库
+然后修改`local_config.py`文件，
+```
+# 这里的账号密码是在docker-compose.yml中配置的
+SQLALCHEMY_DATABASE_URI = 'mysql://root:tc123456@mysql:3306/demo?charset=utf8'
+```
+再初始化kong的数据库（如果报错，再执行一次，成功的话会显示`Database is up-to-date`）
 
 ```
-$ sudo docker-compose run kong kong migrations bootstrap
+$ sudo docker-compose up -d kong_database
+$ sudo docker-compose run --rm kong kong migrations bootstrap
 ```
 
 然后启动所有项目
