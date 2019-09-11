@@ -1,0 +1,65 @@
+version: '3.5'
+services:
+  tcloud:
+    image: h1.ywopt.com/ywopt.com/tcloud:demo
+    restart: always
+    volumes:
+      - "./local_config.py:/tcloud/local_config.py"
+
+ mysql:
+   image: mysql:5.7
+   restart: always
+   environment:
+     MYSQL_ROOT_PASSWORD: "tc123456"
+   volumes:
+     - "./init:/docker-entrypoint-initdb.d/"
+   ports:
+     - 3306:3306
+
+
+  kong:
+    image: kong:latest
+    restart: always
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong_database
+      KONG_CASSANDRA_CONTACT_POINTS: kong_database
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001
+      KONG_ADMIN_LISTEN_SSL: 0.0.0.0:8444
+    volumes:
+      - ./volumes/logs:/usr/local/kong/logs
+    ports:
+      - 9000:8000
+    links:
+      - kong_database
+
+
+  kong_database:
+    image: postgres:9.5
+    restart: always
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_DB: kong
+    volumes:
+      - ./volumes/kong_database:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "kong"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+
+  konga:
+    image: pantsel/konga
+    restart: always
+    ports:
+      - 9001:1337
+    environment:
+      - DB_ADAPTER=postgres
+      - DB_HOST=kong_database
+      - DB_USER=kong
+
+networks:
+  default:
+    name: tcloud_demo
+    driver: bridge
