@@ -63,6 +63,7 @@
 
 
 # 四、安装介绍
+> 建议部署在Linux或者Macos上，Windows不适合本项目的调试、部署
 #### docker部署
 
 点击查看: [deploy](deploy/README.md)
