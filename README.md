@@ -60,84 +60,8 @@
 ![image](http://tcloud-static.oss-cn-beijing.aliyuncs.com/tcloud_git/interface.png)
 
 
-
-
-# 四、安装介绍
-#### docker部署
-
-点击查看: [deploy](deploy/README.md)
-
-#### 环境
-python => 3.7
-推荐使用pipenv管理python环境，安装Pipfile中的依赖包，注意版本问题
-或者直接使用`pip install -r requirement.txt -i https://mirrors.aliyun.com/pypi/simple`安装依赖包，最好先新建一个虚拟环境`virtualenv`
-可配置文件为local_config.py文件，这里的配置需要根据自己环境进行修改
-
-#### 服务端口
-
-| id | service name | port |
-|:---- |:---- |:---- |
-| 1 | auth | 9020 |
-| 2 | autotest	| 9022 |
-| 3 | extention | 9024 |
-| 4 | flow | 9026 |
-| 5 | interface	| 9028 |
-| 6 | message | 9030 |
-| 7 | project |	9032 |
-| 8 | public | 9034 |
-| 9 | tcdevices	| 9036 |
-| 10 | jobs	| 9038 |
-| 11 | ws	| 9040 |
-
-
-
-#### 服务间调用 
-
-> trpc
-
-- now : communicate with http request by ```requests```
-
-```
-    user_trpc = Trpc('auth')   # using with service name
-    user_trpc.requests(method='get', path='/user')
-```
-
-#### 一、启动服务
-
-以auth服务为例，切换到项目根目录，执行python -m apps.auth.run
-
-建议可以使用supervisor管理多服务的启动
-```shell
-python -m apps.auth.run
-```
-
-
-##### 二、启动Kong
-
-书写好`docker-compose.yml`文件后即可启动
-
-```bash
-$ sudo docker-compose up -d
-```
-
-首先需要migrations，把kong所需要的数据库文件写入到数据库中
-
-```bash
-$ sudo docker-compose run kong kong migrations bootstrap
-
-# 这个版本是bootstrap，不同版本可能命令不同，最好在docker-compose.yml中写死版本
-```
-
-
-##### 三、配置Kong
-
-输入http://ip:9000 进入kong_dashboard的界面，注册账号密码
-
-```yml
-username: admin
-email   : admin@tcloud.com
-password: 123456
-```
+# 四、安装部署
+(快速安装)[https://github.com/bigbaser/TcloudServer/wiki/部署]
 
 #### 联系我们
 欢迎扫描下方二维码关注我们
