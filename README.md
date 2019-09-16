@@ -70,9 +70,9 @@
 
 #### 环境
 python => 3.7
-推荐使用pipenv管理python环境，安装Pipfile中的依赖包，注意版本问题
-或者直接使用`pip install -r requirement.txt -i https://mirrors.aliyun.com/pypi/simple`安装依赖包，最好先新建一个虚拟环境`virtualenv`
-可配置文件为local_config.py文件，这里的配置需要根据自己环境进行修改
+推荐使用pipenv管理python环境，安装Pipfile中的依赖包，注意版本问题，  
+或者直接使用`pip install -r requirement.txt -i https://mirrors.aliyun.com/pypi/simple`安装依赖包，最好先新建一个虚拟环境`virtualenv`。  
+必须配置的文件为local_config.py文件，这里的配置需要根据自己环境进行修改
 
 #### 服务端口
 
@@ -115,30 +115,29 @@ python -m apps.auth.run
 
 ##### 二、启动Kong
 
-书写好`docker-compose.yml`文件后即可启动
+书写好`docker-compose.yml`文件后,
+再初始化kong的数据库（如果报错，再执行一次，成功的话会显示`Database is up-to-date`）
 
-```bash
-$ sudo docker-compose up -d
 ```
-
-首先需要migrations，把kong所需要的数据库文件写入到数据库中
-
-```bash
-$ sudo docker-compose run kong kong migrations bootstrap
-
+$ sudo docker-compose up -d kong_database
+$ sudo docker-compose run --rm kong kong migrations bootstrap
 # 这个版本是bootstrap，不同版本可能命令不同，最好在docker-compose.yml中写死版本
 ```
+然后启动所有项目
+```
+$ sudo docker-compose up -d
+```
+查看启动状态
+```
+$ sudo docker-compose ps
+```
+如果所有状态均为up，则运行正常，否则`sudo docker logs <name>`查看日志
 
 
 ##### 三、配置Kong
 
-输入http://ip:9000 进入kong_dashboard的界面，注册账号密码
-
-```yml
-username: admin
-email   : admin@tcloud.com
-password: 123456
-```
+输入http://localhost:9000 进入kong_dashboard的界面，注册账号密码  
+`kong`可以理解为一个类似nginx作用的网关系统(实际上就是基于nginx)，配置图形化以及多插件、可扩展，对开发人员非常友好，具体配置方案可以参考官网，只需要配置好每个服务的`service`以及`route`即可，我们也提供了一个导出的配置(deploy/snapshot_2.json)，导入后，只需要把service的HOST修改为localhost即可
 
 #### 联系我们
 欢迎扫描下方二维码关注我们
