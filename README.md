@@ -61,7 +61,7 @@
 
 
 # 四、安装部署
-(快速安装)[https://github.com/bigbaser/TcloudServer/wiki/部署]
+[快速安装](https://github.com/bigbaser/TcloudServer/wiki/部署)
 
 #### 联系我们
 欢迎扫描下方二维码关注我们
