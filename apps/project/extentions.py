@@ -2,11 +2,11 @@ import os
 from os.path import join, abspath, dirname, splitext
 
 import yaml
-from jira import JIRA
+# from jira import JIRA
 
 from library.api.parse import TParse
 from library.api.security import Validation
-from public_config import JIRA_URL, JIRA_AUTH
+# from public_config import JIRA_URL, JIRA_AUTH
 
 current_path = dirname(abspath(__file__))
 
@@ -25,7 +25,7 @@ except yaml.YAMLError as e:
 v = Validation(yml_json)
 validation = v.validation
 
-jira = JIRA(server=JIRA_URL, basic_auth=JIRA_AUTH)
+# jira = JIRA(server=JIRA_URL, basic_auth=JIRA_AUTH)
 
 p = TParse(yml_json)
 parse_list_args = p.parse_list_args
