@@ -14,7 +14,7 @@ from apps.project.views.cases import case
 from apps.project.views.credit import credit
 from apps.project.views.dashboard import dashboard
 from apps.project.views.issue import issue
-from apps.project.views.jira import jira
+# from apps.project.views.jira import jira
 from apps.project.views.modules import module
 from apps.project.views.project import project
 from apps.project.views.requirement import requirement
@@ -37,7 +37,7 @@ def register_blueprints(app):
     app.register_blueprint(virtualasset, url_prefix="/v1/asset/virtual")
     app.register_blueprint(case, url_prefix="/v1/case")
     app.register_blueprint(credit, url_prefix="/v1/credit")
-    app.register_blueprint(jira, url_prefix="/v1/jira")
+    # app.register_blueprint(jira, url_prefix="/v1/jira")
     app.register_blueprint(issue, url_prefix="/v1/issue")
     app.register_blueprint(module, url_prefix="/v1/module")
     app.register_blueprint(requirement, url_prefix="/v1/requirement")
@@ -48,7 +48,6 @@ def register_blueprints(app):
     app.register_blueprint(tag, url_prefix="/v1/tag")
     app.register_blueprint(board, url_prefix="/v1/board")
     app.register_blueprint(dashboard, url_prefix="/v1/dashboard")
-    app.register_blueprint(jira, url_prefix='/v1/jira')
 
 
 if __name__ == '__main__':
