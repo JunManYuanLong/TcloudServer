@@ -9,6 +9,7 @@ from public_config import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT
 """
 优化方案：
 监听当前用户的redis_key，看未读消息数，有变化就去返回该消息数，否则返回ping/pong
+如果需要打开改消息通知服务的话，需要去message服务解除相关注释以及library/api/db的redis注释
 """
 
 define("port", default=9040, help="run on the given port", type=int)
@@ -69,6 +70,7 @@ class WebSocketHandler(websocket.WebSocketHandler, ABC):
                     await gen.sleep(3)
                 except websocket.WebSocketClosedError:
                     self.on_close()
+                    break
 
     def on_close(self):
         pass
