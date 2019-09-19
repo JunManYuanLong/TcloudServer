@@ -98,7 +98,7 @@ $ sudo docker-compose ps
 
 ![](http://tcloud-static.oss-cn-beijing.aliyuncs.com/tcloud_git/kong-1.png)
 
-成功后，进入SNAPSHOT页面，点击IMPORT FROM FILE，选择我们的`snapshot_2.json`文件，并进入DETAILS中RESTORE，可能会出错，再执行一次即可，此时我们的网关服务已经运行完成，地址为`http://localhost:9000`
+成功后，进入SNAPSHOT页面，点击IMPORT FROM FILE，选择我们的`snapshot_2.json`文件，并进入DETAILS中RESTORE，全选导入，可能会出错，再执行一次即可，此时我们的网关服务已经运行完成，地址为`http://localhost:9000`
 ps: 数据库初始化文件是init/init.sql，可以通过`sudo docker-compose down -v`再`sudo docker-compose up -d`来重新初始化数据库
 
 
