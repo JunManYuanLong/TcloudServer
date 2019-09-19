@@ -1,3 +1,5 @@
+> 希望补充文档和自己出现的问题的，请fork代码然后提出pull request
+
 [快速安装](快速安装.md)
 
 [Docker部署](Docker部署.md)
