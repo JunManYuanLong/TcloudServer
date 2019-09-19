@@ -5,6 +5,8 @@
 
 线上demo地址：http://tcloud-demo.ywopt.com/#/login （账号：admin 密码：123456）
 
+文档地址(部署、常见问题)：https://vissssa.gitbook.io/tcloud/
+
 # 一、什么是Tcloud?
 
       Tcloud(Test Cloud)致力于打造云测平台，测试数据上云，移动终端云(云真机)。统一定制化的流程系统，管理执行者工作效率，任务到期提醒，方便快捷查看“我的”相关任务，使需求->开发->测试->验收->发布更高效。
