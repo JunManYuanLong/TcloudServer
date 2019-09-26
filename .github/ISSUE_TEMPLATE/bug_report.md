@@ -1,3 +1,12 @@
+---
+name: Bug report
+about: Create a report to help us improve
+title: ''
+labels: ''
+assignees: ''
+
+---
+
 <!-- 为更高效率地交流并解决问题，请按照以下模板提交issue，感谢！ -->
 
 ### 1. 您当前使用的`Python`版本，及系统版本、系统架构？
