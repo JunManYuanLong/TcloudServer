@@ -3,7 +3,7 @@
 
 前端传送门：https://github.com/bigbaser/Tcloud
 
-线上demo地址：http://tcloud-demo.ywopt.com/#/login （账号：admin 密码：123456）
+线上demo地址：http://tcloud-demo.innotechx.com/#/login （账号：admin 密码：123456）
 
 文档地址(安装、常见问题)：[查看](deploy/docs/README.md)
 
