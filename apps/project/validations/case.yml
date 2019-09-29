@@ -83,3 +83,11 @@ case_bind_requirement:
   returnvalue:
     - requirement_id
     - case_id
+
+
+case_info_by_ids:
+  case_ids:
+    required: True
+    type: list
+  returnvalue:
+    - case_ids

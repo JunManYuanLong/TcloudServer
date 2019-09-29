@@ -15,6 +15,7 @@ from apps.project.models.modules import Module
 from apps.project.models.project import Project
 from apps.project.models.requirement import Requirement, RequirementBindCase
 from library.api.db import db
+from library.api.exceptions import CannotFindObjectException, OperationFailedException
 from library.api.transfer import transfer2jsonwithoutset, slicejson, transfer2json
 from library.oss import oss_upload, oss_download
 from library.trpc import Trpc
@@ -62,6 +63,16 @@ class CaseBusiness(object):
             Module.name.label('module'),
             User.id.label('userid'),
             User.nickname.label('username')
+        )
+
+    @classmethod
+    def case_total_groupby_module(cls):
+        return Case.query.outerjoin(
+            Module, Module.id == Case.module_id).add_columns(
+            Module.id.label('id'),
+            Module.project_id.label('projectid'),
+            Module.status.label('status'),
+            func.count('*').label('total'),
         )
 
     @classmethod
@@ -162,50 +173,45 @@ class CaseBusiness(object):
 
     @classmethod
     def create(cls, moduleid, ctype, title, precondition, step_result, creator, priority, requirement_ids=None):
-        try:
-            c = Case(
-                module_id=moduleid,
-                ctype=ctype,
-                title=title,
-                precondition=precondition,
-                step_result=step_result,
-                creator=creator,
-                priority=priority
-            )
-            db.session.add(c)
-            db.session.flush()
-            mid = c.id
-            c.cnumber = 'TC' + str(mid)
-            db.session.add(c)
-            current_app.logger.info(requirement_ids)
-            if requirement_ids is not None:
-                current_app.logger.info('create case')
-                RequirementBindCaseBusiness.case_bind_requirements(c.id, requirement_ids)
-            db.session.commit()
-            return 0, None
-        except Exception as e:
-            current_app.logger.error(str(e))
-            return 102, str(e)
+        c = Case(
+            module_id=moduleid,
+            ctype=ctype,
+            title=title,
+            precondition=precondition,
+            step_result=step_result,
+            creator=creator,
+            priority=priority
+        )
+        db.session.add(c)
+        db.session.flush()
+        mid = c.id
+        c.cnumber = 'TC' + str(mid)
+        db.session.add(c)
+        current_app.logger.info(requirement_ids)
+        if requirement_ids is not None:
+            current_app.logger.info('create case')
+            RequirementBindCaseBusiness.case_bind_requirements(c.id, requirement_ids)
+        db.session.commit()
+        return 0, None
 
     @classmethod
     def update(cls, caseid, moduleid, ctype, title, precondition, step_result, is_auto, priority, requirement_ids):
-        try:
-            c = Case.query.get(caseid)
-            c.module_id = moduleid
-            c.ctype = ctype
-            c.title = title
-            c.precondition = precondition
-            c.step_result = step_result
-            c.is_auto = is_auto
-            c.priority = priority
-            db.session.add(c)
-            if requirement_ids is not None:
-                RequirementBindCaseBusiness.case_bind_requirements(caseid, requirement_ids)
-            db.session.commit()
-            return 0
-        except Exception as e:
-            current_app.logger.error(str(e))
-            return 301
+        c = Case.query.get(caseid)
+        if not c:
+            raise CannotFindObjectException
+
+        c.module_id = moduleid
+        c.ctype = ctype
+        c.title = title
+        c.precondition = precondition
+        c.step_result = step_result
+        c.is_auto = is_auto
+        c.priority = priority
+        db.session.add(c)
+        if requirement_ids is not None:
+            RequirementBindCaseBusiness.case_bind_requirements(caseid, requirement_ids)
+        db.session.commit()
+        return 0
 
     @classmethod
     def case_all_tester_dashboard(cls, begin_date, end_date, testers=None):
@@ -514,6 +520,26 @@ class CaseBusiness(object):
         else:
             count = query.count()
         if page_size and page_index:
-            query = query.limit(int(page_size)).offset(int(page_index - 1) * int(page_size))
+            size, index = int(page_size), int(page_index)
+            query = query.limit(size).offset((index - 1) * size)
         data = query.all()
         return data, count
+
+    @classmethod
+    @transfer2json(
+        '?id|!cnumber|!ctype|!title|!precondition|!step_result|!creation_time|!modified_time'
+        '|!is_auto|!status|!moduleid|!module|!userid|!username|!priority',
+    )
+    def case_info_by_ids(cls, case_ids):
+        ret = cls.filter_query().filter(Case.id.in_(case_ids[0]))
+        data = ret.all()
+        return data
+
+    @classmethod
+    def copy_case_by_id(cls, case_id):
+        ret = Case.query.get(case_id)
+        if ret:
+            cls.create(ret.module_id, ret.ctype, ret.title, ret.precondition, ret.step_result, g.userid, ret.priority)
+            return 0
+        else:
+            raise OperationFailedException

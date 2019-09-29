@@ -31,6 +31,7 @@ class Requirement(EntityModel):
     report_real = db.Column(db.Text)  # 高价值实际结果
     worth_sure = db.Column(db.Integer)  # 确认需求价值  1:高价值 2:非高价值
     expect_time = db.Column(db.DateTime)  # 预计完成时间
+    tag = db.Column(db.String(300))
 
 
 class RequirementRecord(EntityModel):
@@ -64,6 +65,7 @@ class RequirementRecord(EntityModel):
     report_real = db.Column(db.Text)  # 高价值实际结果
     worth_sure = db.Column(db.Integer)  # 确认需求价值  1:高价值 2:非高价值
     expect_time = db.Column(db.DateTime)  # 预计完成时间
+    tag = db.Column(db.String(300))
 
 
 class RequirementReview(EntityModel):

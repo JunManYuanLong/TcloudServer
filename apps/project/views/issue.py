@@ -38,6 +38,7 @@ def issue_add_handler():
     @apiParam {int} creator 创建人 ID
     @apiParam {int} modifier 修改人 ID
     @apiParam {int} [requirement_id] 关联的 需求 ID
+    @apiParam {string} [tag] 标签
     @apiParamExample {json} Request-Example:
     {
         "module_id": 340,
@@ -55,7 +56,8 @@ def issue_add_handler():
         "version": 168,
         "creator": 93,
         "modifier": 93,
-        "requirement_id": 123
+        "requirement_id": 123,
+        "tag": 13,14
     }
     @apiSuccessExample {json} Success-Response:
      HTTP/1.1 200 OK
@@ -67,10 +69,10 @@ def issue_add_handler():
     """
     (system, version, project_id, module_id, creator, modifier, handler,
      issue_type, chance, level, priority, stage,title, attach, handle_status,
-     description, comment, detection_chance, requirement_id, case_covered) = parse_json_form('issue_create')
+     description, comment, detection_chance, requirement_id, case_covered, tag) = parse_json_form('issue_create')
     ret = IssueBusiness.create(system, version, project_id, module_id, creator, modifier, handler, issue_type,
                                chance, level, priority, stage, title, attach, handle_status, description, comment,
-                               detection_chance, requirement_id, case_covered)
+                               detection_chance, requirement_id, case_covered, tag)
 
     return json_detail_render(ret)
 
@@ -101,6 +103,7 @@ def issue_modify_handler(issue_id):
     @apiParam {int} creator 创建人 ID
     @apiParam {int} modifier 修改人 ID
     @apiParam {int} [requirement_id] 关联的 需求 ID
+    @apiParam {string} [tag] 标签
     @apiParamExample {json} Request-Example:
     {
         "module_id": 340,
@@ -118,7 +121,8 @@ def issue_modify_handler(issue_id):
         "version": 168,
         "creator": 93,
         "modifier": 93,
-        "requirement_id": 1
+        "requirement_id": 1,
+        "tag": 13,14
     }
     @apiSuccessExample {json} Success-Response:
      HTTP/1.1 200 OK
@@ -130,10 +134,10 @@ def issue_modify_handler(issue_id):
     """
     (system, version, project_id, module_id, modifier, handler, issue_type,
      chance, level, priority, stage, title, attach, handle_status, description,
-     comment, detection_chance, requirement_id, case_covered) = parse_json_form('issue_modify')
+     comment, detection_chance, requirement_id, case_covered, tag) = parse_json_form('issue_modify')
     ret = IssueBusiness.modify(issue_id, system, version, project_id, module_id, modifier, handler, issue_type,
                                chance, level, priority, stage, title, attach, handle_status, description, comment,
-                               detection_chance, requirement_id, case_covered)
+                               detection_chance, requirement_id, case_covered, tag)
     return json_detail_render(ret)
 
 

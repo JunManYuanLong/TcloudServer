@@ -36,6 +36,7 @@ class Issue(EntityModel):
     rank = db.Column(db.Integer)  # 故障的分数  可映射故障的等级 A (R 80-125)  B (R 45-79)  C(R 11-44) D(R 1-10)
     requirement_id = db.Column(db.Integer)  # 需求 ID
     case_covered = db.Column(db.Integer)  # 用例覆盖  0为未覆盖  1为覆盖
+    tag = db.Column(db.String(300))
 
 
 class IssueRecord(EntityModel):
@@ -72,3 +73,4 @@ class IssueRecord(EntityModel):
     rank = db.Column(db.Integer)  # 故障的分数 可映射故障的等级 A (R 80-125)  B (R 45-79)  C(R 11-44) D(R 1-10)
     requirement_id = db.Column(db.Integer)  # 需求 ID
     case_covered = db.Column(db.Integer)  # 用例覆盖  0为未覆盖  1为覆盖
+    tag = db.Column(db.String(300))

@@ -44,6 +44,8 @@ issue_create:
     type: int
   case_covered:
     type: int
+  tag:
+    type: basestring
   returnvalue:
     - system
     - version
@@ -65,6 +67,8 @@ issue_create:
     - detection_chance
     - requirement_id
     - case_covered
+    - tag
+
 
 issue_modify:
   system:
@@ -111,6 +115,8 @@ issue_modify:
     type: int
   case_covered:
     type: int
+  tag:
+    type: basestring
   returnvalue:
     - system
     - version
@@ -131,6 +137,7 @@ issue_modify:
     - detection_chance
     - requirement_id
     - case_covered
+    - tag
 
 issue_dashboard:
   start_date:

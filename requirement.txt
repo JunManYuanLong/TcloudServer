@@ -25,4 +25,6 @@ pandas==0.24.2
 jira
 tornado
 ujson
-
+aredis
+redis
+flask-caching

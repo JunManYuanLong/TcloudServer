@@ -4,19 +4,19 @@ from aredis import StrictRedis
 from tornado import websocket, web, ioloop, httpserver, gen
 from tornado.options import define, options
 
-from public_config import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT
+from public_config import REDIS_HOST, REDIS_PASSWORD, REDIS_PORT, REDIS_DB
 
 """
 优化方案：
 监听当前用户的redis_key，看未读消息数，有变化就去返回该消息数，否则返回ping/pong
-如果需要打开改消息通知服务的话，需要去message服务解除相关注释以及library/api/db的redis注释
 """
 
 define("port", default=9040, help="run on the given port", type=int)
-redis_client = StrictRedis(host=REDIS_HOST, password=REDIS_PASSWORD, port=REDIS_PORT, decode_responses=True)
+redis_client = StrictRedis(host=REDIS_HOST, password=REDIS_PASSWORD,
+                           port=REDIS_PORT, db=REDIS_DB, decode_responses=True)
 
 
-class WebSocketHandler(websocket.WebSocketHandler, ABC):
+class MessageWSHandler(websocket.WebSocketHandler, ABC):
     """
     @api {ws} /v1/ws/message 站内信websocket接口
     @apiName MessageWsApi
@@ -67,7 +67,7 @@ class WebSocketHandler(websocket.WebSocketHandler, ABC):
                             await self.write_message({'code': 101})
                     else:
                         await self.write_message({'code': 101})
-                    await gen.sleep(3)
+                    await gen.sleep(5)
                 except websocket.WebSocketClosedError:
                     self.on_close()
                     break
@@ -83,7 +83,7 @@ class HealthyCheckHandler(web.RequestHandler, ABC):
 
 def make_app():
     return web.Application([
-        ("/v1/ws/message", WebSocketHandler),
+        ("/v1/ws/message", MessageWSHandler),
         ("/v1/ws/healthycheck", HealthyCheckHandler)
     ])
 

@@ -1,4 +1,4 @@
-from flask import g, request, current_app
+from flask import request, current_app
 from sqlalchemy import desc, func
 
 from apps.auth.models.users import User, UserBindProject
@@ -9,6 +9,8 @@ from apps.project.models.requirement import Requirement
 from apps.project.models.tasks import TaskCase, Task
 from apps.project.models.version import Version
 from library.api.db import db
+from library.api.exceptions import SaveObjectException, CannotFindObjectException
+from library.api.render import row2list
 from library.api.transfer import transfer2json, slicejson, transfer2jsonwithoutset
 from library.trpc import Trpc
 
@@ -54,24 +56,30 @@ class ProjectBusiness(object):
 
     @classmethod
     def create_new_project(cls, name, description, logo):
+        ret = Project.query.filter_by(name=name, status=Project.ACTIVE).first()
+        if ret:
+            raise SaveObjectException('存在相同名称的项目')
 
-        try:
-            p = Project(
-                name=name,
-                description=description,
-                logo=logo,
-            )
-            db.session.add(p)
-            db.session.commit()
-            return 0, None
-        except Exception as e:
-            current_app.logger.error(str(e))
-            return 102, str(e)
+        p = Project(
+            name=name,
+            description=description,
+            logo=logo,
+        )
+        db.session.add(p)
+        db.session.commit()
+        return 0, None
 
     @classmethod
     def modify(cls, id, name, description, weight, logo):
+        ret = Project.query.filter_by(name=name,
+                                      status=Project.ACTIVE).filter(Project.id != id).first()
+        if ret:
+            raise SaveObjectException('存在相同名称的项目')
 
         project = Project.query.get(id)
+        if not project:
+            raise CannotFindObjectException
+
         if project.status == Project.ACTIVE:
             try:
                 project.name = name
@@ -204,6 +212,20 @@ class ProjectBusiness(object):
             Issue.project_id == id, Issue.status != Issue.DISABLE, Version.status != Version.DISABLE
         )
 
+        # 每天新建和关闭的issue总数
+        create_count = Issue.query.add_columns(
+            func.date_format(Issue.creation_time, "%Y-%m-%d").label('creation_time'),
+            func.count('*').label('count')
+        ).filter(
+            Issue.project_id == id, Issue.status != Issue.DISABLE
+        )
+        finish_count = Issue.query.add_columns(
+            func.date_format(Issue.modified_time, "%Y-%m-%d").label('modified_time'),
+            func.count('*').label('count')
+        ).filter(
+            Issue.project_id == id, Issue.status != Issue.DISABLE
+        )
+
         # 根据时间过滤数据
         if start_time and end_time:
             requirement = requirement.filter(Version.start_time.between(start_time, end_time + " 23:59:59"))
@@ -213,6 +235,13 @@ class ProjectBusiness(object):
             taskcase = taskcase.filter(Version.start_time.between(start_time, end_time + " 23:59:59"))
             issue_status_ret = issue_status_ret.filter(Issue.creation_time.between(start_time, end_time + " 23:59:59"))
             issue_rank_ret = issue_rank_ret.filter(Version.start_time.between(start_time, end_time + " 23:59:59"))
+            create_count = create_count.filter(
+                Issue.creation_time.between(start_time, end_time + " 23:59:59")
+            )
+            finish_count = finish_count.filter(
+                Issue.handle_status == 4,
+                Issue.modified_time.between(start_time, end_time + " 23:59:59")
+            )
 
         requirement = requirement.group_by(Requirement.version).order_by(desc(Version.id)).all()
         issue = issue.group_by(Issue.version).order_by(desc(Version.id)).all()
@@ -280,6 +309,11 @@ class ProjectBusiness(object):
             else:
                 issue_info[i]['rank'] = 0
 
+        create_count = create_count.group_by(func.date_format(Issue.creation_time, "%Y-%m-%d")).all()
+        create_issue_count = row2list(create_count)
+        finish_count = finish_count.group_by(func.date_format(Issue.modified_time, "%Y-%m-%d")).all()
+        finish_issue_count = row2list(finish_count)
+
         detail = [
             dict(
                 requirement_sum=requirement_sum,
@@ -291,6 +325,8 @@ class ProjectBusiness(object):
                 issue_status=issue_status,
                 taskcase_sum=taskcase_sum,
                 tester_data=tester_data,
+                create_issue_count=create_issue_count,
+                finish_issue_count=finish_issue_count
             )
         ]
         return detail

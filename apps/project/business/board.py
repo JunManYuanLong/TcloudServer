@@ -18,8 +18,9 @@ class BoardBusiness(object):
     @classmethod
     @transfer2json(
         '?id|!name|!description|!tmethod|!ttype|!status|!start_time|!end_time|!priority|!version_id|!version_name'
-        '|!creator_id|!creator_name|!executor_id|!executor_name|!project_id')
-    def task_query(cls, projectid, userid, status, iscreator):
+        '|!creator_id|!creator_name|!executor_id|!executor_name|!project_id',
+        ispagination=True)
+    def task_query(cls, projectid, userid, status, iscreator, page_size, page_index, title):
         # 0:创建,1:任务已删除,2:任务已完成
         user_creator = aliased(User)
         user_executor = aliased(User)
@@ -43,7 +44,6 @@ class BoardBusiness(object):
             user_creator.nickname.label('creator_name'),
             user_executor.id.label('executor_id'),
             user_executor.nickname.label('executor_name'),
-
         )
         if projectid:
             ret = ret.filter(Task.project_id == projectid)
@@ -51,14 +51,21 @@ class BoardBusiness(object):
             ret = ret.filter(Task.creator == userid)
         else:
             ret = ret.filter(Task.executor == userid)
-        ret = ret.filter(Task.status.in_(status)).order_by(desc(Task.id)).all()
-        return ret
+        if title not in ["", None]:
+            ret = ret.filter(Task.name.like(f'%{title}%'))
+        ret = ret.filter(Task.status.in_(status))
+        result = ret.order_by(desc(Task.id)
+                              ).limit(int(page_size)).offset(int(page_index - 1) * int(page_size)).all()
+        count = ret.count()
+        return result, count
 
     @classmethod
     @transfer2json(
         '?taskcaseid|!task_id|!executor_id|!executor_name|!handler_id|!handler_name|!exe_way|!cnumber|!ctype|!title|'
-        '!description|!precondition|!step_result|!is_auto|!status|!comment|!module_id|!module_name|!project_id')
-    def task_case_query(cls, projectid, userid, status, iscreator):
+        '!description|!precondition|!step_result|!is_auto|!status|!comment|!module_id|!module_name|!project_id',
+        ispagination=True
+    )
+    def task_case_query(cls, projectid, userid, status, iscreator, page_size, page_index, title):
         # 0:case创建,1:case已删除,2:跳过,3:case执行通过,4:case执行不通过
         user_executor = aliased(User)
         user_handler = aliased(User)
@@ -93,14 +100,20 @@ class BoardBusiness(object):
             ret = ret.filter(TaskCase.handler == userid)
         else:
             ret = ret.filter(TaskCase.executor == userid)
-        ret = ret.filter(TaskCase.status.in_(status)).order_by(desc(TaskCase.id)).all()
-
-        return ret
+        if title not in ["", None]:
+            ret = ret.filter(TaskCase.title.like(f'%{title}%'))
+        ret = ret.filter(TaskCase.status.in_(status))
+        result = ret.order_by(desc(TaskCase.id)
+                              ).limit(int(page_size)).offset(int(page_index - 1) * int(page_size)).all()
+        count = ret.count()
+        return result, count
 
     @classmethod
     @transfer2json('?id|!issue_number|!title|!handle_status|!description|!chance|!level|!priority|!stage'
-                   '|!version_id|!version_name|!creator_id|!creator_name|!handler_id|!handler_name|!project_id')
-    def issue_query(cls, projectid, userid, status, iscreator):
+                   '|!version_id|!version_name|!creator_id|!creator_name|!handler_id|!handler_name|!project_id',
+                   ispagination=True
+                   )
+    def issue_query(cls, projectid, userid, status, iscreator, page_size, page_index, title):
         # 处理状态 {"1": "待办", "2": "处理中", "3": "测试中", "4": "已关闭", "5": "已拒绝", "6": "延时处理"}
         user_creator = aliased(User)
         user_handler = aliased(User)
@@ -131,9 +144,13 @@ class BoardBusiness(object):
             ret = ret.filter(Issue.creator == userid)
         else:
             ret = ret.filter(Issue.handler == userid)
-        ret = ret.filter(Issue.handle_status.in_(status), Issue.status == Issue.ACTIVE).order_by(desc(Issue.id)).all()
-
-        return ret
+        if title not in ["", None]:
+            ret = ret.filter(Issue.title.like(f'%{title}%'))
+        ret = ret.filter(Issue.handle_status.in_(status), Issue.status == Issue.ACTIVE)
+        result = ret.order_by(desc(Issue.id)
+                              ).limit(int(page_size)).offset(int(page_index - 1) * int(page_size)).all()
+        count = ret.count()
+        return result, count
 
     @classmethod
     def board_config(cls):
@@ -145,34 +162,56 @@ class BoardBusiness(object):
         return user_id, board_config
 
     @classmethod
-    def user_create(cls):
+    def user_create(cls, page_size, page_index, r_type, title):
         project_id = request.args.get('projectid')
         user_id, board_config = cls.board_config()
-        task_ret = cls.task_query(project_id, user_id, board_config['create']['task'], 1)
+        ret = None
+        count = 0
+        if r_type == "task":
+            ret, count = cls.task_query(project_id, user_id, board_config['create']['task'], 1, page_size,
+                                        page_index, title)
         # task_case_ret = cls.task_case_query(projectid, user_id, board_config['create']['task_case'], 1)
-        issue_ret = cls.issue_query(project_id, user_id, board_config['create']['issue'], 1)
-        ret = dict(task_info=task_ret, issue_info=issue_ret)
-        return ret
+        if r_type == "issue":
+            ret, count = cls.issue_query(project_id, user_id, board_config['create']['issue'], 1, page_size,
+                                         page_index, title)
+
+        return ret, count
 
     @classmethod
-    def user_unfinish(cls):
+    def user_unfinish(cls, page_size, page_index, r_type, title):
         project_id = request.args.get('projectid')
         user_id, board_config = cls.board_config()
-        task_ret = cls.task_query(project_id, user_id, board_config['unfinish']['task'], 0)
-        task_case_ret = cls.task_case_query(project_id, user_id, board_config['unfinish']['task_case'], 1)
-        issue_ret = cls.issue_query(project_id, user_id, board_config['unfinish']['issue'], 0)
-        ret = dict(task_info=task_ret, task_case_info=task_case_ret, issue_info=issue_ret)
-        return ret
+        ret = None
+        count = 0
+        if r_type == "task":
+            ret, count = cls.task_query(project_id, user_id, board_config['unfinish']['task'], 0, page_size, page_index,
+                                        title)
+        if r_type == "task_case":
+            ret, count = cls.task_case_query(project_id, user_id, board_config['unfinish']['task_case'],
+                                             1, page_size, page_index, title)
+        if r_type == "issue":
+            ret, count = cls.issue_query(project_id, user_id, board_config['unfinish']['issue'], 0, page_size,
+                                         page_index, title)
+        return ret, count
 
     @classmethod
-    def user_finish(cls):
+    def user_finish(cls, page_size, page_index, r_type, title):
         project_id = request.args.get('projectid')
         user_id, board_config = cls.board_config()
-        task_ret = cls.task_query(project_id, user_id, board_config['finish']['task'], 0)
-        task_case_ret = cls.task_case_query(project_id, user_id, board_config['finish']['task_case'], 1)
-        issue_ret = cls.issue_query(project_id, user_id, board_config['finish']['issue'], 0)
-        ret = dict(task_info=task_ret, task_case_info=task_case_ret, issue_info=issue_ret)
-        return ret
+        ret = None
+        count = 0
+
+        if r_type == "task":
+            ret, count = cls.task_query(project_id, user_id, board_config['finish']['task'], 0, page_size, page_index,
+                                        title)
+        if r_type == "task_case":
+            ret, count = cls.task_case_query(project_id, user_id, board_config['finish']['task_case'], 1,
+                                             page_size, page_index, title)
+        if r_type == "issue":
+            ret, count = cls.issue_query(project_id, user_id, board_config['finish']['issue'], 0, page_size,
+                                                 page_index, title)
+
+        return ret, count
 
     @classmethod
     def stf_devices(cls):

@@ -467,11 +467,9 @@ class UserBusiness(object):
             User.telephone.label('telephone'),
             User.picture.label('picture'),
             User.weight.label('userweight')).filter(User.id.in_(user_list)).all()
-        keys = ['userid', 'nickname', 'picture', 'username', 'userweight']
-        user_info_list = row2list(user_info_row, keys)
+        user_info_list = row2list(user_info_row)
         role_row = Role.query.filter(Role.status != Role.DISABLE).all()
-        role_keys = ['id', 'name', 'comment']
-        role_list = row2list(role_row, role_keys)
+        role_list = row2list(role_row)
         role_dict = {}
         for role in role_list:
             role_dict[role['id']] = role
@@ -497,5 +495,5 @@ class UserBusiness(object):
                                        User.email == wxemail).all()
         else:
             data = cls._query().filter(User.status == User.ACTIVE,
-                                       User.email.like(f'{wxemail}@%')).all()
+                                       User.email.startswith(f'{wxemail}@%')).all()
         return data

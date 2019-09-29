@@ -124,9 +124,11 @@ def module_query_by_project_id_handler(pid):
         "total":85
      }
     """
-    module_name = request.args.get('modulename')
-    data, case_total = ModuleBusiness.query_by_project_id(pid, module_name)
-    return {'code': 0, 'data': data, 'total': case_total}
+    data, case_total, page_index, page_size, module_total = ModuleBusiness.query_by_project_id(pid)
+    return {
+        'code': 0, 'data': data, 'total': case_total, 'page_index': page_index, 'page_size': page_size,
+        'module_total': module_total
+    }
 
 
 @module.route('/queryprojectcase/<int:pid>', methods=['GET'])

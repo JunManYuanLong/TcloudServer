@@ -9,9 +9,11 @@ from sqlalchemy.orm import aliased
 
 from apps.auth.models.users import User
 from apps.project.business.modules import ModuleBusiness
+from apps.project.business.tag import TagBusiness
 from apps.project.models.cases import Case
 from apps.project.models.modules import Module
 from apps.project.models.project import Project
+from apps.project.models.tag import Tag
 from apps.project.models.tasks import Task, TaskCase, TaskCaseRecord
 from apps.project.models.version import Version
 from library.api.db import db
@@ -81,8 +83,7 @@ class TaskBusiness(object):
             status = status.split(',')
             ret = ret.filter(Task.status.in_(status))
         if title:
-            ret = ret.filter(or_(Task.name.like(f'%{title}%'), Task.id.like(f'{title}%')))
-
+            ret = ret.filter(or_(Task.name.like(f'%{title}%'), Task.id.startswith(f'{title}%')))
         if tag:
             ret = ret.filter(func.find_in_set(tag, Task.tag))
         ret = ret.order_by(desc(Task.id))
@@ -126,8 +127,8 @@ class TaskBusiness(object):
         'creator|id|name|creator_id|creator_name', 'version|id|name|version_id|version_name'
     ])
     @transfer2json(
-        '?id|!name|!description|~case_list|!attach|!attachment|!testreport|!tmethod|!ttype|!status|!start_time|!end_time|'
-        '!priority|!project_id|@version_id|@version_name'
+        '?id|!name|!description|~case_list|!attach|!attachment|!testreport|!tmethod|!ttype|!status|!start_time|'
+        '!end_time|!priority|!project_id|@version_id|@version_name'
         '|@creator_id|@creator_name|@executor_id|@executor_name|!tag')
     def _query_borad(cls, user, start_time, end_time, project_id, version):
         ret = cls._query().filter(Task.status != Task.DISABLE)
@@ -173,8 +174,8 @@ class TaskBusiness(object):
         'creator|id|name|creator_id|creator_name', 'version|id|name|version_id|version_name'
     ])
     @transfer2json(
-        '?id|!name|!description|~case_list|!attach|!attachment|!testreport|!tmethod|!ttype|!status|!start_time|!end_time|'
-        '!priority|!project_id|@version_id|@version_name'
+        '?id|!name|!description|~case_list|!attach|!attachment|!testreport|!tmethod|!ttype|!status|!start_time|'
+        '!end_time|!priority|!project_id|@version_id|@version_name'
         '|@creator_id|@creator_name|@executor_id|@executor_name|!tag')
     def query_json_by_id(cls, id):
         return cls._query().filter(Task.id == id,
@@ -218,8 +219,8 @@ class TaskBusiness(object):
         'creator|id|name|creator_id|creator_name'
     ])
     @transfer2json(
-        '?id|!name|!description|~case_list|!attach|!attachment|!testreport|!tmethod|!ttype|!status|!start_time|!end_time|'
-        '!priority|!project_id|!version_id'
+        '?id|!name|!description|~case_list|!attach|!attachment|!testreport|!tmethod|!ttype|!status|!start_time|'
+        '!end_time|!priority|!project_id|!version_id'
         '|@creator_id|@creator_name|@executor_id|@executor_name|!tag')
     def query_by_version_id(cls, version_id):
         return cls._query().filter(Task.version == version_id,
@@ -236,11 +237,13 @@ class TaskBusiness(object):
             taskcase = TaskCase.query.filter(TaskCase.status == TaskCase.ACTIVE, TaskCase.task_id == id).all()
             if taskcase and int(mstatus) is 2:
                 return 106, '任务用例未全部执行！'
+            task = Task.query.get(id)
             if mstatus is 1:
                 current_app.logger.info('task remove,taskcase remove too.')
                 for case in taskcase:
                     case.status = 1
-            task = Task.query.get(id)
+                if task.tag:
+                    TagBusiness.less_reference(task.tag)
             task.status = mstatus
             db.session.add(task, taskcase)
             db.session.commit()
@@ -307,6 +310,9 @@ class TaskBusiness(object):
             else:
                 current_app.logger.info("case_list should be  a Non empty list！")
             db.session.commit()
+            if tag:
+                TagBusiness.add_reference(tag)
+
             user_list = [executor]
             board_config = cls.public_trpc.requests('get', '/public/config', {'module': 'tcloud', 'module_type': 1})
             text = f'''[任务创建 - {name}]
@@ -323,6 +329,8 @@ URL：{board_config}/project/{project_id}/version/{version}'''
                testreport, attach, tag, attachment):
         try:
             task = Task.query.get(id)
+            old_tag = []
+            new_tag = []
             is_change_executor = False
             if task.executor != executor:
                 is_change_executor = True
@@ -357,12 +365,18 @@ URL：{board_config}/project/{project_id}/version/{version}'''
             task.start_time = start_time
             task.end_time = end_time
             task.priority = priority
-            task.tag = tag
+            if task.tag != tag:
+                old_tag = task.tag
+                new_tag = tag
+                task.tag = tag
             task.attachment = attachment
             # task.testreport = testreport
             # task.attach = attach
             db.session.add(task)
             db.session.commit()
+
+            if old_tag or new_tag:
+                TagBusiness.change_reference(old_tag, new_tag)
             if is_change_executor:
                 modifier_user = cls.user_trpc.requests('get', f'/user/{g.userid}')
                 if modifier_user:
@@ -485,8 +499,8 @@ URL：{board_config}/project/{project_id}/version/{version}'''
         'creator|id|name|creator_id|creator_name', 'version|id|name|version_id|version_name'
     ], ispagination=True)
     @transfer2json(
-        '?id|!name|!description|~case_list|!attach|!attachment|!testreport|!tmethod|!ttype|!status|!start_time|!end_time|'
-        '!priority|!project_id|@version_id|@version_name'
+        '?id|!name|!description|~case_list|!attach|!attachment|!testreport|!tmethod|!ttype|!status|'
+        '!start_time|!end_time|!priority|!project_id|@version_id|@version_name'
         '|@creator_id|@creator_name|@executor_id|@executor_name|!tag', ispagination=True)
     def pageinate_data(cls, page_size, page_index):
         query = cls.filter_query()
@@ -567,7 +581,7 @@ class TaskCaseBusiness(object):
             status = status.split(',')
             ret = ret.filter(TaskCase.status.in_(status))
         if title:
-            ret = ret.filter(or_(TaskCase.title.like(f'%{title}%'), TaskCase.id.like(f'{title}%')))
+            ret = ret.filter(or_(TaskCase.title.like(f'%{title}%'), TaskCase.id.startswith(f'{title}%')))
         ret = ret.order_by(desc(TaskCase.id)).all()
         return ret
 
@@ -1195,7 +1209,8 @@ class TaskDashBoardBusiness(object):
             func.count('*').label('count')). \
             filter(TaskCase.creation_time.between(start_date, end_date + " 23:59:59")). \
             filter(TaskCase.handler != None, TaskCase.status != TaskCase.ACTIVE).group_by(
-            func.date_format(TaskCase.creation_time, "%Y-%m-%d"), TaskCase.handler).order_by(desc(TaskCase.handler)).all()
+            func.date_format(TaskCase.creation_time, "%Y-%m-%d"), TaskCase.handler).order_by(
+            desc(TaskCase.handler)).all()
 
         for tester in testers:
             userid = tester.get('userid')
@@ -1204,7 +1219,7 @@ class TaskDashBoardBusiness(object):
             info = []
             for da in dashboard_ret:
                 if userid == da.handler:
-                    info.append({"date":da.creation_time,"count":da.count})
+                    info.append({"date": da.creation_time, "count": da.count})
             detail = [
                 dict(
                     userid=userid,

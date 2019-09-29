@@ -2,6 +2,7 @@ from flask import Flask, jsonify
 from gunicorn.six import iteritems
 
 from library.api.db import db
+# from library.api.db import cache
 from library.api.parse import format_response
 from library.api.tMiddleware import t_middleware
 from library.tlogger import logger_create
@@ -66,6 +67,7 @@ def register_logger(app, config):
 
 def register_extensions(app):
     db.init_app(app)
+    # cache.init_app(app)
 
 
 def tflask(config):

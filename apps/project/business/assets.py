@@ -120,7 +120,7 @@ class PhoneBusiness(object):
         users = {int(user.get('userid')): user
                  for user in user_trpc.requests(method='get', path='/user', query={'base_info': True})}
         # 获取所有借用关系列表
-        phone_borrows = {phone_borrow.id: phone_borrow for phone_borrow in PhoneBorrow.query.all()}
+        phone_borrows = {phone_borrow.phone_id: phone_borrow for phone_borrow in PhoneBorrow.query.all()}
         data = []
         for phone in phones:
             phone_borrow = phone_borrows.get(phone.get('id'))

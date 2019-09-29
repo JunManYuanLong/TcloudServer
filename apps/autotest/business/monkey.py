@@ -8,10 +8,9 @@ import jenkins
 from flask import current_app
 from sqlalchemy import desc, func
 
+from apps.autotest.business.performance import PerformanceTestBusiness
 from apps.autotest.models.monkey import (
-    Monkey, MonkeyErrorLog, MonkeyDeviceStatus, MonkeyPackage, MonkeyReport,
-    MonkeyDeviceUsing,
-)
+    Monkey, MonkeyErrorLog, MonkeyDeviceStatus, MonkeyPackage, MonkeyReport, MonkeyDeviceUsing)
 from apps.tcdevices.models.tcDevices import TcDevicesnInfo
 from library.api.db import db
 from library.api.exceptions import (
@@ -53,7 +52,8 @@ class MonkeyBusiness(object):
             Monkey.login_username.label('login_username'),
             Monkey.login_password.label('login_password'),
             Monkey.app_install_required.label('app_install_required'),
-            Monkey.cancel_status.label('cancel_status')
+            Monkey.cancel_status.label('cancel_status'),
+            Monkey.test_type.label('test_type'),
         )
 
     @classmethod
@@ -62,14 +62,15 @@ class MonkeyBusiness(object):
         '!process|!status|!type_id|!download_app_status|!run_time|!actual_run_time|!app_id|!creation_time|'
         '!system_device|!login_required|!login_username|!login_password|!app_install_required|!cancel_status'
     )
-    def query_all_json(cls, page_size, page_index):
-        ret = cls._query().filter(Monkey.status == Monkey.ACTIVE).order_by(
+    def query_all_json(cls, page_size, page_index, test_type=1):
+        ret = cls._query().filter(Monkey.status == Monkey.ACTIVE,
+                                  Monkey.test_type == test_type).order_by(
             desc(Monkey.id)).limit(page_size).offset((page_index - 1) * page_size).all()
         return ret
 
     @classmethod
-    def query_all_count(cls):
-        count = cls._query().filter(Monkey.status == Monkey.ACTIVE).count()
+    def query_all_count(cls, test_type=1):
+        count = cls._query().filter(Monkey.status == Monkey.ACTIVE, Monkey.test_type == test_type).count()
         return count
 
     @classmethod
@@ -78,14 +79,17 @@ class MonkeyBusiness(object):
         '!process|!status|!type_id|!download_app_status|!run_time|!actual_run_time|!app_id|!creation_time|'
         '!system_device|!login_required|!login_username|!login_password|!app_install_required|!cancel_status'
     )
-    def query_json_by_user_id(cls, user_id, page_size, page_index):
-        ret = cls._query().filter(Monkey.status == Monkey.ACTIVE, Monkey.user_id == user_id).order_by(
+    def query_json_by_user_id(cls, user_id, page_size, page_index, test_type=1):
+        ret = cls._query().filter(Monkey.status == Monkey.ACTIVE,
+                                  Monkey.test_type == test_type,
+                                  Monkey.user_id == user_id).order_by(
             desc(Monkey.id)).limit(page_size).offset((page_index - 1) * page_size).all()
         return ret
 
     @classmethod
-    def query_count_by_user_id(cls, user_id):
-        count = cls._query().filter(Monkey.status == Monkey.ACTIVE, Monkey.user_id == user_id)
+    def query_count_by_user_id(cls, user_id, test_type=1):
+        count = cls._query().filter(Monkey.status == Monkey.ACTIVE, Monkey.user_id == user_id,
+                                    Monkey.test_type == test_type)
         current_app.logger.info(count.count())
         return count.count()
 
@@ -197,13 +201,16 @@ class MonkeyBusiness(object):
             raise SaveObjectException()
 
     @classmethod
-    def start_jenkins_job(cls, parameters):
+    def start_jenkins_job(cls, test_type, parameters):
         try:
             jenkins_server_url = current_app.config['CI_AUTO_MAN_JENKINS_URL']
             jenkins_server_username = current_app.config['CI_AUTO_MAN_JENKINS_AUTH']
-            job_name = current_app.config['CI_AUTO_MAN_JENKINS_MONKEY_JOB']
             jenkins_server = jenkins.Jenkins(jenkins_server_url, username=jenkins_server_username.get('username'),
                                              password=jenkins_server_username.get('password'))
+            if test_type == 1:
+                job_name = current_app.config['CI_AUTO_MAN_JENKINS_MONKEY_JOB']
+            elif test_type == 2:
+                job_name = current_app.config['CI_AUTO_MAN_JENKINS_PERFORMANCE_JOB']
             jenkins_server.build_job(job_name, parameters)
             return 'Success'
         except Exception as e:
@@ -212,8 +219,144 @@ class MonkeyBusiness(object):
             raise SaveObjectException()
 
     @classmethod
+    def start_test(cls, user_id, mobile_infos, type_id, run_time, system_device, login_required, login_username,
+                   login_password, app_id, parameters, app_install_required, test_type=1, test_config=''):
+        test_type = int(test_type)
+        if test_type == 1:
+            current_app.logger.info('start monkey test ')
+            cls.start_monkey(user_id, mobile_infos, type_id, run_time, system_device, login_required, login_username,
+                             login_password, app_id, parameters, app_install_required)
+        elif test_type == 2:
+            current_app.logger.info('start performance test ')
+            cls.start_performance(user_id, mobile_infos, type_id, run_time, system_device, login_required,
+                                  login_username, login_password, app_id, parameters, app_install_required,
+                                  test_config)
+        return 0, None
+
+    @classmethod
+    def start_performance(cls, user_id, mobile_infos, type_id, run_time, system_device, login_required, login_username,
+                          login_password, app_id, parameters, app_install_required, test_config):
+        try:
+            current_app.logger.info('start performance test ')
+            if not isinstance(mobile_infos, list):
+                return 102, 'mobile_ids 参数格式不对，应为 List 格式'
+
+            mobile_ids = []
+            mobile_models = {}
+            mobile_versions = {}
+            mobile_resolutions = {}
+
+            for info in mobile_infos:
+                id = info.get('mobile_id')
+                mobile_ids.append(id)
+                mobile_models[id] = info.get('mobile_model')
+                mobile_versions[id] = info.get('mobile_version')
+                mobile_resolutions[id] = info.get('mobile_resolution')
+
+            try:
+                parameters = json.loads(parameters)
+            except Exception as e:
+                current_app.logger.warning('error when json the parameters: {}'.format(parameters))
+
+            if not isinstance(parameters, dict):
+                return 102, 'parameters 参数格式不对，应为 dict 格式'
+
+            app_info = MonkeyPackage.query.get(app_id)
+
+            # 创建 Monkey 示例
+            monkey = Monkey(
+                app_name=app_info.name,
+                app_id=app_id,
+                package_name=app_info.package_name,
+                begin_time=datetime.now(),
+                user_id=user_id,
+                report_url='',
+                mobile_ids=','.join(mobile_ids),
+                parameters=str(parameters),
+                process=0,
+                type_id=type_id,
+                run_time=run_time,
+                system_device=system_device,
+                login_required=login_required,
+                login_username=login_username,
+                login_password=login_password,
+                app_install_required=app_install_required,
+                test_type=2,
+            )
+            db.session.add(monkey)
+            db.session.flush()
+
+            # 创建 PerformanceDeviceStatus
+            device_serial_list = []
+            task_id_list = []
+
+            # status defined
+            # setup_info = db.Column(db.Integer)  # 前置条件, 表情打开：1，表情关闭：2
+            # base_app = db.Column(db.Integer)  # 场景（不同的app）,微信：1，QQ：2，WPS: 3，趣键盘：4
+            # key_type = db.Column(db.Integer)  # 26 : 1, 9 : 2
+            # run_time = db.Column(db.Integer)  # 输入运行时间
+            # all_env = [
+            #     [1, 1, 1, run_time],
+            #     [1, 2, 2, run_time],
+            #     [2, 1, 1, run_time],
+            #     [2, 2, 2, run_time],
+            #     [2, 3, 1, run_time],
+            #     [2, 4, 2, run_time]
+            # ]
+
+            devices_info = TcDevicesnInfo.query.all()
+            for mobile_id in mobile_ids:
+                current_app.logger.info(mobile_id)
+                device_serial_list.append(mobile_id)
+
+                for device in devices_info:
+                    if device.serial == mobile_id:
+                        task = MonkeyDeviceStatusBusiness.create(monkey.id, device.id,
+                                                                 mobile_models.get(mobile_id),
+                                                                 mobile_versions.get(mobile_id), device.serial,
+                                                                 mobile_resolutions.get(mobile_id), run_time)
+                        task_id_list.append(str(task))
+                        # task_id_list[str(task)] = []
+                        # for env_row in all_env:
+                        #     env_id = PerformanceTestBusiness.create(task, *env_row)
+                        #     task_id_list[str(task)].append(env_id)
+                        break
+
+            db.session.commit()
+
+            jenkins_parameters = {
+                'PackageName': app_info.package_name,
+                'DeviceName': ','.join(device_serial_list),
+                'RunMode': type_id,
+                'RunTime': run_time,
+                'AppDownloadUrl': app_info.oss_url,
+                'DefaultAppActivity': app_info.default_activity,
+                'SystemDevice': system_device,
+                'LoginRequired': login_required,
+                'LoginUsername': login_username,
+                'LoginPassword': login_password,
+                'TaskId': ",".join(task_id_list), # json.dumps(task_id_list),
+                'MonkeyId': monkey.id,
+                'InstallAppRequired': monkey.app_install_required,
+                'TestType': 'performance',
+                'TestConfig': test_config
+            }
+
+            msg = cls.start_jenkins_job(2, jenkins_parameters)
+
+            if msg == "Success":
+                current_app.logger.info('build jenkins job success')
+
+            return 0, None
+
+        except Exception as e:
+            current_app.logger.error(e)
+            current_app.logger.error(traceback.format_exc())
+            raise SaveObjectException()
+
+    @classmethod
     def start_monkey(cls, user_id, mobile_infos, type_id, run_time, system_device, login_required, login_username,
-                     login_password, app_id, parameters, app_install_required):
+                     login_password, app_id, parameters, app_install_required, test_type=1):
         try:
             if not isinstance(mobile_infos, list):
                 return 102, 'mobile_ids 参数格式不对，应为 List 格式'
@@ -258,6 +401,7 @@ class MonkeyBusiness(object):
                 login_username=login_username,
                 login_password=login_password,
                 app_install_required=app_install_required,
+                test_type=1
             )
 
             db.session.add(monkey)
@@ -295,10 +439,11 @@ class MonkeyBusiness(object):
                 'LoginPassword': login_password,
                 'TaskId': ','.join(task_id_list),
                 'MonkeyId': monkey.id,
-                'InstallAppRequired': monkey.app_install_required
+                'InstallAppRequired': monkey.app_install_required,
+                'TestType': 'monkey'
             }
 
-            msg = cls.start_jenkins_job(jenkins_parameters)
+            msg = cls.start_jenkins_job(1, jenkins_parameters)
 
             if msg == "Success":
                 current_app.logger.info('build jenkins job success')
@@ -336,7 +481,7 @@ class MonkeyBusiness(object):
             raise OperationFailedException()
 
     @classmethod
-    def get_all_monkeys(cls, id, user_id, page_size, page_index):
+    def get_all_monkeys(cls, id, user_id, page_size, page_index, test_type=1):
 
         current_stage_map = {
             0: '设备状态检查中',
@@ -361,17 +506,22 @@ class MonkeyBusiness(object):
             monkeys = cls.query_json_by_id(id)
             count = 1
         elif user_id:
-            monkeys = cls.query_json_by_user_id(user_id, page_size, page_index)
-            count = cls.query_count_by_user_id(user_id)
+            monkeys = cls.query_json_by_user_id(user_id, page_size, page_index, test_type)
+            count = cls.query_count_by_user_id(user_id, test_type)
         else:
-            monkeys = cls.query_all_json(page_size, page_index)
-            count = cls.query_all_count()
+            monkeys = cls.query_all_json(page_size, page_index, test_type)
+            count = cls.query_all_count(test_type)
 
         stf_devices = TcDevicesnInfo.query.all()
         monkey_packages = {package.get('id'): package for package in
                            MonkeyPackageBusiness.query_all_json_with_status_all()}
         user_infos = {user.get('userid'): user
                       for user in user_trpc.requests(method='get', path='/user', query={'base_info': True})}
+
+        performance_tests = {}
+        if test_type == 2:
+            performance_tests = {performance_test.get('run_type'): performance_test
+                                 for performance_test in PerformanceTestBusiness.query_all_json()}
 
         for monkey_data in monkeys:
             process = 0
@@ -428,8 +578,43 @@ class MonkeyBusiness(object):
                 current_app.logger.error(e)
                 current_app.logger.error(traceback.format_exc())
                 monkey_data['user_nickname'] = ''
+            if test_type == 2:
+                monkey_data['performance_test'] = performance_tests
 
         return monkeys, count
+
+    @classmethod
+    def get_all_name(cls, test_type=1):
+        try:
+            name_list = []
+            monkeys = Monkey.query.add_columns(
+                Monkey.id.label('id'),
+                func.date_format(Monkey.creation_time, "%Y-%m-%d %H:%i:%s").label('creation_time'),
+                Monkey.app_name.label('app_name'),
+                Monkey.app_version.label('app_version')
+            ).filter(Monkey.status==Monkey.ACTIVE, Monkey.test_type==test_type
+                     ).order_by(desc(Monkey.id)).all()
+            for monkey in monkeys:
+                name_list.append(
+                    {
+                        'id': monkey.id,
+                        'name': f'{monkey.id}-{monkey.creation_time}-{monkey.app_name}-{monkey.app_version}'
+                    }
+                )
+            return name_list
+        except Exception as e:
+            current_app.logger.error(e)
+            current_app.logger.error(traceback.format_exc())
+            return []
+
+    @classmethod
+    def get_performance_by_monkey_id_and_type(cls, monkey_id, run_type):
+        infos = {}
+        performances = MonkeyDeviceStatusBusiness.query_json_by_monkey_id(monkey_id)
+        for performance in performances:
+            infos[performance.get('mobile_serial')] = \
+                PerformanceTestBusiness.query_json_by_performance_id_and_type(performance.get('id'), run_type)[0]
+        return [infos]
 
 
 class MonkeyPackageBusiness(object):
@@ -447,21 +632,26 @@ class MonkeyPackageBusiness(object):
             MonkeyPackage.user_id.label('user_id'),
             MonkeyPackage.status.label('status'),
             MonkeyPackage.size.label('size'),
-            func.date_format(MonkeyPackage.creation_time, "%Y-%m-%d %H:%i:%s").label('upload_time')
+            func.date_format(MonkeyPackage.creation_time, "%Y-%m-%d %H:%i:%s").label('upload_time'),
+            MonkeyPackage.test_type.label('test_type'),
         )
 
     @classmethod
     @transfer2json(
         '?id|!name|!package_name|!oss_url|!picture|!version|!default_activity|!user_id|!size|!upload_time'
+        '|!test_type'
     )
-    def query_all_json(cls, page_size=10, page_index=1):
-        ret = cls._query().filter(MonkeyPackage.status == MonkeyPackage.ACTIVE).order_by(desc(MonkeyPackage.id)). \
-            limit(int(page_size)).offset(int(page_index - 1) * int(page_size)).all()
+    def query_all_json(cls, page_size=10, page_index=1, test_type=1):
+        ret = cls._query().filter(MonkeyPackage.status == MonkeyPackage.ACTIVE,
+                                  MonkeyPackage.test_type == test_type).order_by(desc(MonkeyPackage.id)
+                                                                                 ).limit(int(page_size)).offset(
+            int(page_index - 1) * int(page_size)).all()
         return ret
 
     @classmethod
-    def query_all_count(cls):
-        data = cls._query().filter(MonkeyPackage.status == MonkeyPackage.ACTIVE).count()
+    def query_all_count(cls, test_type=1):
+        data = cls._query().filter(MonkeyPackage.status == MonkeyPackage.ACTIVE,
+                                   MonkeyPackage.test_type == test_type).count()
         return data
 
     @classmethod
@@ -489,25 +679,28 @@ class MonkeyPackageBusiness(object):
     @transfer2json(
         '?id|!name|!package_name|!oss_url|!picture|!version|!default_activity|!user_id|!size|!upload_time'
     )
-    def query_json_by_user_id(cls, user_id, page_size, page_index):
-        data = cls._query().filter(MonkeyPackage.status == MonkeyPackage.ACTIVE, MonkeyPackage.user_id == user_id). \
+    def query_json_by_user_id(cls, user_id, page_size, page_index, test_type=1):
+        data = cls._query().filter(MonkeyPackage.status == MonkeyPackage.ACTIVE,
+                                   MonkeyPackage.test_type == test_type,
+                                   MonkeyPackage.user_id == user_id). \
             order_by(desc(MonkeyPackage.id)).limit(int(page_size)).offset(int(page_index - 1) * int(page_size)).all()
         return data
 
     @classmethod
-    def query_count_by_user_id(cls, user_id):
+    def query_count_by_user_id(cls, user_id, test_type=1):
         count = cls._query().filter(MonkeyPackage.status == MonkeyPackage.ACTIVE,
+                                    MonkeyPackage.test_type == test_type,
                                     MonkeyPackage.user_id == user_id).count()
         return count
 
     @classmethod
-    def get_monkey_packages_by_user_id(cls, user_id, page_size, page_index):
+    def get_monkey_packages_by_user_id(cls, user_id, page_size, page_index, test_type=1):
         if user_id:
-            all = cls.query_json_by_user_id(user_id, page_size, page_index)
-            count = cls.query_count_by_user_id(user_id)
+            all = cls.query_json_by_user_id(user_id, page_size, page_index, test_type)
+            count = cls.query_count_by_user_id(user_id, test_type)
         else:
-            all = cls.query_all_json(page_size, page_index)
-            count = cls.query_all_count()
+            all = cls.query_all_json(page_size, page_index, test_type)
+            count = cls.query_all_count(test_type)
         users = {
             user.get('userid'): user
             for user in user_trpc.requests(method='get', path='/user/', query={'base_info': True})
@@ -522,7 +715,7 @@ class MonkeyPackageBusiness(object):
         return all, count
 
     @classmethod
-    def create(cls, name, package_name, oss_url, picture, version, default_activity, user_id, size):
+    def create(cls, name, package_name, oss_url, picture, version, default_activity, user_id, size, test_type=1):
         try:
             monkey_package = MonkeyPackage(
                 name=name,
@@ -532,7 +725,8 @@ class MonkeyPackageBusiness(object):
                 version=version,
                 default_activity=default_activity,
                 user_id=user_id,
-                size=size
+                size=size,
+                test_type=test_type or 1,
             )
             db.session.add(monkey_package)
             db.session.commit()

@@ -4,6 +4,7 @@ from werkzeug.exceptions import HTTPException
 
 from library.api.exceptions import Error, NotLoginException
 from library.api.parse import format_response
+from library.serverchan import send2serverchan
 from public_config import AUTH_KEY, TSECRET, ALGORITHM, SECRET
 
 
@@ -17,12 +18,14 @@ def t_middleware(app):
         if isinstance(e, HTTPException):
             code = e.code
             message = e.name
+            send2serverchan(code)
         elif issubclass(type(e), Error):
             code = e.code
             message = e.message
         else:
             code = 500
-            message = str(e)
+            message = "服务异常，请联系管理员"
+            send2serverchan(code)
 
         err_res = {
             "code": code,
@@ -52,7 +55,8 @@ def t_middleware(app):
                 'login' in request.path or
                 'interface' in request.path or
                 'jira' in request.path or
-                'monkey' in request.path
+                'monkey' in request.path or
+                'performance' in request.path
         ):
             pass
         # 内部trpc，也不需要登录

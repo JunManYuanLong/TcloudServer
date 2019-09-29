@@ -2,6 +2,7 @@ from sqlalchemy import func, desc
 
 from apps.message.models.message import Content, Message
 from library.api.db import db
+# from library.api.db import t_redis
 from library.api.exceptions import SaveObjectException
 from library.api.render import row2list
 
@@ -56,12 +57,12 @@ from library.api.render import row2list
 
 """
 
-
-# 等解决了websocket占用cpu超高后再来搞这个
-# def push2redis(user):
-#     count = _get_unread_count(user)
-#     if isinstance(count, int):
-#         t_redis.set(f'message_{user}', count)
+# 需配置redis，解除注释
+def push2redis(user):
+    pass
+    # count = _get_unread_count(user)
+    # if isinstance(count, int):
+    #     t_redis.set(f'message_{user}', count)
 
 
 def create_by_one2one(send_id, rec_ids, content, message_type, group):
@@ -89,8 +90,8 @@ def create_by_one2one(send_id, rec_ids, content, message_type, group):
                 with db.auto_commit():
                     for i in rec_ids:
                         db.session.add(Message(rec_id=int(i), content_id=content_id, status=Message.UNREAD))
-        # for i in rec_ids:
-        #     push2redis(i)
+        for i in rec_ids:
+            push2redis(i)
         return 0
     raise SaveObjectException()
 
@@ -118,8 +119,7 @@ def get_all_message_by_user_id(user_id, page_size, page_index):
     total = _get_message_query_by_user_id(user_id).count()
     messages = _get_message_query_by_user_id(user_id).limit(
         int(page_size)).offset((int(page_index) - 1) * int(page_size)).all()
-    keys = ['id', 'content', 'status', 'create_time']
-    data = row2list(messages, keys)
+    data = row2list(messages)
     return 0, data, total
 
 
@@ -134,13 +134,12 @@ def get_5_message_by_user_id(user_id):
     #     raise Exception("Error:cls.user_trpc.requests('get', '/allflow')")
 
     messages = _get_message_query_by_user_id(user_id).filter(Message.status == Message.UNREAD).limit(5).all()
-    keys = ['id', 'content', 'status', 'create_time']
-    data = row2list(messages, keys)
+    data = row2list(messages)
     if len(data) < 5:
         rows = 5 - len(data)
         rows_messages = _get_message_query_by_user_id(user_id).filter(
             Message.status != Message.UNREAD).limit(rows).all()
-        rows_data = row2list(rows_messages, keys)
+        rows_data = row2list(rows_messages)
         if rows_data:
             data.extend(rows_data)
     total = len(data)
@@ -154,8 +153,7 @@ def get_all_read_message_by_user_id(user_id, page_size, page_index):
     messages = _get_message_query_by_user_id(user_id).filter(
         Message.status == Message.READ).limit(
         int(page_size)).offset((int(page_index) - 1) * int(page_size)).all()
-    keys = ['id', 'content', 'status', 'create_time']
-    data = row2list(messages, keys)
+    data = row2list(messages)
     return 0, data, total
 
 
@@ -165,8 +163,7 @@ def get_all_unread_message_by_user_id(user_id, page_size, page_index):
     messages = _get_message_query_by_user_id(user_id).filter(
         Message.status == Message.UNREAD).limit(
         int(page_size)).offset((int(page_index) - 1) * int(page_size)).all()
-    keys = ['id', 'content', 'status', 'create_time']
-    data = row2list(messages, keys)
+    data = row2list(messages)
     return 0, data, total
 
 
@@ -179,13 +176,13 @@ def delete_status(user, message_ids=None, isall=None):
         with db.auto_commit():
             query = f"UPDATE message SET status={Message.DISABLE} WHERE rec_id={user} and id in ({message_ids})"
             db.engine.execute(query)
-        # push2redis(user)
+        push2redis(user)
         return 0, ''
     elif isall:
         with db.auto_commit():
             query = f"UPDATE message SET status={Message.DISABLE} WHERE rec_id={user}"
             db.engine.execute(query)
-        # push2redis(user)
+        push2redis(user)
         return 0, ''
     else:
         raise SaveObjectException()
@@ -196,13 +193,13 @@ def change_status(user, message_ids=None, isall=None):
         with db.auto_commit():
             query = f"UPDATE message SET status={Message.READ} WHERE rec_id={user} and id in ({message_ids})"
             db.engine.execute(query)
-        # push2redis(user)
+        push2redis(user)
         return 0, ''
     elif isall:
         with db.auto_commit():
             query = f"UPDATE message SET status={Message.READ} WHERE rec_id={user}"
             db.engine.execute(query)
-        # push2redis(user)
+        push2redis(user)
         return 0, ''
     else:
         raise SaveObjectException()

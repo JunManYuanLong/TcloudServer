@@ -19,12 +19,13 @@ def monkey_index_handler():
     limit, offset = parse_list_args()
 
     monkey_id = request.args.get('monkey_id')
+    test_type = request.args.get('test_type', 1)
 
     if monkey_id:
         data = MonkeyBusiness.query_all_json()
         return json_list_render(0, data, limit, offset)
 
-    data = MonkeyBusiness.query_all_json(limit, offset)
+    data = MonkeyBusiness.query_all_json(limit, offset, test_type=test_type)
     return {
         "code": 0,
         "data": data
@@ -43,11 +44,13 @@ def monkey_all_handler():
     @apiParam {int} [page_index] 分页-页数
     @apiParam {int} [user_id] 用户 ID，获取当前用户 ID 的 monkey 测试信息
     @apiParam {int} [id] Monkey ID，根据 ID 获取 monkey 信息
+    @apiParam {int} [test_type] 测试类型 1：monkey ，2：performance
     @apiParamExample {json} Request-Example:
     {
        "page_index": 1,
        "page_size": 10,
-       "user_id": 1
+       "user_id": 1,
+       "test_type": 1
     }
     @apiSuccessExample {json} Success-Response:
      HTTP/1.1 200 OK
@@ -136,8 +139,9 @@ def monkey_all_handler():
 
     user_id = request.args.get('user_id')
     id = request.args.get('id')
+    test_type = request.args.get('test_type', 1)
 
-    monkeys, count = MonkeyBusiness.get_all_monkeys(id, user_id, page_size, page_index)
+    monkeys, count = MonkeyBusiness.get_all_monkeys(id, user_id, page_size, page_index, test_type=test_type)
 
     return {
         "code": 0,
@@ -228,7 +232,10 @@ def monkey_start_handler():
     @apiParam {string} login_password 登录用户名密码
     @apiParam {int} app_id 要测试的app id
     @apiParam {int} app_install_required 是否需要安装 app，1：是，2：否
+    @apiParam {int} test_type 测试类型，默认 1：monkey，性能测试需要传 2
+    @apiParam {int} test_config 测试配置文件 默认 qjp_ui/config.json
     @apiParamExample {json} Request-Example:
+    ?test_type=2
     {
         "user_id": 1,
         "mobile_infos": [
@@ -246,7 +253,8 @@ def monkey_start_handler():
         "type_id": 1,
         "run_time": 1,
         "app_id": 1,
-        "app_install_required": 1
+        "app_install_required": 1,
+        "test_config": "qjp_ui/config.json"
     }
     @apiSuccessExample {json} Success-Response:
      HTTP/1.1 200 OK
@@ -257,8 +265,9 @@ def monkey_start_handler():
     }
     """
     (user_id, mobile_infos, type_id, run_time, system_device, login_required, login_username, login_password, app_id,
-     app_install_required) = parse_json_form('monkey_start')
-
+     app_install_required, test_config) = parse_json_form('monkey_start')
+    test_type = request.args.get('test_type', 1)
+    # test_config = request.args.get('test_config', '')
     parameters = {
         "system_device": system_device,
         "app": {
@@ -271,8 +280,9 @@ def monkey_start_handler():
             "password": login_password,
         }
     }
-    ret, msg = MonkeyBusiness.start_monkey(user_id, mobile_infos, type_id, run_time, system_device, login_required,
-                                           login_username, login_password, app_id, parameters, app_install_required)
+    ret, msg = MonkeyBusiness.start_test(user_id, mobile_infos, type_id, run_time, system_device, login_required,
+                                           login_username, login_password, app_id, parameters, app_install_required,
+                                           test_type=test_type, test_config=test_config)
     return {
         "code": ret,
         "message": msg
@@ -425,11 +435,13 @@ def monkey_package_index_handler():
     @apiParam {int} [page_index] 分页-页数
     @apiParam {int} [id] Monkey 的 ID
     @apiParam {int} [user_id] 单个设备的测试 ID
+    @apiParam {int} test_type 测试类型，默认为 1：monkey，性能测试需要传 2
     @apiParamExample {json} Request-Example:
     {
         "page_size": 10,
         "page_index": 1,
-        "monkey_id": 1
+        "monkey_id": 1,
+        "test_type": 1
     }
     @apiSuccessExample {json} Success-Response:
      HTTP/1.1 200 OK
@@ -459,11 +471,12 @@ def monkey_package_index_handler():
 
     id = request.args.get('id')
     user_id = request.args.get('user_id')
+    test_type = request.args.get('test_type', 1)
 
     if id:
         data = MonkeyPackageBusiness.query_json_by_id(id)
         return json_detail_render(0, data)
-    all, count = MonkeyPackageBusiness.get_monkey_packages_by_user_id(user_id, page_size, page_index)
+    all, count = MonkeyPackageBusiness.get_monkey_packages_by_user_id(user_id, page_size, page_index, test_type)
     response = dict(
         code=0,
         data=all,
@@ -485,6 +498,7 @@ def monkey_package_create_handler():
     @apiDescription 上传 Monkey 测试包
     @apiParam {int} user_id 上传用户 ID
     @apiParam {string} oss_url 存放 apk 的 oss 路径
+    @apiParam {int} test_type 测试类型，1：monkey，2：performance
     @apiParamExample {json} Request-Example:
     {
         "user_id": 1,
@@ -498,8 +512,8 @@ def monkey_package_create_handler():
         "message": "ok"
     }
     """
-    name, package_name, oss_url, picture, version, default_activity, user_id = parse_json_form('monkey_package_create')
-
+    (name, package_name, oss_url, picture, version, default_activity,
+     user_id, test_type) = parse_json_form('monkey_package_create')
     apk_info = tool_trpc.requests('post', '/tool/apk/analysis', body={"apk_download_url": oss_url})
 
     package_name = apk_info.get('package_name')
@@ -511,7 +525,7 @@ def monkey_package_create_handler():
 
     ret, msg = MonkeyPackageBusiness.create(name=name, package_name=package_name, oss_url=oss_url, picture=picture,
                                             version=version, default_activity=default_activity, user_id=user_id,
-                                            size=size)
+                                            size=size, test_type=test_type)
     response = dict(
         code=ret,
         message=msg
@@ -804,3 +818,90 @@ def monkey_device_release():
         )
     else:
         raise FieldMissingException('serial is required')
+
+
+# 获取所有性能测试名称
+@monkey.route('/name', methods=['GET'])
+def monkey_test_name_get_handler():
+    """
+    @api {get} /v1/monkey/name 根据 测试类型 获取测试列表
+    @apiName GetAutotestListByTestType
+    @apiGroup 自动化测试
+    @apiDescription 根据 测试类型 获取测试列表
+    @apiParam {int} [test_type] 测试类型
+    @apiParamExample {json} Request-Example:
+    ?test_type=2
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+      "code": 0,
+      "data": [
+        {
+          "id": 163,
+          "name": "163-2019-09-19 15:16:54-xxxx-1.5.5.1"
+        },
+      ],
+      "message": "ok"
+    }
+    """
+    test_type = request.args.get('test_type', 1)
+    response = {
+        "code": 0,
+        "data": MonkeyBusiness.get_all_name(test_type)
+    }
+    return response
+
+
+# 根据 id 获取信息
+@monkey.route('/test', methods=['GET'])
+def performance_test_get_by_performance_id_handler():
+    """
+    @api {get} /v1/monkey/test 根据 monkey id 和 测试场景 获取场景的设备测试信息列表
+    @apiName GetAutotestListByMonkeyIdAndTestType
+    @apiGroup 自动化测试
+    @apiDescription 根据 monkey id 和 测试场景 获取场景的设备测试信息列表
+    @apiParam {int} monkey_id 测试 id
+    @apiParam {string} run_type 测试场景
+    @apiParamExample {json} Request-Example:
+    ?performance_id=260
+    @apiSuccessExample {json} Success-Response:
+    HTTP/1.1 200 OK
+    {
+      "code": 0,
+      "data": [
+        {
+          "ZTEC880U": [
+            {
+              "cpu_average": 0.0,
+              "cpu_top": 0.0,
+              "creation_time": "2019-09-19 15:41:46",
+              "heap_alloc_average": 0.0,
+              "heap_alloc_top": 0.0,
+              "heap_size_average": 0.0,
+              "heap_size_top": 0.0,
+              "id": 12,
+              "modified_time": "2019-09-19 15:41:45",
+              "performance_id": 260,
+              "rss_top": 0.0,
+              "run_time": 1,
+              "run_type": "qjp"
+            }
+          ]
+        }
+      ],
+      "message": "ok"
+    }
+    """
+    monkey_id = request.args.get('monkey_id')
+    run_type = request.args.get('run_type')
+    if not monkey_id:
+        raise FieldMissingException('monkey_id is required')
+
+    if not run_type:
+        raise FieldMissingException('run_type is required')
+
+    response = {
+        "code": 0,
+        "data": MonkeyBusiness.get_performance_by_monkey_id_and_type(monkey_id, run_type)
+    }
+    return response

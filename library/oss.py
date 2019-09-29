@@ -1,10 +1,9 @@
 import os
-from datetime import datetime
 
 import oss2
 
 from public_config import (
-    OSSAccessKeyId, OSSAccessKeySecret, OSS_ENDPOINT, OSS_BUCTET_NAME, OSSHost, TCLOUD_FILE_TEMP_PATH
+    OSSAccessKeyId, OSSAccessKeySecret, OSS_ENDPOINT, OSS_BUCTET_NAME, OSSHost,
 )
 
 
@@ -36,7 +35,6 @@ def oss_upload_monkey_package_picture(path, picture):
     url_string = OSSHost + '/' + oss_path
     os.remove(actual_path)
     return url_string
-
 
 
 def oss_download(user_id, url):
