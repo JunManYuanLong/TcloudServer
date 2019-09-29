@@ -108,23 +108,42 @@ class TcDevicesBusiness(object):
     def get_devices(cls):
         now_time = int(time.time())
         now_devices = TcDevices.query.filter(TcDevices.use_type == 2, TcDevices.using != 0).all()
+        stf_rets = Config.query.add_columns(
+            Config.content.label('content'),
+            Config.module_type).filter(
+            Config.module == 'stf').all()
+        stf_token, stf_devices = None, None
+        for stf_ret in stf_rets:
+            if stf_ret.module_type == 3:
+                stf_token = json.loads(stf_ret.content)
+            elif stf_ret.module_type == 1:
+                stf_devices = json.loads(stf_ret.content)
+
+        session_list = []
         for now_device in now_devices:
             diff_time = int(now_time - now_device.using)
             current_app.logger.info(
                 'now_time:{}\nold_time:{}\ndiff_time:{}'.format(str(now_time), str(now_device.using), str(diff_time)))
             if diff_time >= 6:
-                cls.disconnect_devices(now_device.serial)
+                cls.disconnect_devices(now_device.serial, stf_token)
                 now_device.using = 0
-                db.session.add(now_device)
-                db.session.commit()
+                session_list.append(now_device)
 
-        devices = cls.stf_devices()
+        if session_list:
+            for i in session_list:
+                db.session.add(i)
+            db.session.commit()
+
+        devices_info = cls.stf_devices(stf_devices)
         ret = TcDevicesnInfo.query.all()
-        devices = devices['devices']
+        devices = devices_info['devices']
         monkey_devices = MonkeyDeviceUsingBusiness.mdyb_query().all()
-        devices_serial_list = []
-        for ret_device in ret:
-            devices_serial_list.append(ret_device.serial)
+        devices_serial_list = [ret_device.serial for ret_device in ret]
+        ret_nickname = User.query.add_columns(
+            User.nickname,
+            User.name).all()
+        nickname_dict = {i.name: i.nickname for i in ret_nickname}
+        tcdevicesn_info_session_list = []
         for i in range(len(devices)):
             if devices[i]['serial'] not in devices_serial_list:
                 try:
@@ -139,8 +158,7 @@ class TcDevicesBusiness(object):
                     pic=TCDEVICE_PIC,
                     comment=comment
                 )
-                db.session.add(tc)
-                db.session.commit()
+                tcdevicesn_info_session_list.append(tc)
             devices[i]['times'] = 0
             devices[i]['use_time'] = 0
             devices[i]['nickname'] = ''
@@ -150,12 +168,7 @@ class TcDevicesBusiness(object):
                     devices[i]['use_time'] = ret_device.use_time
                     devices[i]['pic'] = ret_device.pic
             if devices[i]['owner'] and 'name' in devices[i]['owner']:
-                ret_nickname = User.query.add_columns(User.nickname.label('nickname')).filter(
-                    User.name == devices[i]['owner']['name']).first()
-                if ret_nickname:
-                    devices[i]['nickname'] = ret_nickname.nickname
-                else:
-                    devices[i]['nickname'] = devices[i]['owner']['name']
+                devices[i]['nickname'] = nickname_dict.get(devices[i]['owner']['name'], devices[i]['owner']['name'])
 
             for monkey_device in monkey_devices:
                 if monkey_device.serial == devices[i].get('serial') and monkey_device.using == MonkeyDeviceUsing.ACTIVE:
@@ -165,22 +178,19 @@ class TcDevicesBusiness(object):
                         'group': 'Monkey',
                         'email': 'Monkey'
                     }
-        # logger.info(devices)
+        if tcdevicesn_info_session_list:
+            for i in tcdevicesn_info_session_list:
+                db.session.add(i)
+            db.session.commit()
         return devices
 
     @classmethod
-    def stf_devices(cls):
-        stf_devices = Config.query.add_columns(Config.content.label('content')).filter(
-            Config.module == 'stf',
-            Config.module_type == 1).first()
-        stf_devices = json.loads(stf_devices.content)
+    def stf_devices(cls, stf_devices):
         current_app.logger.info(json.dumps(stf_devices, ensure_ascii=False))
         url = stf_devices['URL']
         headers = stf_devices['headers']
         ret = requests.get(url, headers=headers)
-        ret = json.loads(ret.content)
-        # logger.info(json.dumps(ret, ensure_ascii=False))
-        return ret
+        return ret.json()
 
     @classmethod
     def stf_token(cls):
@@ -197,21 +207,21 @@ class TcDevicesBusiness(object):
         return ret
 
     @classmethod
-    def disconnect_devices(cls, serial):
+    def disconnect_devices(cls, serial, stf_token=None):
         try:
-            current_app.logger.info('--------serial-------')
-            current_app.logger.info(serial)
-            stf_token = Config.query.add_columns(Config.content.label('content')).filter(
-                Config.module == 'stf',
-                Config.module_type == 3).first()
-            stf_token = json.loads(stf_token.content)
-            current_app.logger.info(json.dumps(stf_token, ensure_ascii=False))
+            current_app.logger.info(f'--------serial-------\n{serial}\n{json.dumps(stf_token, ensure_ascii=False)}')
+            if not stf_token:
+                stf_token = Config.query.add_columns(Config.content.label('content')).filter(
+                    Config.module == 'stf',
+                    Config.module_type == 3).first()
+                stf_token = json.loads(stf_token.content)
             url = stf_token['URL']
             if serial:
-                url = stf_token['URL'] + serial
+                url += serial
             headers = stf_token['headers']
             ret = requests.delete(url, headers=headers)
-            ret = json.loads(ret.content)
+            # ret = json.loads(ret.content)
+            ret = ret.json()
             current_app.logger.info(json.dumps(ret, ensure_ascii=False))
             return ret
         except Exception as e:

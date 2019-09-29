@@ -1,5 +1,3 @@
-from flask import current_app
-
 from apps.project.business.cases import CaseBusiness
 from apps.project.business.issue import IssueDashBoardBusiness
 from apps.project.business.tasks import TaskDashBoardBusiness

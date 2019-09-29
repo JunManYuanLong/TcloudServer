@@ -1,0 +1,86 @@
+performance_device_status_update:
+  process:
+    type: int
+  setup_install_app_status:
+    type: int
+  setup_uninstall_app_status:
+    type: int
+  start_app_status:
+    type: int
+  begin_time:
+    type: basestring
+  login_app_status:
+    type: int
+  running_status:
+    type: int
+  teardown_uninstall_app_status:
+    type: int
+  end_time:
+    type: basestring
+  run_time:
+    type: int
+  device_connect_status:
+    type: int
+  screen_lock_status:
+    type: int
+  current_stage:
+    type: int
+  running_error_reason:
+    type: basestring
+  mobile_resolution:
+    type: basestring
+
+  returnvalue:
+    - process
+    - setup_install_app_status
+    - setup_uninstall_app_status
+    - start_app_status
+    - begin_time
+    - login_app_status
+    - running_status
+    - teardown_uninstall_app_status
+    - end_time
+    - run_time
+    - device_connect_status
+    - screen_lock_status
+    - current_stage
+    - running_error_reason
+    - mobile_resolution
+
+
+performance_test_create:
+  performance_id:
+    type: int
+    required: true
+  run_type:
+    type: basestring
+    required: true
+  run_time:
+    type: int
+    required: true
+
+  returnvalue:
+    - performance_id
+    - run_type
+    - run_time
+
+
+performance_log_create:
+  cpu:
+    type: basestring
+    required: true
+  rss:
+    type: basestring
+    required: true
+  heap_size:
+    type: basestring
+    required: true
+  heap_alloc:
+    type: basestring
+    required: true
+
+  returnvalue:
+    - cpu
+    - rss
+    - heap_size
+    - heap_alloc

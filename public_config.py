@@ -168,3 +168,5 @@ TCLOUD_FILE_TEMP_PATH = '/tmp/tcloud'
 
 # 默认的 sft 设备图片
 TCDEVICE_PIC = 'http://picture-url.test/devices_pic/default.png'
+
+TCDEVICE_TIMEOUT = 3

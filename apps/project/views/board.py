@@ -1,6 +1,7 @@
-from flask import Blueprint
+from flask import Blueprint, request
 
 from apps.project.business.board import BoardBusiness
+from apps.project.extentions import parse_list_args2
 from library.api.render import json_detail_render
 
 bpname = 'board'
@@ -16,6 +17,8 @@ def create_work_handler():
     @apiGroup 项目
     @apiDescription 查询 我的创建
     @apiParam {int} projectid 项目编号
+    @apiParam {string} type 类型 ： task，issue
+    @apiParam {string} title 标题：根据标题搜索
     @apiParamExample {json} Request-Example:
     ?projectid=1
     @apiSuccessExample {json} Success-Response:
@@ -67,12 +70,23 @@ def create_work_handler():
                 }
             ]
         },
-     "message": "ok"
+     "message": "ok",
+     "page_size": 1,
+     "page_index": 1,
+     "total": 1
     }
     """
-    data = BoardBusiness.user_create()
-
-    return json_detail_render(0, data)
+    page_size, page_index = parse_list_args2()
+    r_type = request.args.get("type")
+    title = request.args.get("title")
+    data, count = BoardBusiness.user_create(page_size, page_index, r_type, title)
+    return {
+        "code": 0,
+        "data": data,
+        "total": count,
+        "page_size": page_size,
+        "page_index": page_index
+    }
 
 
 # 我的代办
@@ -84,6 +98,8 @@ def unfinish_work_handler():
     @apiGroup 项目
     @apiDescription 查询 我的待办
     @apiParam {int} projectid 项目编号
+    @apiParam {string} type 类型 ： task，issue, task_case
+    @apiParam {string} title 标题：根据标题搜索
     @apiParamExample {json} Request-Example:
     ?projectid=1
     @apiSuccessExample {json} Success-Response:
@@ -135,12 +151,23 @@ def unfinish_work_handler():
                 }
             ]
         },
-     "message": "ok"
+     "message": "ok",
+     "page_size": 1,
+     "page_index": 1,
+     "total": 1
     }
     """
-    data = BoardBusiness.user_unfinish()
-
-    return json_detail_render(0, data)
+    page_size, page_index = parse_list_args2()
+    r_type = request.args.get("type")
+    title = request.args.get("title")
+    data, count = BoardBusiness.user_unfinish(page_size, page_index, r_type, title)
+    return {
+        "code": 0,
+        "data": data,
+        "total": count,
+        "page_size": page_size,
+        "page_index": page_index
+    }
 
 
 # 我的已办
@@ -152,6 +179,8 @@ def finish_work_handler():
     @apiGroup 项目
     @apiDescription 查询 我的已完成
     @apiParam {int} projectid 项目编号
+    @apiParam {string} type 类型 ： task，issue, task_case
+    @apiParam {string} title 标题：根据标题搜索
     @apiParamExample {json} Request-Example:
     ?projectid=1
     @apiSuccessExample {json} Success-Response:
@@ -203,11 +232,23 @@ def finish_work_handler():
                 }
             ]
         },
-     "message": "ok"
+     "message": "ok",
+     "page_size": 1,
+     "page_index": 1,
+     "total": 1
     }
     """
-    data = BoardBusiness.user_finish()
-    return json_detail_render(0, data)
+    page_size, page_index = parse_list_args2()
+    r_type = request.args.get("type")
+    title = request.args.get("title")
+    data, count = BoardBusiness.user_finish(page_size, page_index, r_type, title)
+    return {
+        "code": 0,
+        "data": data,
+        "total": count,
+        "page_size": page_size,
+        "page_index": page_index
+    }
 
 
 # STF接口

@@ -1,5 +1,4 @@
 import json
-import traceback
 
 from flask import request, g, current_app
 from sqlalchemy import desc, asc, func, or_
@@ -7,15 +6,17 @@ from sqlalchemy.orm import aliased
 
 from apps.auth.models.users import User
 from apps.project.business.issue import IssueBusiness
+from apps.project.business.tag import TagBusiness
 from apps.project.models.project import Project
 from apps.project.models.requirement import (
     Requirement, RequirementRecord, RequirementReview, Review,
     RequirementBindCase,
 )
+from apps.project.models.tag import Tag
 from apps.project.models.version import Version
 from apps.public.models.public import Config
 from library.api.db import db
-from library.api.exceptions import FieldMissingException, CannotFindObjectException
+from library.api.exceptions import FieldMissingException, CannotFindObjectException, SaveObjectException
 from library.api.transfer import transfer2jsonwithoutset, transfer2json
 from library.notification import notification
 from library.trpc import Trpc
@@ -62,13 +63,14 @@ class RequirementBusiness(object):
             Requirement.parent_id.label('parent_id'),
             Requirement.review_status.label('review_status'),
             func.date_format(Requirement.expect_time, "%Y-%m-%d %H:%i:%s").label('expect_time'),
+            Requirement.tag.label('tag')
         )
 
     @classmethod
     @transfer2jsonwithoutset(
         '?id|!title|!project_id|!version_id|!version_name|!creator_id|!creator_name|!handler_id|!handler_name|'
         '!board_status|!description|!comment|!priority|!requirement_type|!attach|!parent_id|!review_status|'
-        '!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time')
+        '!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time|!tag')
     def query_all_json(cls):
         projectid = request.args.get('projectid')
         versionid = request.args.get('versionid')
@@ -82,11 +84,12 @@ class RequirementBusiness(object):
         board_status = request.args.get('board_status')
         priority = request.args.get('priority')
         handler_id = request.args.get('handler_id')
+        tag = request.args.get('tag')
 
         ret = cls._query().filter(Requirement.status != Requirement.DISABLE)
 
         if title:
-            ret = ret.filter(or_(Requirement.title.like(f'%{title}%'), Requirement.id.like(f'{title}%')))
+            ret = ret.filter(or_(Requirement.title.like(f'%{title}%'), Requirement.id.startswith(f'{title}%')))
         if priority:
             priority = priority.split(',')
             ret = ret.filter(Requirement.priority.in_(priority))
@@ -114,6 +117,8 @@ class RequirementBusiness(object):
             ret = ret.filter(Requirement.version is not None)
         if rtype:
             ret = ret.filter(Requirement.requirement_type == rtype)
+        if tag:
+            ret = ret.filter(func.find_in_set(tag, Requirement.tag))
         ret = ret.order_by(asc(Requirement.id)).all()
         return ret
 
@@ -121,7 +126,7 @@ class RequirementBusiness(object):
     @transfer2json(
         '?id|!title|!project_id|!version_id|!version_name|!creator_id|!creator_name|!handler_id|!handler_name|'
         '!board_status|!comment|!priority|!requirement_type|!parent_id|!review_status|'
-        '!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time')
+        '!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time|!tag')
     def query_all_json_no_status(cls):
         projectid = request.args.get('projectid')
         versionid = request.args.get('versionid')
@@ -137,6 +142,7 @@ class RequirementBusiness(object):
         user = request.args.get('user')
         start_time = request.args.get('start_time')
         end_time = request.args.get('end_time')
+        tag = request.args.get('tag')
 
         ret = cls._query().filter(Requirement.status != Requirement.DISABLE)
 
@@ -169,6 +175,8 @@ class RequirementBusiness(object):
             ret = ret.filter(Requirement.requirement_type == rtype)
         if user:
             ret = ret.filter(Requirement.handler == user)
+        if tag:
+            ret = ret.filter(func.find_in_set(tag, Requirement.tag))
         if start_time and end_time:
             ret = ret.filter(
                 Requirement.modified_time.between(start_time, end_time + " 23:59:59"))
@@ -180,7 +188,7 @@ class RequirementBusiness(object):
     @transfer2json(
         '?id|!title|!project_id|!version_id|!version_name|!creator_id|!creator_name|!handler_id|!handler_name|'
         '!board_status|!description|!comment|!priority|!requirement_type|!attach|!parent_id|!review_status|'
-        '!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time')
+        '!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time|!tag')
     def query_by_id(cls, requirement_id):
         ret = cls._query().filter(Requirement.status != Requirement.DISABLE,
                                   Requirement.id == requirement_id).all()
@@ -220,19 +228,21 @@ class RequirementBusiness(object):
                                          req.description, req.comment, req.priority, req.requirement_type,
                                          req.attach, req.creator, Requirement.DISABLE, modifier, req.parent_id,
                                          req.review_status, req.jira_id, req.worth, req.report_time, req.report_expect,
-                                         req.report_real, req.worth_sure, req.expect_time)
-
+                                         req.report_real, req.worth_sure, req.expect_time, req.tag)
         db.session.commit()
+        if req.tag:
+            TagBusiness.less_reference(req.tag)
         return 0
 
     @classmethod
     def requirement_create(cls, title, project_id, version, handler, priority, requirement_type, attach,
                            board_status,
                            description, comment, jira_id, worth, report_time, report_expect, report_real,
-                           worth_sure, case_ids, expect_time=None, creator=None):
+                           worth_sure, case_ids, tag, expect_time=None, creator=None):
         try:
             is_repeat = Requirement.query.filter(Requirement.title == title,
                                                  Requirement.project_id == project_id,
+                                                 Requirement.jira_id == jira_id,
                                                  Requirement.status != Requirement.DISABLE).first()
             if is_repeat:
                 return 103
@@ -258,7 +268,8 @@ class RequirementBusiness(object):
                 report_expect=report_expect,
                 report_real=report_real,
                 worth_sure=worth_sure,
-                expect_time=expect_time
+                expect_time=expect_time,
+                tag=tag
             )
             db.session.add(c)
             db.session.flush()
@@ -266,12 +277,15 @@ class RequirementBusiness(object):
                                              comment, priority, requirement_type, attach, creator,
                                              Requirement.ACTIVE,
                                              creator, 0, jira_id, worth, report_time, report_expect, report_real,
-                                             worth_sure, expect_time)
+                                             worth_sure, expect_time, tag)
 
             if case_ids is not None:
                 RequirementBindCaseBusiness.requirement_bind_cases(c.id, case_ids)
 
             db.session.commit()
+            if tag:
+                TagBusiness.add_reference(tag)
+
             board_config = cls.public_trpc.requests('get', '/public/config', {'module': 'tcloud', 'module_type': 1})
             text = f'''[需求创建 - {title}]
 URL：{board_config}/project/{project_id}/requirement/{version}'''
@@ -287,8 +301,14 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
     @classmethod
     def requirement_children_create(cls, title, project_id, version, board_status, handler, description, comment,
                                     priority, requirement_type, attach, parent_id, jira_id, worth, report_time,
-                                    report_expect, report_real, worth_sure, case_ids, expect_time=None, creator=None):
+                                    report_expect, report_real, worth_sure, case_ids, tag, expect_time=None,
+                                    creator=None):
         try:
+            is_repeat = Requirement.query.filter(Requirement.title == title,
+                                                 Requirement.project_id == project_id,
+                                                 Requirement.status != Requirement.DISABLE).first()
+            if is_repeat:
+                return 103
             if not creator:
                 creator = g.userid if g.userid else creator
             c = Requirement(
@@ -311,7 +331,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                 report_expect=report_expect,
                 report_real=report_real,
                 worth_sure=worth_sure,
-                expect_time=expect_time
+                expect_time=expect_time,
+                tag=tag
             )
             db.session.add(c)
             db.session.flush()
@@ -319,11 +340,13 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                                              comment, priority, requirement_type, attach, creator,
                                              Requirement.ACTIVE,
                                              creator, parent_id, jira_id, worth, report_time, report_expect,
-                                             report_real, worth_sure, expect_time)
+                                             report_real, worth_sure, expect_time, tag)
             if case_ids is not None:
                 RequirementBindCaseBusiness.requirement_bind_cases(c.id, case_ids)
 
             db.session.commit()
+            if tag:
+                TagBusiness.add_reference(tag)
             return 0
         except Exception as e:
             current_app.logger.error(str(e))
@@ -333,74 +356,80 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
     @classmethod
     def requirement_modify(cls, requirementid, title, project_id, version, board_status, handler, description, comment,
                            priority, requirement_type, attach, parent_id, jira_id, worth, report_time, report_expect,
-                           report_real, worth_sure, case_ids, expect_time=None, modifier=None):
+                           report_real, worth_sure, case_ids, tag, expect_time=None, creator=None, modifier=None):
         if not modifier:
             modifier = g.userid if g.userid else modifier
-        try:
-            c = Requirement.query.get(requirementid)
-            is_change_handler = False
-            if c.handler != handler:
-                is_change_handler = True
-            c.title = title
-            c.project_id = project_id
-            c.version = version
-            c.board_status = board_status
-            c.handler = handler
-            c.priority = priority
-            c.requirement_type = requirement_type
-            c.attach = attach
-            c.description = description
-            c.comment = comment
-            c.modifier = modifier
-            c.parent_id = parent_id
-            c.jira_id = jira_id
-            c.worth = worth
-            c.report_time = report_time
-            c.report_expect = report_expect
-            c.report_real = report_real
-            c.worth_sure = worth_sure
-            c.expect_time = expect_time
-            db.session.add(c)
-            RequirementRecordBusiness.modify(requirementid, title, project_id, version, board_status, handler,
-                                             description,
-                                             comment, priority, requirement_type, attach, c.creator, c.status, modifier,
-                                             parent_id, c.review_status, c.jira_id, c.worth, c.report_time,
-                                             c.report_expect, c.report_real, c.worth_sure, expect_time)
-            if case_ids is not None:
-                RequirementBindCaseBusiness.requirement_bind_cases(c.id, case_ids)
-            db.session.commit()
-            if is_change_handler:
-                # text = f'''[需求修改处理人 - {title}]
-                # 你已被修改为处理人'''
-                #                 if not isinstance(handler, list):
-                #                     handler = [handler]
-                modifier_user = cls.user_trpc.requests('get', f'/user/{g.userid}')
-                if modifier_user:
-                    modifier_user = modifier_user[0].get('nickname')
-                handler_user = cls.user_trpc.requests('get',
-                                                      f'/user'
-                                                      f'/{handler if not isinstance(handler, list) else handler[0]}')
-                if handler_user:
-                    handler_user = handler_user[0].get('nickname')
-                if not isinstance(handler, list):
-                    handler = [handler]
-                text = f'''[requirement处理人变更 - {title}]
+        c = Requirement.query.get(requirementid)
+
+        ret = Requirement.query.filter_by(title=title,
+                                          status=Requirement.ACTIVE,
+                                          project_id=c.project_id).filter(Requirement.id != requirementid).first()
+        if ret:
+            raise SaveObjectException('存在相同名称的需求')
+        old_tag = None
+        new_tag = None
+        is_change_handler = False
+        if c.handler != handler:
+            is_change_handler = True
+        c.title = title
+        c.project_id = project_id
+        c.version = version
+        c.board_status = board_status
+        c.handler = handler
+        c.priority = priority
+        c.requirement_type = requirement_type
+        c.attach = attach
+        c.description = description
+        c.comment = comment
+        c.modifier = modifier
+        c.parent_id = parent_id
+        c.jira_id = jira_id
+        c.worth = worth
+        c.report_time = report_time
+        c.report_expect = report_expect
+        c.report_real = report_real
+        c.worth_sure = worth_sure
+        c.expect_time = expect_time
+        if c.tag != tag:
+            old_tag = c.tag
+            new_tag = tag
+            c.tag = tag
+        c.creator = creator if creator else c.creator
+        db.session.add(c)
+        RequirementRecordBusiness.modify(requirementid, title, project_id, version, board_status, handler,
+                                         description,
+                                         comment, priority, requirement_type, attach, c.creator, c.status, modifier,
+                                         parent_id, c.review_status, c.jira_id, c.worth, c.report_time,
+                                         c.report_expect, c.report_real, c.worth_sure, expect_time, tag)
+        if case_ids is not None:
+            RequirementBindCaseBusiness.requirement_bind_cases(c.id, case_ids)
+        db.session.commit()
+
+        if old_tag or new_tag:
+            TagBusiness.change_reference(old_tag, new_tag)
+
+        if is_change_handler:
+            modifier_user = cls.user_trpc.requests('get', f'/user/{g.userid}')
+            if modifier_user:
+                modifier_user = modifier_user[0].get('nickname')
+            handler_user = cls.user_trpc.requests('get',
+                                                  f'/user'
+                                                  f'/{handler if not isinstance(handler, list) else handler[0]}')
+            if handler_user:
+                handler_user = handler_user[0].get('nickname')
+            if not isinstance(handler, list):
+                handler = [handler]
+            text = f'''[requirement处理人变更 - {title}]
 {modifier_user}  修改处理人为  {handler_user}'''
-                notification.send_notification(handler, text, send_type=2)
-            return 0
-        except Exception as e:
-            current_app.logger.error(traceback.format_exc())
-            current_app.logger.error(str(e))
-            db.session.rollback()
-            return 301
+            notification.send_notification(handler, text, send_type=2)
+        return 0
 
     @classmethod
     @transfer2json(
         '?id|!title|!project_id|!version_id|!version_name|!creator_id|!creator_name|!handler_id|!handler_name|'
         '!board_status|!description|!comment|!priority|!requirement_type|!attach|!modified_time|!parent_id|'
-        '!review_status|!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time')
+        '!review_status|!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time|!tag')
     def look_up_chidren_requirement(cls, id, project_id, version_id):
-
         if version_id:
             ret = cls._query().filter(Requirement.status != Requirement.DISABLE, Requirement.parent_id == id,
                                       Requirement.project_id == project_id, Requirement.version == version_id).all()
@@ -414,7 +443,7 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
     @transfer2json(
         '?id|!title|!project_id|!version_id|!version_name|!creator_id|!creator_name|!handler_id|!handler_name|'
         '!board_status|!description|!comment|!priority|!requirement_type|!attach|!modified_time|!parent_id|'
-        '!review_status|!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time')
+        '!review_status|!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!expect_time|!tag')
     def look_up_pass_chidren_requirement(cls, id, project_id, version_id, review_status):
         ret = cls._query().filter(Requirement.status != Requirement.DISABLE, Requirement.parent_id == id,
                                   Requirement.project_id == project_id)
@@ -439,7 +468,6 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
 
     @classmethod
     def look_up_board_status(cls, id, project_id, version_id):
-
         requirement = cls._query().filter(Requirement.status != Requirement.DISABLE, Requirement.parent_id == id,
                                           Requirement.project_id == project_id, Requirement.version == version_id,
                                           Requirement.board_status == 5).all()
@@ -476,7 +504,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                 report_expect=req.report_expect,
                 report_real=req.report_real,
                 worth_sure=req.worth_sure,
-                expect_time=req.expect_time
+                expect_time=req.expect_time,
+                tag=req.tag
             )
             db.session.add(c)
             db.session.commit()
@@ -518,7 +547,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                 report_expect=req.report_expect,
                 report_real=req.report_real,
                 worth_sure=req.worth_sure,
-                expect_time=req.expect_time
+                expect_time=req.expect_time,
+                tag=req.tag
             )
             db.session.add(c)
             db.session.commit()
@@ -573,7 +603,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                 report_expect=req.report_expect,
                 report_real=req.report_real,
                 worth_sure=req.worth_sure,
-                expect_time=req.expect_time
+                expect_time=req.expect_time,
+                tag=req.tag
             )
             db.session.add(c)
             db.session.commit()
@@ -612,7 +643,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                 report_expect=req.report_expect,
                 report_real=req.report_real,
                 worth_sure=req.worth_sure,
-                expect_time=req.expect_time
+                expect_time=req.expect_time,
+                tag=req.tag
             )
             db.session.add(c)
             db.session.commit()
@@ -651,7 +683,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                 report_expect=req.report_expect,
                 report_real=req.report_real,
                 worth_sure=req.worth_sure,
-                expect_time=req.expect_time
+                expect_time=req.expect_time,
+                tag=req.tag
             )
             db.session.add(c)
             db.session.commit()
@@ -690,7 +723,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                 report_expect=req.report_expect,
                 report_real=req.report_real,
                 worth_sure=req.worth_sure,
-                expect_time=req.expect_time
+                expect_time=req.expect_time,
+                tag=req.tag
             )
             db.session.add(c)
             db.session.commit()
@@ -734,7 +768,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                     report_expect=req.report_expect,
                     report_real=req.report_real,
                     worth_sure=req.worth_sure,
-                    expect_time=req.expect_time
+                    expect_time=req.expect_time,
+                    tag=req.tag
                 )
                 db.session.add(req)
                 db.session.add(reqrecord)
@@ -766,7 +801,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
                     report_expect=req.report_expect,
                     report_real=req.report_real,
                     worth_sure=req.worth_sure,
-                    expect_time=req.expect_time
+                    expect_time=req.expect_time,
+                    tag=req.tag
                 )
                 db.session.add(req)
                 db.session.add(reqrecord)
@@ -843,7 +879,7 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
     @transfer2json(
         '?id|!title|!project_id|!version_id|!version_name|!creator_id|!creator_name|!handler_id|!handler_name|'
         '!board_status|!description|!comment|!priority|!requirement_type|!attach|!parent_id|!review_status|'
-        '!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!creation_time|!expect_time',
+        '!jira_id|!worth|!report_time|!report_expect|!report_real|!worth_sure|!creation_time|!expect_time|!tag',
         ispagination=True
     )
     def paginate_data(cls, page_size=None, page_index=None):
@@ -872,7 +908,7 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
         user = request.args.get('user')
         start_time = request.args.get('start_time')
         end_time = request.args.get('end_time')
-
+        tag = request.args.get('tag')
         ret = cls._query().filter(Requirement.status != Requirement.DISABLE, Requirement.parent_id == 0)
         if worth:
             ret = ret.filter(Requirement.worth == worth)
@@ -883,13 +919,13 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
         if versionid:
             ret = ret.filter(Requirement.version == versionid)
         if notype == '1':
-            ret = ret.filter(Requirement.version is None)
+            ret = ret.filter(Requirement.version == None)
         if notype == '0':
-            ret = ret.filter(Requirement.version is not None)
+            ret = ret.filter(Requirement.version != None)
         if rtype:
             ret = ret.filter(Requirement.requirement_type == rtype)
         if title:
-            ret = ret.filter(or_(Requirement.title.like(f'%{title}%'), Requirement.id.like(f'{title}%')))
+            ret = ret.filter(or_(Requirement.title.like(f'%{title}%'), Requirement.id.startswith(f'{title}%')))
         if priority:
             priority = priority.split(',')
             ret = ret.filter(Requirement.priority.in_(priority))
@@ -912,6 +948,8 @@ URL：{board_config}/project/{project_id}/requirement/{version}'''
         if id_or_title:
             ret = ret.filter(or_(Requirement.id.like('%{}%'.format(id_or_title)),
                                  Requirement.title.like('%{}%'.format(id_or_title))))
+        if tag:
+            ret = ret.filter(func.find_in_set(tag, Requirement.tag))
         return ret
 
 
@@ -1071,6 +1109,7 @@ class RequirementRecordBusiness(object):
             user_modifier.nickname.label('modifier_name'),
             RequirementRecord.parent_id.label('parent_id'),
             RequirementRecord.review_status.label('review_status'),
+            RequirementRecord.tag.label('tag'),
             func.date_format(RequirementRecord.expect_time, "%Y-%m-%d %H:%i:%s").label('expect_time'),
         )
 
@@ -1078,7 +1117,7 @@ class RequirementRecordBusiness(object):
     @classmethod
     def create(cls, requirement_id, title, project_id, version, board_status, handler, description, comment, priority,
                requirement_type, attach, creator, status, modifier, parent_id, jira_id, worth, report_time,
-               report_expect, report_real, worth_sure, expect_time):
+               report_expect, report_real, worth_sure, expect_time, tag):
         c = RequirementRecord(
             requirement_id=requirement_id,
             title=title,
@@ -1101,7 +1140,8 @@ class RequirementRecordBusiness(object):
             report_expect=report_expect,
             report_real=report_real,
             worth_sure=worth_sure,
-            expect_time=expect_time
+            expect_time=expect_time,
+            tag=tag
         )
         db.session.add(c)
 
@@ -1109,7 +1149,7 @@ class RequirementRecordBusiness(object):
     @classmethod
     def modify(cls, requirement_id, title, project_id, version, board_status, handler, description, comment, priority,
                requirement_type, attach, creator, status, modifier, parent_id, review_status, jira_id, worth,
-               report_time, report_expect, report_real, worth_sure, expect_time):
+               report_time, report_expect, report_real, worth_sure, expect_time, tag):
         c = RequirementRecord(
             requirement_id=requirement_id,
             title=title,
@@ -1133,7 +1173,8 @@ class RequirementRecordBusiness(object):
             report_expect=report_expect,
             report_real=report_real,
             worth_sure=worth_sure,
-            expect_time=expect_time
+            expect_time=expect_time,
+            tag=tag
         )
         db.session.add(c)
 
@@ -1142,7 +1183,7 @@ class RequirementRecordBusiness(object):
         '?id|!title|!project_id|!version_id|!version_name|!creator_id|!creator_name|!modifier_id|!modifier_name|'
         '!creation_time|!modified_time|!handler_id|!handler_name|!board_status|!description|!comment|!priority|'
         '!requirement_type|!attach|!parent_id|!review_status|!jira_id|!worth|!report_time|!report_expect|'
-        '!report_real|!worth_sure|!expect_time')
+        '!report_real|!worth_sure|!expect_time|!tag')
     def query_record_json(cls, requirement_id):
         ret = cls._query().filter(RequirementRecord.requirement_id == requirement_id).order_by(
             RequirementRecord.requirement_id).all()
@@ -1264,7 +1305,7 @@ class RequirementReviewBusiness(object):
             user_handler.id.label('handler_id'),
             user_handler.nickname.label('handler_name'),
             RequirementReview.parent_id.label('parent_id'),
-            RequirementReview.review_status.label('review_status'),
+            RequirementReview.review_status.label('review_status')
         )
 
     @classmethod

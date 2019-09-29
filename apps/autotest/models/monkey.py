@@ -9,6 +9,7 @@ from library.api.db import EntityModel, db
 class Monkey(EntityModel):
     ACTIVE = 0
     DISABLE = 1
+    TEST_TYPE = {'monkey': 1, 'performance': 2}
 
     app_name = db.Column(db.String(100))  # app 名称，例如：萌推
     package_name = db.Column(db.String(100))  # 要测试的包名
@@ -41,9 +42,9 @@ class Monkey(EntityModel):
     login_required = db.Column(db.Integer)  # 是否需要登陆
     login_username = db.Column(db.String(100))  # 登陆 用户名
     login_password = db.Column(db.String(100))  # 登陆 密码
-
     cancel_status = db.Column(db.Integer, default=DISABLE)  # 是否cancel 此次monkey，默认 1，0为确认
 
+    test_type = db.Column(db.Integer)  # 测试类型  monkey：1， performance：2
 
 # monkey log
 class MonkeyErrorLog(EntityModel):
@@ -72,6 +73,7 @@ class MonkeyReport(EntityModel):
 class MonkeyPackage(EntityModel):
     ACTIVE = 0
     DISABLE = 1
+    PACKAGE_TYPE = {'monkey': 1, 'performance': 2}
 
     name = db.Column(db.String(100))  # package name
     package_name = db.Column(db.String(100))  # android package name
@@ -82,6 +84,7 @@ class MonkeyPackage(EntityModel):
     user_id = db.Column(db.Integer)  # upload user id
     status = db.Column(db.Integer, default=ACTIVE)  # package status
     size = db.Column(db.String(200))  # package size
+    test_type = db.Column(db.Integer)  # test type : monkey=1,performance=2
 
 
 # monkey device using
@@ -139,3 +142,5 @@ class MonkeyDeviceStatus(EntityModel):
     mobile_resolution = db.Column(db.String(100))  # device 分辨率
 
     cancel_status = db.Column(db.Integer, default=DISABLE)  # 取消此设备的构建，默认 1，取消为 0
+
+

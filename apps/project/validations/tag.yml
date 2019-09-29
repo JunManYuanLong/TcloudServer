@@ -1,4 +1,4 @@
-updatetag:
+createtag:
   tag:
     required: True
     type: basestring
@@ -7,13 +7,18 @@ updatetag:
     type: int
   description:
     type: basestring
-  tag_type:
-    type: int
   returnvalue:
     - tag
     - project_id
     - description
-    - tag_type
 
 
-
+updatetag:
+  tag:
+    required: True
+    type: basestring
+  description:
+    type: basestring
+  returnvalue:
+    - tag
+    - description

@@ -11,3 +11,5 @@ class Tag(EntityModel):
     description = db.Column(db.Text())  # 配置描述
     creator = db.Column(db.String(300))  # 配置增加人
     tag_type = db.Column(db.Integer)  # 配置类型 1表示需求2任务3issue
+    reference_nums = db.Column(db.Integer, default=0)  # 被引用次数，只有为0时才能被删除
+    modifier = db.Column(db.String(300))  # 配置修改人

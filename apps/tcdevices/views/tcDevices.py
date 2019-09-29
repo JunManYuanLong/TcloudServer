@@ -2,6 +2,8 @@ from flask import Blueprint
 
 from apps.tcdevices.business.tcDevices import TcDevicesBusiness
 from apps.tcdevices.extentions import validation, parse_json_form
+# from apps.tcdevices.settings.config import TCDEVICE_TIMEOUT
+# from library.api.db import cache
 from library.api.render import json_detail_render
 
 tcdevices = Blueprint("tcdevices", __name__)
@@ -47,6 +49,7 @@ def tcdevices_index_handler():
 
 
 @tcdevices.route('/getdevices', methods=['GET'])
+# @cache.cached(timeout=TCDEVICE_TIMEOUT)
 def get_tcdevices_handler():
     """
     @api {get} /v1/tcdevices/getdevices 云真机列表

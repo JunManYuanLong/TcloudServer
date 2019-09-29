@@ -104,6 +104,26 @@ def case_single_modify_handler(case_id):
     return json_detail_render(ret)
 
 
+@case.route('/duplication/<int:case_id>', methods=['POST'])
+@required(modify_permission)
+def copy_case(case_id):
+    """
+    @api {post} /v1/case/duplication/{case_id} 复制 用例
+    @apiName CopyCase
+    @apiGroup 项目
+    @apiDescription 复制用例
+    @apiSuccessExample {json} Success-Response:
+     HTTP/1.1 200 OK
+    {
+        "code":0,
+        "data":[],
+        "message":"ok"
+    }
+    """
+    code = CaseBusiness.copy_case_by_id(case_id)
+    return {'code': code}
+
+
 @case.route('/<int:case_id>', methods=['DELETE'])
 def case_single_delete_handler(case_id):
     """
@@ -261,7 +281,8 @@ def case_query_by_module_id_handler(mid):
         "total": 1
     }
     """
-    page_size, page_index = parse_list_args2()
+    page_size = request.args.get('page_size')
+    page_index = request.args.get('page_index')
     data, count = CaseBusiness.paginate_data(mid=mid, page_size=page_size, page_index=page_index)
 
     return json_list_render2(0, data, page_size, page_index, count)
@@ -326,3 +347,11 @@ def case_import():
     url_path, creator, project_id, module_id = parse_json_form('fileimport')
     code, message = CaseBusiness.case_import(url_path, creator, project_id, module_id)
     return json_detail_render(code, [], message)
+
+
+@case.route('/list', methods=['POST'])
+@required(view_permission)
+def case_list():
+    case_ids = parse_json_form('case_info_by_ids')
+    data = CaseBusiness.case_info_by_ids(case_ids)
+    return {'code': 0, 'data': data}

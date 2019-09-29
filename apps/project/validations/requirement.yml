@@ -37,6 +37,8 @@ requirementcreate:
     type: list
   expect_time:
     type: basestring
+  tag:
+    type: basestring
   returnvalue:
     - title
     - project_id
@@ -56,6 +58,7 @@ requirementcreate:
     - worth_sure
     - case_ids
     - expect_time
+    - tag
 
 
 childrenrequirementcreate:
@@ -100,6 +103,8 @@ childrenrequirementcreate:
     type: list
   expect_time:
     type: basestring
+  tag:
+    type: basestring
   returnvalue:
     - title
     - project_id
@@ -120,6 +125,7 @@ childrenrequirementcreate:
     - worth_sure
     - case_ids
     - expect_time
+    - tag
 
 requirementmodify:
   title:
@@ -163,6 +169,8 @@ requirementmodify:
     type: list
   expect_time:
     type: basestring
+  tag:
+    type: basestring
   returnvalue:
     - title
     - project_id
@@ -183,6 +191,7 @@ requirementmodify:
     - worth_sure
     - case_ids
     - expect_time
+    - tag
 
 board_status:
   board_status:

@@ -1,4 +1,5 @@
 import json
+import traceback
 
 from flask import current_app, request
 from jira import Issue
@@ -74,16 +75,22 @@ class JiraBusiness(object):
     def get_version_by_title(cls, issue, project_id):
         version_title = issue.fields.fixVersions[0].name if issue.fields.fixVersions else None
         if version_title is None:
-            raise CannotFindObjectException(f'issue {issue} does not have fixVersion ! please check the issue !')
+            # raise CannotFindObjectException(f'issue {issue} does not have fixVersion ! please check the issue !')
+            current_app.logger.warning(f'issue {issue} does not have fixVersion ! please check the issue !')
+            return None
         version = Version.query.filter(Version.title == version_title,
                                        Version.project_id == project_id).first()
         if version:
             version_id = version.id
         else:
+
+            fix_version = jira.version(issue.fields.fixVersions[0].id)
+            start_time = fix_version.startDate if fix_version and hasattr(fix_version, "startDate") else None
+            end_time = fix_version.releaseDate if fix_version and hasattr(fix_version, "releaseDate") else None
             VersionBusiness.version_create(title=version_title,
                                            project_id=project_id,
-                                           start_time=None,
-                                           end_time=None,
+                                           start_time=start_time,
+                                           end_time=end_time,
                                            description="jira create",
                                            creator=1,)  # 默认的 版本创建人 1
             version_id = cls.get_version_by_title(issue, project_id)
@@ -185,8 +192,9 @@ class JiraBusiness(object):
             report_real=None,
             worth_sure=None,
             case_ids=None,
+            expect_time=None,
             creator=cls.get_creator(issue),
-            modifier=cls.get_modifier(modifier)
+            modifier=cls.get_modifier(modifier) if modifier is not None else None
         )
 
     @classmethod
@@ -195,7 +203,7 @@ class JiraBusiness(object):
         params = []
         for key in ['title', 'project_id', 'version', 'handler', 'priority', 'requirement_type', 'attach',
                     'board_status', 'description', 'comment', 'jira_id', 'worth', 'report_time', 'report_expect',
-                    'report_real', 'worth_sure', 'case_ids', 'creator']:
+                    'report_real', 'worth_sure', 'case_ids', "expect_time", 'creator']:
             value = requirement_dict.get(key)
             params.append(value)
         return RequirementBusiness.requirement_create(*params)
@@ -206,7 +214,7 @@ class JiraBusiness(object):
         params = []
         for key in ["title", "project_id", "version", "board_status", "handler", "description", "comment",
                     "priority", "requirement_type", "attach", "parent_id", "jira_id", "worth", "report_time",
-                    "report_expect", "report_real", "worth_sure", "case_ids", "modifier"]:
+                    "report_expect", "report_real", "worth_sure", "case_ids", "expect_time", "creator", "modifier", ]:
             value = requirement_dict.get(key)
             if value is None:
                 params.append(getattr(requirement, key, None))
@@ -229,7 +237,8 @@ class JiraBusiness(object):
                     cls.requirement_update_handler(requirement, issue, user_key)
                     requirement_id = requirement.id
                 else:
-                    cls.requirement_create_handler(issue)
+                    rev = cls.requirement_create_handler(issue)
+                    current_app.logger.info(rev)
                     requirement = Requirement.query.filter(Requirement.jira_id == str(issue)).first()
                     requirement_id = requirement.id
             else:
@@ -239,6 +248,9 @@ class JiraBusiness(object):
             jira_result = f"{user_id} {user_key} - {key} success"
             return 0
         except Exception as e:
+            current_app.logger.error(e)
+            current_app.logger.error(traceback.format_exc())
+            jira_result = f'{user_id} {user_key} - {key} - {str(e)}'
             raise e
         finally:
             cls.create(key, jira_result, requirement_id, Jira.KEY_MAP.get('requirement'))
@@ -334,8 +346,12 @@ class JiraBusiness(object):
             issues = jira.search_issues(f'key={key}')
             if issues:
                 issue = issues[0]
+                assmble_type = cls.get_assemble_type(issue)
                 handler = cls.get_handler(issue)
                 creator = cls.get_creator(issue)
+                if assmble_type == 1:
+                    jira_result = f'{user_id} {user_key} - flow would not create because of assmble_type is 1: {key}'
+                    return
                 data = {
                     "name": f'{key} - {issue.fields.summary}',
                     "flow_type": 1,
@@ -365,6 +381,9 @@ class JiraBusiness(object):
                 jira_result = f"{user_id} {user_key} - {key} unknown!"
             return 0
         except Exception as e:
+            current_app.logger.error(e)
+            current_app.logger.error(traceback.format_exc())
+            jira_result = f'{user_id} {user_key} - {key} - {str(e)}'
             raise e
         finally:
             cls.create(key, jira_result, requirement.id, Jira.KEY_MAP.get('flow'))

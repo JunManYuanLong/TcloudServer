@@ -120,7 +120,7 @@ class FlowBusiness(object):
             ret = ret.filter(or_(FlowInfo.name.like('%{}%'.format(name)),
                                  FlowInfo.name.like('%{}%'.format(name.lower())),
                                  FlowInfo.name.like('%{}%'.format(name.upper())),
-                                 FlowInfo.id.like(f'{name}%')))
+                                 FlowInfo.id.startswith(f'{name}%')))
 
         if platform:
             ret = ret.filter(

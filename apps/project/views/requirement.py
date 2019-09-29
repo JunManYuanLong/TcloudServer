@@ -43,6 +43,8 @@ def requirement_add_handler():
     @apiParam {string} report_real 高价值实际结果
     @apiParam {int} worth_sure 确认需求价值1:高价值2:非高价值
     @apiParam {list} [case_ids] 关联的 用例 ID
+    @apiParam {string} expect_time 预期时间
+    @apiParam {string} [tag] 标签
     @apiParamExample {json} Request-Example:
     {
         "title": "str",
@@ -65,7 +67,9 @@ def requirement_add_handler():
         "report_expect": "str",
         "report_real": "str",
         "worth_sure": 1,
-        "case_ids": [1,2,3]
+        "case_ids": [1,2,3],
+        "expect_time": "2018-1-30",
+        "tag": "1,2,3"
     }
     @apiSuccessExample {json} Success-Response:
      HTTP/1.1 200 OK
@@ -76,11 +80,11 @@ def requirement_add_handler():
     }
     """
     (title, project_id, version, handler, priority, requirement_type, attach, board_status, description, comment,
-     jira_id, worth, report_time, report_expect, report_real, worth_sure, case_ids, expect_time) = parse_json_form(
-        'requirementcreate')
+     jira_id, worth, report_time, report_expect, report_real, worth_sure,
+     case_ids, expect_time, tag) = parse_json_form('requirementcreate')
     ret = RequirementBusiness.requirement_create(title, project_id, version, handler, priority, requirement_type,
                                                  attach, board_status, description, comment, jira_id, worth,
-                                                 report_time, report_expect, report_real, worth_sure, case_ids,
+                                                 report_time, report_expect, report_real, worth_sure, case_ids, tag,
                                                  expect_time=expect_time)
     return json_detail_render(ret)
 
@@ -115,6 +119,8 @@ def requirement_modify_handler(requirement_id):
     @apiParam {string} report_real 高价值实际结果
     @apiParam {int} worth_sure 确认需求价值1:高价值2:非高价值
     @apiParam {list} [case_ids] 关联的 用例 ID
+    @apiParam {string} expect_time 预期时间
+    @apiParam {string} [tag] 标签
     @apiParamExample {json} Request-Example:
     {
         "title": "str",
@@ -136,7 +142,9 @@ def requirement_modify_handler(requirement_id):
         "report_expect": "str",
         "report_real": "str",
         "worth_sure": 1,
-        "case_ids": [1,2]
+        "case_ids": [1,2],
+        "expect_time": "2018-1-30",
+        "tag": "1,2,3"
     }
     @apiSuccessExample {json} Success-Response:
      HTTP/1.1 200 OK
@@ -148,11 +156,11 @@ def requirement_modify_handler(requirement_id):
     """
     (title, project_id, version, priority, requirement_type, attach, handler, board_status, description,
      comment, parent_id, jira_id, worth, report_time, report_expect, report_real, worth_sure,
-     case_ids, expect_time) = parse_json_form('requirementmodify')
+     case_ids, expect_time, tag) = parse_json_form('requirementmodify')
     ret = RequirementBusiness.requirement_modify(requirement_id, title, project_id, version, board_status, handler,
                                                  description, comment, priority, requirement_type, attach, parent_id,
                                                  jira_id, worth, report_time, report_expect, report_real, worth_sure,
-                                                 case_ids, expect_time=expect_time)
+                                                 case_ids, tag, expect_time=expect_time)
     return json_detail_render(ret)
 
 
@@ -426,12 +434,12 @@ def create_childrequirement():
     """
     (title, project_id, version, handler, priority, requirement_type, attach, board_status, description,
      comment, parent_id, jira_id, worth, report_time, report_expect, report_real, worth_sure,
-     case_ids, expect_time) = parse_json_form('childrenrequirementcreate')
+     case_ids, expect_time, tag) = parse_json_form('childrenrequirementcreate')
     ret = RequirementBusiness.requirement_children_create(title, project_id, version, board_status, handler,
                                                           description,
                                                           comment, priority, requirement_type, attach, parent_id,
                                                           jira_id, worth, report_time, report_expect, report_real,
-                                                          worth_sure, case_ids, expect_time=expect_time)
+                                                          worth_sure, case_ids, tag, expect_time=expect_time)
     return json_detail_render(ret)
 
 

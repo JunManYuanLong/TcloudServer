@@ -10,6 +10,7 @@ from sqlalchemy import desc, func, or_
 from sqlalchemy.orm import aliased
 
 from apps.auth.models.users import User, UserBindRole
+from apps.project.business.tag import TagBusiness
 from apps.project.models.issue import Issue, IssueRecord
 from apps.project.models.modules import Module
 from apps.project.models.project import Project
@@ -17,6 +18,7 @@ from apps.project.models.requirement import Requirement
 from apps.project.models.version import Version
 from apps.public.models.public import Config
 from library.api.db import db
+from library.api.exceptions import SaveObjectException
 from library.api.transfer import transfer2json, slicejson
 from library.notification import notification
 from library.oss import oss_upload
@@ -79,7 +81,8 @@ class IssueBusiness(object):
             user_handler.nickname.label('handler_name'),
             Issue.requirement_id.label('requirement_id'),
             Requirement.title.label('requirement_title'),
-            Issue.case_covered.label('case_covered')
+            Issue.case_covered.label('case_covered'),
+            Issue.tag.label('tag')
         )
 
     @classmethod
@@ -99,8 +102,11 @@ class IssueBusiness(object):
         module_id = module_id_args.split(',') if module_id_args != '' else []
         priority_args = request.args.get('priority', '')
         priority = priority_args.split(',') if priority_args != '' else []
+        level_args = request.args.get('level', '')
+        level = level_args.split(',') if level_args != '' else []
         user = request.args.get('user')
         case_covered = request.args.get('case_covered')
+        tag = request.args.get('tag')
         ret = cls._query().filter(Issue.status == Issue.ACTIVE)
         if project_id:
             ret = ret.filter(Issue.project_id == project_id)
@@ -118,10 +124,14 @@ class IssueBusiness(object):
             ret = ret.filter(Issue.module_id.in_(module_id))
         if priority:
             ret = ret.filter(Issue.priority.in_(priority))
+        if level:
+            ret = ret.filter(Issue.level.in_(level))
         if user:
             ret = ret.filter(Issue.handler == user)
         if case_covered:
             ret = ret.filter(Issue.case_covered == case_covered)
+        if tag:
+            ret = ret.filter(func.find_in_set(tag, Issue.tag))
         if start_time and end_time:
             ret = ret.filter(
                 Issue.modified_time.between(start_time, end_time + " 23:59:59"))
@@ -137,7 +147,7 @@ class IssueBusiness(object):
         '!creator|!handler|!issue_type|!chance|!level|!priority|!stage|!title|!attach|!handle_status|'
         '!reopen|!status|!weight|!description|!comment|!creation_time|!modified_time|!repair_time|'
         '!test_time|!detection_chance|!rank|@creator_id|@creator_name|@modifier_id|@modifier_name|'
-        '@handler_id|@handler_name|!requirement_id|!requirement_title|!case_covered', ispagination=True)
+        '@handler_id|@handler_name|!requirement_id|!requirement_title|!case_covered|!tag', ispagination=True)
     def paginate_data(cls, page_size=None, page_index=None, only_data=False):
         query = cls.filter_query()
         count = query.count()
@@ -157,7 +167,7 @@ class IssueBusiness(object):
         '!creator|!handler|!issue_type|!chance|!level|!priority|!stage|!title|!attach|!handle_status|'
         '!reopen|!status|!weight|!description|!comment|!creation_time|!modified_time|!repair_time|'
         '!test_time|@creator_id|@creator_name|@modifier_id|@modifier_name|@handler_id|@handler_name|'
-        '!requirement_id|!requirement_title|!case_covered', ispagination=True)
+        '!requirement_id|!requirement_title|!case_covered|!tag', ispagination=True)
     def paginate_data_by_rid(cls, page_size, page_index, requirement_id):
         query = cls._query().filter(Issue.status == Issue.ACTIVE, Issue.requirement_id == requirement_id)
         count = query.count()
@@ -174,7 +184,7 @@ class IssueBusiness(object):
         '!creator|!handler|!issue_type|!chance|!level|!priority|!stage|!title|!attach|!handle_status|'
         '!reopen|!status|!weight|!description|!comment|!creation_time|!modified_time|!repair_time|'
         '!test_time|@creator_id|@creator_name|@modifier_id|@modifier_name|@handler_id|@handler_name|'
-        '!requirement_id|!requirement_title|!case_covered')
+        '!requirement_id|!requirement_title|!case_covered|!tag')
     def query_by_id(cls, id):
         return cls._query().filter(Issue.id == id, Issue.status == Issue.ACTIVE).all()
 
@@ -221,23 +231,27 @@ class IssueBusiness(object):
             detection_chance=iss.detection_chance,
             rank=iss.rank,
             requirement_id=iss.requirement_id,
-            case_covered=iss.case_covered
+            case_covered=iss.case_covered,
+            tag=iss.tag
         )
         db.session.add(issue_record)
         db.session.commit()
+        if iss.tag:
+            TagBusiness.less_reference(iss.tag)
         return 0
 
     @classmethod
     def create(cls, system, version, project_id, module_id, creator, modifier, handler, issue_type, chance, level,
                priority, stage, title, attach, handle_status, description, comment, detection_chance,
-               requirement_id, case_covered):
+               requirement_id, case_covered, tag):
         # 创建issue的初始状态只能是2，1
         handle_status = 1
         if handler:
             handle_status = 2
-        is_repeat = Issue.query.filter(Issue.title == title, Issue.status != Issue.DISABLE).first()
-        if is_repeat:
-            return 103
+
+        ret = Issue.query.filter_by(title=title, project_id=project_id, status=Issue.ACTIVE).first()
+        if ret:
+            raise SaveObjectException('存在相同名称的缺陷')
         creator = g.userid if g.userid else None
         current_app.logger.info("creator:" + str(creator))
         rank_type = cls.gain_rank(level, chance)
@@ -263,7 +277,8 @@ class IssueBusiness(object):
                 detection_chance=detection_chance,
                 rank=rank_type,
                 requirement_id=requirement_id,
-                case_covered=case_covered
+                case_covered=case_covered,
+                tag=tag
             )
             db.session.add(c)
             db.session.flush()
@@ -272,9 +287,13 @@ class IssueBusiness(object):
             IssueRecordBusiness.create(c.id, system, project_id, version, module_id, creator, modifier, handler,
                                        issue_type, chance, level,
                                        priority, stage, title, attach, handle_status, description, comment,
-                                       detection_chance, requirement_id, case_covered)
+                                       detection_chance, requirement_id, case_covered, tag)
             db.session.add(c)
             db.session.commit()
+
+            if tag:
+                TagBusiness.add_reference(tag)
+
             if not isinstance(handler, list):
                 handler = [handler]
             board_config = cls.public_trpc.requests('get', '/public/config', {'module': 'tcloud', 'module_type': 1})
@@ -295,74 +314,85 @@ URL：{board_config}/project/{project_id}/issue/{version}'''
     @classmethod
     def modify(cls, id, system, version, project_id, module_id, modifier, handler, issue_type, chance, level,
                priority, stage, title, attach, handle_status, description, comment, detection_chance,
-               requirement_id, case_covered):
-        try:
-            current_app.logger.info("id:" + str(id))
-            iss = Issue.query.get(id)
-            if iss is None:
-                return 101
-            is_change_handler = False
-            if iss.handler != handler:
-                is_change_handler = True
-            modifier = g.userid if g.userid else None
-            current_app.logger.info("modifier：" + str(modifier))
-            flag = cls.status_switch_auth(iss.handle_status, handle_status)
-            # 判断是否有权限操作
-            if not flag:
-                return 110
+               requirement_id, case_covered, tag):
+        current_app.logger.info("id:" + str(id))
+        iss = Issue.query.get(id)
+        if iss is None:
+            return 101
 
-            # 计算reopen次数，repair_time和test_time
-            reopen, repair_time, test_time = cls.operation_authority(id, handle_status)
-            rank_type = cls.gain_rank(level, chance)
+        ret = Issue.query.filter_by(title=title,
+                                    status=Issue.ACTIVE,
+                                    project_id=iss.project_id).filter(Issue.id != id).first()
+        if ret:
+            raise SaveObjectException('存在相同名称的缺陷')
 
-            iss.system = system,
-            iss.version = version,
-            iss.project_id = project_id,
-            iss.module_id = module_id,
-            iss.modifier = modifier,
-            iss.handler = handler,
-            iss.issue_type = issue_type,
-            iss.chance = chance,
-            iss.level = level,
-            iss.priority = priority,
-            iss.stage = stage,
-            iss.title = title,
-            iss.attach = attach,
-            iss.handle_status = handle_status,
-            iss.reopen = reopen,
-            iss.description = description,
-            # iss.comment = comment,
-            iss.repair_time = repair_time,
-            iss.test_time = test_time,
-            iss.detection_chance = detection_chance,
-            iss.rank = rank_type
-            iss.requirement_id = requirement_id
-            iss.case_covered = case_covered
-            db.session.add(iss)
-            IssueRecordBusiness.modify(id, system, project_id, version, module_id, iss.creator, modifier, handler,
-                                       issue_type, chance, level, priority, stage, title, attach, handle_status,
-                                       description, iss.comment, reopen, repair_time, test_time, detection_chance,
-                                       requirement_id, case_covered)
-            db.session.commit()
-            if is_change_handler:
-                modifier_user = cls.user_trpc.requests('get', f'/user/{g.userid}')
-                if modifier_user:
-                    modifier_user = modifier_user[0].get('nickname')
-                handler_user = cls.user_trpc.requests('get',
-                                                      f'/user'
-                                                      f'/{handler if not isinstance(handler, list) else handler[0]}')
-                if handler_user:
-                    handler_user = handler_user[0].get('nickname')
-                if not isinstance(handler, list):
-                    handler = [handler]
-                text = f'''[issue处理人变更 - {title}]
+        is_change_handler = False
+        if iss.handler != handler:
+            is_change_handler = True
+        modifier = g.userid if g.userid else None
+        current_app.logger.info("modifier：" + str(modifier))
+        flag = cls.status_switch_auth(iss.handle_status, handle_status)
+        # 判断是否有权限操作
+        if not flag:
+            return 110
+
+        # 计算reopen次数，repair_time和test_time
+        reopen, repair_time, test_time = cls.operation_authority(id, handle_status)
+        rank_type = cls.gain_rank(level, chance)
+        old_tag = None
+        new_tag = None
+        iss.system = system,
+        iss.version = version,
+        iss.project_id = project_id,
+        iss.module_id = module_id,
+        iss.modifier = modifier,
+        iss.handler = handler,
+        iss.issue_type = issue_type,
+        iss.chance = chance,
+        iss.level = level,
+        iss.priority = priority,
+        iss.stage = stage,
+        iss.title = title,
+        iss.attach = attach,
+        iss.handle_status = handle_status,
+        iss.reopen = reopen,
+        iss.description = description,
+        # iss.comment = comment,
+        iss.repair_time = repair_time,
+        iss.test_time = test_time,
+        iss.detection_chance = detection_chance,
+        iss.rank = rank_type
+        iss.requirement_id = requirement_id
+        iss.case_covered = case_covered
+        if iss.tag != tag:
+            old_tag = iss.tag
+            new_tag = tag
+            iss.tag = tag
+        db.session.add(iss)
+        IssueRecordBusiness.modify(id, system, project_id, version, module_id, iss.creator, modifier, handler,
+                                   issue_type, chance, level, priority, stage, title, attach, handle_status,
+                                   description, iss.comment, reopen, repair_time, test_time, detection_chance,
+                                   requirement_id, case_covered, tag)
+        db.session.commit()
+
+        if old_tag or new_tag:
+            TagBusiness.change_reference(old_tag, new_tag)
+
+        if is_change_handler:
+            modifier_user = cls.user_trpc.requests('get', f'/user/{g.userid}')
+            if modifier_user:
+                modifier_user = modifier_user[0].get('nickname')
+            handler_user = cls.user_trpc.requests('get',
+                                                  f'/user'
+                                                  f'/{handler if not isinstance(handler, list) else handler[0]}')
+            if handler_user:
+                handler_user = handler_user[0].get('nickname')
+            if not isinstance(handler, list):
+                handler = [handler]
+            text = f'''[issue处理人变更 - {title}]
 {modifier_user} 修改处理人为 {handler_user}'''
-                notification.send_notification(handler, text, send_type=2)
-            return 0
-        except Exception as e:
-            current_app.logger.error(str(e))
-            db.session.rollback()
-            return 102
+            notification.send_notification(handler, text, send_type=2)
+        return 0
 
     @classmethod
     def export(cls):
@@ -572,7 +602,8 @@ URL：{board_config}/project/{project_id}/issue/{version}'''
                 detection_chance=iss.detection_chance,
                 rank=iss.rank,
                 requirement_id=iss.requirement_id,
-                case_covered=iss.case_covered
+                case_covered=iss.case_covered,
+                tag=iss.tag
             )
             db.session.add(iss)
             db.session.add(issue_record)
@@ -619,7 +650,8 @@ URL：{board_config}/project/{project_id}/issue/{version}'''
                 detection_chance=iss.detection_chance,
                 rank=iss.rank,
                 requirement_id=iss.requirement_id,
-                case_covered=iss.case_covered
+                case_covered=iss.case_covered,
+                tag=iss.tag
             )
             db.session.add(iss)
             db.session.add(issue_record)
@@ -686,7 +718,8 @@ URL：{board_config}/project/{project_id}/issue/{version}'''
                 detection_chance=iss.detection_chance,
                 rank=rank,
                 requirement_id=iss.requirement_id,
-                case_covered=iss.case_covered
+                case_covered=iss.case_covered,
+                tag=iss.tag
             )
             db.session.add(iss)
             db.session.add(issue_record)
@@ -732,7 +765,8 @@ URL：{board_config}/project/{project_id}/issue/{version}'''
                 detection_chance=iss.detection_chance,
                 rank=iss.rank,
                 requirement_id=iss.requirement_id,
-                case_covered=iss.case_covered
+                case_covered=iss.case_covered,
+                tag=iss.tag
             )
             db.session.add(iss)
             db.session.add(issue_record)
@@ -782,7 +816,8 @@ URL：{board_config}/project/{project_id}/issue/{version}'''
                 detection_chance=iss.detection_chance,
                 rank=iss.rank,
                 requirement_id=iss.requirement_id,
-                case_covered=iss.case_covered
+                case_covered=iss.case_covered,
+                tag=iss.tag
             )
             db.session.add(iss)
             db.session.add(issue_record)
@@ -829,7 +864,8 @@ URL：{board_config}/project/{project_id}/issue/{version}'''
                 detection_chance=iss.detection_chance,
                 rank=iss.rank,
                 requirement_id=iss.requirement_id,
-                case_covered=iss.case_covered
+                case_covered=iss.case_covered,
+                tag=iss.tag
             )
             db.session.add(issue_record)
             db.session.commit()
@@ -881,7 +917,8 @@ URL：{board_config}/project/{project_id}/issue/{version}'''
                 detection_chance=issue.detection_chance,
                 rank=issue.rank,
                 requirement_id=issue.requirement_id,
-                case_covered=issue.case_covered
+                case_covered=issue.case_covered,
+                tag=issue.tag
             )
 
             db.session.add(issue)
@@ -941,6 +978,7 @@ class IssueRecordBusiness(object):
             IssueRecord.rank.label('rank'),
             IssueRecord.requirement_id.label('requirement_id'),
             IssueRecord.case_covered.label('case_covered'),
+            IssueRecord.tag.label('tag'),
             Requirement.title.label('requirement_title'),
             user_creator.id.label('creator_id'),
             user_creator.nickname.label('creator_name'),
@@ -959,7 +997,7 @@ class IssueRecordBusiness(object):
         '@module_name|!creator|!handler|!issue_type|!chance|!level|!priority|!stage|!title|!attach|'
         '!handle_status|!reopen|!status|!weight|!description|!comment|!creation_time|!modified_time|!repair_time|'
         '!test_time|!detection_chance|!rank|@creator_id|@creator_name|@modifier_id|@modifier_name|@handler_id|'
-        '@handler_name|!requirement_id|!requirement_title')
+        '@handler_name|!requirement_id|!requirement_title|!tag')
     def query_all_json(cls):
         projectid = request.args.get('projectid')
         versionid = request.args.get('versionid')
@@ -975,7 +1013,7 @@ class IssueRecordBusiness(object):
     @classmethod
     def create(cls, iss_id, system, project_id, version, module_id, creator, modifier, handler, issue_type, chance,
                level, priority, stage, title, attach, handle_status, description, comment, detection_chance,
-               requirement_id, case_covered):
+               requirement_id, case_covered, tag):
 
         rank = cls.gain_rank(level, chance)
         c = IssueRecord(
@@ -1004,7 +1042,8 @@ class IssueRecordBusiness(object):
             detection_chance=detection_chance,
             rank=rank,
             requirement_id=requirement_id,
-            case_covered=case_covered
+            case_covered=case_covered,
+            tag=tag
         )
         db.session.add(c)
 
@@ -1012,7 +1051,7 @@ class IssueRecordBusiness(object):
     @classmethod
     def modify(cls, iss_id, system, project_id, version, module_id, creator, modifier, handler, issue_type, chance,
                level, priority, stage, title, attach, handle_status, description, comment, reopen, repair_time,
-               test_time, detection_chance, requirement_id, case_covered):
+               test_time, detection_chance, requirement_id, case_covered, tag):
         rank = cls.gain_rank(level, chance)
         c = IssueRecord(
             iss_id=iss_id,
@@ -1040,7 +1079,8 @@ class IssueRecordBusiness(object):
             detection_chance=detection_chance,
             rank=rank,
             requirement_id=requirement_id,
-            case_covered=case_covered
+            case_covered=case_covered,
+            tag=tag
         )
         db.session.add(c)
 
@@ -1062,7 +1102,7 @@ class IssueRecordBusiness(object):
         '?issuerecordid|!iss_id|!system|!module_name|!handler|!issue_type|!chance|!level|!priority|!stage|'
         '!title|!attach|!handle_status|!status|!description|!comment|!creation_time|!modified_time|!test_time|'
         '!detection_chance|!rank|!creator_name|!creator_id|!modifier_id|!modifier_name|!handler_name|!requirement_id|'
-        '!requirement_title')
+        '!requirement_title|!tag')
     def query_record_json(cls, issue_id):
         ret = cls._query().filter(IssueRecord.iss_id == issue_id).order_by(IssueRecord.id).all()
         return ret

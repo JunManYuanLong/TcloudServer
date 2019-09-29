@@ -7,6 +7,7 @@ from sqlalchemy.orm import aliased
 from apps.auth.models.users import User
 from apps.project.models.version import Version
 from library.api.db import db
+from library.api.exceptions import SaveObjectException
 from library.api.transfer import transfer2json, slicejson
 from library.trpc import Trpc
 
@@ -101,39 +102,42 @@ class VersionBusiness(object):
 
     @classmethod
     def version_create(cls, title, project_id, start_time, end_time, description, creator=None):
-        try:
-            creator = g.userid if creator is None else creator
-            current_app.logger.info("creator:" + str(creator))
-            c = Version(
-                title=title,
-                project_id=project_id,
-                start_time=start_time,
-                end_time=end_time,
-                creator=creator,
-                description=description,
-            )
-            db.session.add(c)
-            db.session.commit()
-            mid = c.id
-            c.version_number = 'TC' + str(mid)
-            db.session.add(c)
-            db.session.commit()
-            return 0
-        except Exception as e:
-            current_app.logger.error(str(e))
-            return 102
+        ret = Version.query.filter_by(title=title, project_id=project_id, status=Version.ACTIVE).first()
+        if ret:
+            raise SaveObjectException('存在相同名称的版本')
+
+        creator = g.userid if creator is None else creator
+        current_app.logger.info("creator:" + str(creator))
+        c = Version(
+            title=title,
+            project_id=project_id,
+            start_time=start_time,
+            end_time=end_time,
+            creator=creator,
+            description=description,
+        )
+        db.session.add(c)
+        db.session.commit()
+        mid = c.id
+        c.version_number = 'TC' + str(mid)
+        db.session.add(c)
+        db.session.commit()
+        return 0
 
     @classmethod
     def version_modify(cls, versionid, title, start_time, end_time, description):
-        try:
-            c = Version.query.get(versionid)
-            c.title = title,
-            c.start_time = start_time,
-            c.end_time = end_time,
-            c.description = description,
-            db.session.add(c)
-            db.session.commit()
-            return 0
-        except Exception as e:
-            current_app.logger.error(str(e))
-            return 301
+        c = Version.query.get(versionid)
+
+        ret = Version.query.filter_by(title=title,
+                                      status=Version.ACTIVE,
+                                      project_id=c.project_id).filter(Version.id != versionid).first()
+        if ret:
+            raise SaveObjectException('存在相同名称的版本')
+
+        c.title = title,
+        c.start_time = start_time,
+        c.end_time = end_time,
+        c.description = description,
+        db.session.add(c)
+        db.session.commit()
+        return 0

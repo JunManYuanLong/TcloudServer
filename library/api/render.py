@@ -62,8 +62,16 @@ def json_detail_render_sse(code, data=None, message=None):
     return json.dumps(resp)
 
 
-def row2list(rows, keys):
+def row2list(rows):
     data = []
-    for i in rows:
-        data.append({key: getattr(i, key) for key in keys})
+    for row in rows:
+        if hasattr(row, '_asdict'):
+            rv = row._asdict()
+        else:
+            rv = row.__dict__
+        for k, v in rv.items():
+            if not isinstance(v, str):
+                rv.pop(k)
+                break
+        data.append(rv)
     return data

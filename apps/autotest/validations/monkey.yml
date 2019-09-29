@@ -32,6 +32,9 @@ monkey_create:
   run_time:
     required: True
     type: int
+  test_type:
+    required: True
+    type: int
   returnvalue:
     - app_name
     - package_name
@@ -45,6 +48,7 @@ monkey_create:
     - process
     - type_id
     - run_time
+    - test_type
 
 
 monkey_start:
@@ -78,6 +82,8 @@ monkey_start:
   app_install_required:
     type: int
     required: true
+  test_config:
+    type: basestring
 
   returnvalue:
     - user_id
@@ -90,6 +96,7 @@ monkey_start:
     - login_password
     - app_id
     - app_install_required
+    - test_config
 
 
 monkey_update:
@@ -283,6 +290,8 @@ monkey_package_create:
   user_id:
     type: int
     required: true
+  test_type:
+    type: int
   returnvalue:
     - name
     - package_name
@@ -291,6 +300,7 @@ monkey_package_create:
     - picture
     - default_activity
     - user_id
+    - test_type
 
 
 monkey_cancel:
