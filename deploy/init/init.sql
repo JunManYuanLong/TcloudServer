@@ -1,19 +1,3 @@
-/*
- Navicat Premium Data Transfer
-
- Source Server         : dev
- Source Server Type    : MySQL
- Source Server Version : 50616
- Source Host           : rm-2ze3hdq85qi33k641fo.mysql.rds.aliyuncs.com:3306
- Source Schema         : tcloud_2
-
- Target Server Type    : MySQL
- Target Server Version : 50616
- File Encoding         : 65001
-
- Date: 10/09/2019 20:31:50
-*/
-
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
 CREATE DATABASE demo;
@@ -28,8 +12,8 @@ CREATE TABLE `ability` (
   `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `name` varchar(100) NOT NULL,
   `handler` varchar(100) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8;
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of ability
@@ -66,7 +50,11 @@ INSERT INTO `ability` VALUES (28, NULL, '2019-08-21 14:00:54', '访问_配置', 
 INSERT INTO `ability` VALUES (29, NULL, '2019-08-21 14:00:56', '编辑_配置', 'projectconfig_modify');
 INSERT INTO `ability` VALUES (30, NULL, '2019-08-21 14:00:58', '删除_配置', 'projectconfig_delete');
 INSERT INTO `ability` VALUES (31, NULL, '2019-08-21 14:01:00', '执行_用例', 'case_excute');
+INSERT INTO `ability` VALUES (32, NULL, '2019-09-24 16:27:56', '编辑_标签', 'tag_modify');
+INSERT INTO `ability` VALUES (33, NULL, '2019-09-24 16:28:16', '删除_标签', 'tag_delete');
+INSERT INTO `ability` VALUES (34, NULL, '2019-09-24 16:28:34', '访问_标签', 'tag_view');
 COMMIT;
+
 
 -- ----------------------------
 -- Table structure for board_config
@@ -205,28 +193,28 @@ CREATE TABLE `config` (
 -- Records of config
 -- ----------------------------
 BEGIN;
-INSERT INTO `config` VALUES (1, '2019-01-23 14:19:56', '2019-08-08 11:09:01', 'issue', 1, '{\"operation_dict\":{\"requirement_id\":\"需求\",\"attach\":\"附件\",\"chance\":\"BUG出现机率\",\"comment\":\"备注\",\"description\":\"描述\",\"handle_status\":\"处理状态\",\"handler_name\":\"处理人\",\"issue_type\":\"BUG类型\",\"level\":\"BUG级别\",\"module_name\":\"模块\",\"priority\":\"优先级\",\"status\":\"状态\",\"title\":\"标题\",\"system\":\"所属系统\",\"detection_chance\":\"用户识别度\"},\"chance\":{\"0\":\"必现\",\"1\":\"大概率\",\"2\":\"小概率\",\"3\":\"极小概率\",\"\":\"\"},\"issue_type\":{\"0\":\"功能问题\",\"1\":\"界面优化\",\"2\":\"设计缺陷\",\"3\":\"安全相关\",\"4\":\"性能问题\",\"5\":\"开发修改引入\",\"6\":\"其他\",\"\":\"\"},\"level\":{\"0\":\"阻塞\",\"1\":\"严重\",\"2\":\"重要\",\"3\":\"次要\",\"4\":\"微小\",\"\":\"\"},\"priority\":{\"0\":\"紧急\",\"1\":\"高\",\"2\":\"中\",\"3\":\"低\",\"\":\"\"},\"handle_status\":{\"1\":\"待办\",\"2\":\"处理中\",\"3\":\"测试中\",\"4\":\"已关闭\",\"5\":\"已拒绝\",\"6\":\"延时处理\",\"\":\"\"},\"system\":{\"1\":\"ANDROID\",\"2\":\"IOS\",\"3\":\"后端\",\"4\":\"H5\",\"5\":\"小程序\",\"6\":\"WEB端\",\"7\":\"其他\",\"\":\"\"},\"detection_chance\":{\"0\":\"明显的\",\"1\":\"高概率\",\"2\":\"中概率\",\"3\":\"小概率\"}}', 'issue的状态记录', NULL);
+INSERT INTO `config` VALUES (1, '2019-01-23 14:19:56', '2019-09-06 12:57:16', 'issue', 1, '{\"operation_dict\":{\"requirement_id\":\"需求\",\"attach\":\"附件\",\"chance\":\"BUG出现机率\",\"comment\":\"备注\",\"description\":\"描述\",\"handle_status\":\"处理状态\",\"handler_name\":\"处理人\",\"issue_type\":\"BUG类型\",\"level\":\"BUG级别\",\"module_name\":\"模块\",\"priority\":\"优先级\",\"status\":\"状态\",\"title\":\"标题\",\"system\":\"所属系统\",\"detection_chance\":\"用户识别度\"},\"chance\":{\"0\":\"必现\",\"1\":\"大概率\",\"2\":\"小概率\",\"3\":\"极小概率\",\"\":\"\"},\"issue_type\":{\"0\":\"功能问题\",\"1\":\"界面优化\",\"2\":\"设计缺陷\",\"3\":\"安全相关\",\"4\":\"性能问题\",\"5\":\"开发修改引入\",\"6\":\"其他\",\"\":\"\"},\"level\":{\"0\":\"阻塞\",\"1\":\"严重\",\"2\":\"重要\",\"3\":\"次要\",\"4\":\"微小\",\"\":\"\"},\"priority\":{\"0\":\"紧急\",\"1\":\"高\",\"2\":\"中\",\"3\":\"低\",\"\":\"\"},\"handle_status\":{\"1\":\"待办\",\"2\":\"处理中\",\"3\":\"测试中\",\"4\":\"已关闭\",\"5\":\"已拒绝\",\"6\":\"延时处理\",\"\":\"\"},\"system\":{\"1\":\"ANDROID\",\"2\":\"IOS\",\"3\":\"后端\",\"4\":\"H5\",\"5\":\"小程序\",\"6\":\"WEB端\",\"7\":\"其他\",\"\":\"\"},\"detection_chance\":{\"0\":\"明显的\",\"1\":\"高概率\",\"2\":\"中概率\",\"3\":\"小概率\",\"\":\"\"}}', 'issue的状态记录', NULL);
 INSERT INTO `config` VALUES (2, '2019-01-23 14:19:56', '2019-01-23 14:19:58', 'board', 1, '{\"create\":{\"task\":[0,1,2],\"task_case\":[],\"issue\":[1,2,3,4,5,6]},\"unfinish\":{\"task\":[0],\"task_case\":[0],\"issue\":[1,2,3,5,6]},\"finish\":{\"task\":[2],\"task_case\":[2,3,4],\"issue\":[4]}}', 'issue的状态记录', NULL);
 INSERT INTO `config` VALUES (3, '2019-01-23 14:19:56', '2019-06-24 19:10:34', 'requirement', 1, '{\"operation_dict\":{\"attach\":\"附件\",\"comment\":\"备注\",\"description\":\"描述\",\"board_status\":\"处理状态\",\"handler_name\":\"处理人\",\"requirement_type\":\"类型\",\"priority\":\"优先级\",\"status\":\"状态\",\"title\":\"标题\",\"review_status\":\"评审状态\",\"worth\":\"需求价值\",\"worth_sure\":\"需求价值确认\",\"jira_id\":\"jira号\",\"report_time\":\"需获取置信结果天数\",\"report_expect\":\"高价值预期结果\",\"report_real\":\"高价值实际结果\"},\"requirement_type\":{\"0\":\"功能需求\",\"1\":\"优化需求\",\"2\":\"自动化需求\",\"3\":\"性能需求\",\"4\":\"兼容性需求\",\"5\":\"报表需求\",\"6\":\"临时需求\",\"7\":\"紧急需求\",\"8\":\"新功能需求\",\"9\":\"其他\",\"\":\"\"},\"priority\":{\"0\":\"紧急\",\"1\":\"高\",\"2\":\"中\",\"3\":\"低\",\"\":\"\"},\"board_status\":{\"0\":\"规划中\",\"1\":\"实现中\",\"2\":\"测试中\",\"3\":\"已拒绝\",\"4\":\"待验收\",\"5\":\"待发布\",\"6\":\"完成\",\"\":\"\"},\"review_status\":{\"1\":\"未评审\",\"2\":\"评审成功\",\"3\":\"评审失败\",\"\":\"\"},\"worth_sure\":{\"1\":\"超出预期\",\"2\":\"符合预期\",\"3\":\"低于预期\",\"\":\"\"},\"worth\":{\"1\":\"高价值\",\"2\":\"非高价值\",\"\":\"\"}}', 'issue的状态记录', NULL);
-INSERT INTO `config` VALUES (4, '2019-01-23 14:19:56', '2019-03-15 11:02:20', 'issue', 2, '{\"test\":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[1,2],[3,2],[3,4],[4,2],[5,2],[5,4],[6,2],[6,4]],\"dev\":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[1,2],[2,3],[2,5],[2,6]],\"admin\":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[1,2],[2,3],[2,5],[2,6],[3,2],[3,4],[4,2],[5,2],[5,4],[6,2],[6,4]]}', 'issue的状态记录', NULL);
-INSERT INTO `config` VALUES (5, '2019-01-23 14:19:56', '2019-09-02 10:36:55', 'access_token', 1, '{\"access_token\": \"\"}', NULL, 0);
-INSERT INTO `config` VALUES (6, '2019-04-03 10:41:22', '2019-06-14 13:57:29', 'stf', 1, '{\"URL\":\"\",\"headers\":{\"Authorization\": \"\"}}', NULL, NULL);
-INSERT INTO `config` VALUES (7, '2019-04-12 13:47:51', '2019-04-12 13:52:29', 'corp_secret', 1, '', NULL, NULL);
-INSERT INTO `config` VALUES (8, '2019-04-28 16:27:46', '2019-04-29 16:31:36', 'stf', 2, '{\"URL\":\"\"}', NULL, NULL);
-INSERT INTO `config` VALUES (9, '2019-05-05 15:53:04', '2019-06-24 12:39:36', 'stf', 3, '{\"URL\":\"\",\"headers\":{\"Authorization\": \"\"}}', NULL, NULL);
-INSERT INTO `config` VALUES (10, NULL, '2019-06-20 14:14:25', 'tcloud', 1, '', NULL, NULL);
-INSERT INTO `config` VALUES (15, NULL, '2019-06-20 14:14:17', 'tcloud', 2, '', NULL, NULL);
-INSERT INTO `config` VALUES (16, '2019-05-24 17:54:08', '2019-07-26 16:35:33', 'jenkins', 1, '{\"4\":[{\"id\":0,\"name\":\"萌推回归测试\",\"job\":\"mengtui_regression_test\"},{\"id\":1,\"name\":\"萌推回归测试\",\"job\":\"mengtui_regression_test\"},{\"id\":2,\"name\":\"萌推单个接口\",\"job\":\"mengtui_singel_api_dev\"}],\"1\":[{\"id\":1,\"name\":\"萌推回归测试\",\"job\":\"mengtui_regression_test\"}]}', NULL, NULL);
-INSERT INTO `config` VALUES (17, '2019-05-24 20:10:50', '2019-07-22 10:43:34', 'jenkins', 2, '{\"url\":\"\",\"user_id\":\"\",\"api_token\":\"\"}', 'jenkins 账号信息', NULL);
+INSERT INTO `config` VALUES (4, '2019-01-23 14:19:56', '2019-09-25 16:52:47', 'issue', 2, '{\"test\":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[1,2],[3,2],[3,4],[3,6],[4,2],[5,2],[5,4],[6,2],[6,4]],\"dev\":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[1,2],[2,3],[2,5],[2,6]],\"admin\":[[1,1],[2,2],[3,3],[4,4],[5,5],[6,6],[1,2],[2,3],[2,5],[2,6],[3,2],[3,4],[4,2],[5,2],[5,4],[6,2],[6,4]]}', 'issue的状态记录', NULL);
+INSERT INTO `config` VALUES (5, '2019-01-23 14:19:56', '2019-09-27 15:45:36', 'access_token', 1, '{\"access_token\": \"youraccesstoken\"}', NULL, 0);
+INSERT INTO `config` VALUES (6, '2019-04-03 10:41:22', '2019-06-14 13:57:29', 'stf', 1, '{\"URL\":\"http://yourstfurl\",\"headers\":{\"Authorization\": \"yourtoken\"}}', NULL, NULL);
+INSERT INTO `config` VALUES (7, '2019-04-12 13:47:51', '2019-04-12 13:52:29', 'corp_secret', 1, 'yourcorpsecret', NULL, NULL);
+INSERT INTO `config` VALUES (8, '2019-04-28 16:27:46', '2019-09-27 11:21:47', 'stf', 2, '{\"URL\":\"http://yourstfurl\", \"stfurl\":\"http://yourstfurl\"}', NULL, NULL);
+INSERT INTO `config` VALUES (9, '2019-05-05 15:53:04', '2019-06-24 12:39:36', 'stf', 3, '{\"URL\":\"http://yourstfurl\",\"headers\":{\"Authorization\": \"yourtoken\"}}', NULL, NULL);
+INSERT INTO `config` VALUES (10, NULL, '2019-06-20 14:14:25', 'tcloud', 1, 'http://tcloud-demo.innotechx.com/#', NULL, NULL);
+INSERT INTO `config` VALUES (15, NULL, '2019-06-20 14:14:17', 'tcloud', 2, 'http://tcloud-demo.innotechx.com/#', NULL, NULL);
+INSERT INTO `config` VALUES (16, '2019-05-24 17:54:08', '2019-07-26 16:35:33', 'jenkins', 1, '{\"4\":[{\"id\":0,\"name\":\"回归测试\",\"job\":\"regression_test\"},{\"id\":1,\"name\":\"回归测试\",\"job\":\"regression_test\"},{\"id\":2,\"name\":\"单个接口\",\"job\":\"singel_api_dev\"}],\"1\":[{\"id\":1,\"name\":\"回归测试\",\"job\":\"regression_test\"}]}', NULL, NULL);
+INSERT INTO `config` VALUES (17, '2019-05-24 20:10:50', '2019-07-22 10:43:34', 'jenkins', 2, '{\"url\":\"http://ci.automancloud.com\",\"user_id\":\"aaa\",\"api_token\":\"yourtoken\"}', 'jenkins 账号信息', NULL);
 INSERT INTO `config` VALUES (18, '2019-06-14 11:19:56', '2019-06-13 18:59:35', 'asset', 1, '{\"operation_dict\":{\"name\":\"名称\",\"asset_id\":\"资产编号\",\"status\":\"状态\",\"borrow_id\":\"持有者\"},\"status\":{\"0\":\"不可用\",\"1\":\"可用\"}}', '资产的转移记录', NULL);
 INSERT INTO `config` VALUES (19, '2019-06-14 14:19:56', '2019-06-14 14:08:15', 'credit', 1, '{\"operation_dict\":{\"score\": \"信用积分\"},\"status\":{\"0\":\"不可用\",\"1\":\"可用\"}}', '信用积分记录', NULL);
 INSERT INTO `config` VALUES (20, '2019-06-17 19:43:09', '2019-07-02 14:27:40', 'deploy', 1, '{\"operation_dict\":[{\"4\":\"4\"},{\"1\":\"4\"}]}', NULL, NULL);
 INSERT INTO `config` VALUES (22, '2019-06-21 15:49:01', '2019-07-02 22:40:30', 'track', 1, '{\"operation_dict\":[{\"1\":\"3\"},{\"2\":\"42\"},{\"3\":\"41\"},{\"4\":\"43\"},{\"63\":\"45\"}]}', '埋点项目配置', NULL);
-INSERT INTO `config` VALUES (23, '2019-06-21 16:05:34', '2019-07-02 22:40:09', 'track', 2, '{\"URL\":\"\"}', '埋点项目url', NULL);
-INSERT INTO `config` VALUES (24, '2019-06-26 23:08:57', '2019-07-02 22:40:19', 'track', 3, '{\"URL\":\"\"}', '埋点项目websocket', NULL);
-INSERT INTO `config` VALUES (25, '2019-07-01 16:11:16', '2019-07-02 21:41:32', 'deploy', 2, '{\"URL\":\"\"}', '部署url', NULL);
-INSERT INTO `config` VALUES (26, '2019-07-01 16:12:13', '2019-07-02 14:27:30', 'deploy', 3, '{\"api\":\"AwA8qLLB\"}', '部署token', NULL);
-INSERT INTO `config` VALUES (27, '2019-07-22 10:44:01', '2019-07-22 19:12:27', 'jenkins', 3, '{\"job\":[\"mengtui_activity_api\",\"mengtui_regression_test\",\"mengtui_scene_api\",\"shihuimiao_activity_api\",\"shihuimiao_scene_api\"]}', 'jenkins更新的job', NULL);
+INSERT INTO `config` VALUES (23, '2019-06-21 16:05:34', '2019-07-02 22:40:09', 'track', 2, '{\"URL\":\"http://yourtrackurl\"}', '埋点项目url', NULL);
+INSERT INTO `config` VALUES (24, '2019-06-26 23:08:57', '2019-07-02 22:40:19', 'track', 3, '{\"URL\":\"ws://yourtrackurl\"}', '埋点项目websocket', NULL);
+INSERT INTO `config` VALUES (25, '2019-07-01 16:11:16', '2019-07-02 21:41:32', 'deploy', 2, '{\"URL\":\"http://yourdeployurl\"}', '部署url', NULL);
+INSERT INTO `config` VALUES (26, '2019-07-01 16:12:13', '2019-07-02 14:27:30', 'deploy', 3, '{\"api\":\"yourapi\"}', '部署token', NULL);
+INSERT INTO `config` VALUES (27, '2019-07-22 10:44:01', '2019-07-22 19:12:27', 'jenkins', 3, '{\"job\":[\"activity_api\",\"regression_test\",\"scene_api\",\"activity_api\",\"scene_api\"]}', 'jenkins更新的job', NULL);
 INSERT INTO `config` VALUES (28, '2019-07-29 16:30:15', '2019-08-13 10:41:26', 'flow_config', NULL, '{\"type\":{\"1\":\"版本需求\",\"2\":\"搜索推荐\",\"3\":\"问题修复\",\"4\":\"临时需求\",\"5\":\"优化\",\"6\":\"紧急需求\"},\"platform\":{\"1\":\"后端\",\"2\":\"PHP\",\"3\":\"APP\",\"4\":\"H5\",\"5\":\"微信商城\",\"6\":\"小程序\"},\"permission_check\":true}', '默认的流程配置', 0);
 INSERT INTO `config` VALUES (29, '2019-08-19 16:55:16', '2019-08-30 14:43:55', 'flow_config', NULL, '{\"type\": {\"1\": \"\\u7248\\u672c\\u9700\\u6c42\", \"2\": \"\\u641c\\u7d22\\u63a8\\u8350\", \"3\": \"\\u95ee\\u9898\\u4fee\\u590d\", \"4\": \"\\u4e34\\u65f6\\u9700\\u6c42\", \"5\": \"\\u4f18\\u5316\", \"6\": \"\\u7d27\\u6025\\u9700\\u6c42\"}, \"platform\": {\"1\": \"\\u540e\\u7aef\", \"2\": \"PHP\", \"3\": \"APP\", \"4\": \"H5\", \"5\": \"\\u5fae\\u4fe1\\u5546\\u57ce\", \"6\": \"\\u5c0f\\u7a0b\\u5e8f\"}, \"permission_check\": true}', '默认的流程配置', 4);
 INSERT INTO `config` VALUES (30, '2019-09-04 07:00:30', '2019-09-04 15:00:30', 'flow_config', NULL, '{\"type\": {\"1\": \"\\u7248\\u672c\\u9700\\u6c42\", \"2\": \"\\u641c\\u7d22\\u63a8\\u8350\", \"3\": \"\\u95ee\\u9898\\u4fee\\u590d\", \"4\": \"\\u4e34\\u65f6\\u9700\\u6c42\", \"5\": \"\\u4f18\\u5316\", \"6\": \"\\u7d27\\u6025\\u9700\\u6c42\"}, \"platform\": {\"1\": \"\\u540e\\u7aef\", \"2\": \"PHP\", \"3\": \"APP\", \"4\": \"H5\", \"5\": \"\\u5fae\\u4fe1\\u5546\\u57ce\", \"6\": \"\\u5c0f\\u7a0b\\u5e8f\"}, \"permission_check\": false}', '默认的流程配置', 2);
@@ -338,7 +326,7 @@ CREATE TABLE `data_show_response_kernel_record` (
   `status` int(255) DEFAULT '0',
   `show_in_chart` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for data_show_response_log
@@ -367,7 +355,7 @@ CREATE TABLE `data_show_response_log` (
   `status` int(255) DEFAULT '0',
   `show_in_chart` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for deploy
@@ -949,27 +937,15 @@ CREATE TABLE `issue` (
   `rank` int(11) DEFAULT NULL,
   `requirement_id` int(11) DEFAULT NULL,
   `case_covered` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `creator` (`creator`) USING BTREE,
-  KEY `modifier` (`modifier`) USING BTREE,
-  KEY `handler` (`handler`) USING BTREE,
+  `tag` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `creator` (`creator`),
+  KEY `modifier` (`modifier`),
+  KEY `handler` (`handler`),
   CONSTRAINT `issue_ibfk_1` FOREIGN KEY (`creator`) REFERENCES `user` (`id`),
   CONSTRAINT `issue_ibfk_2` FOREIGN KEY (`modifier`) REFERENCES `user` (`id`),
   CONSTRAINT `issue_ibfk_3` FOREIGN KEY (`handler`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of issue
--- ----------------------------
-BEGIN;
-INSERT INTO `issue` VALUES (1, '2019-09-04 06:59:30', '2019-09-04 14:59:38', 'T1', 2, NULL, 1, NULL, 1152, 1152, NULL, NULL, 0, 0, 0, NULL, '缺陷测试', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 25, 1, NULL);
-INSERT INTO `issue` VALUES (2, '2019-09-06 07:39:14', '2019-09-06 15:44:25', 'T2', 2, 1, 2, 1, 1152, 1152, 1152, 0, 0, 2, 1, NULL, '【功能点】 主要问题描述，如果是偶现请备注', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, 1, 15, 2, NULL);
-INSERT INTO `issue` VALUES (3, '2019-09-06 08:10:20', '2019-09-10 17:27:41', 'T3', 2, 6, 2, 4, 1152, 1152, 1155, 0, 0, 1, 1, NULL, 'issue列表页分页功能错误', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 3, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '4 days, 1:17:21', NULL, NULL, 20, 5, NULL);
-INSERT INTO `issue` VALUES (4, '2019-09-06 08:11:14', '2019-09-10 19:49:16', 'T4', 2, 6, 2, 3, 1152, NULL, 1155, 0, 0, 2, 2, NULL, 'taskcase无法导出excel', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 3, 1, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '4 days, 3:38:02', NULL, NULL, 15, 4, NULL);
-INSERT INTO `issue` VALUES (5, '2019-09-06 08:11:59', '2019-09-10 19:49:13', 'T5', 2, 6, 2, 4, 1152, NULL, 1155, 1, 0, 3, 2, NULL, '搜索界面显示优化建议', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 4, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '0:00:07', '4 days, 3:37:07', NULL, 10, 3, NULL);
-INSERT INTO `issue` VALUES (6, '2019-09-06 08:14:42', '2019-09-10 18:28:02', 'T6', 2, 6, 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue` VALUES (7, '2019-09-06 08:18:36', '2019-09-10 19:49:18', 'T7', 2, 6, 2, 7, 1152, 1152, 1155, 0, 0, 2, 2, NULL, '按照标题搜索，不要区分大小写', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 3, 1, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '4 days, 3:30:42', NULL, NULL, 15, NULL, NULL);
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for issue_record
@@ -1008,55 +984,15 @@ CREATE TABLE `issue_record` (
   `rank` int(11) DEFAULT NULL,
   `requirement_id` int(11) DEFAULT NULL,
   `case_covered` int(11) DEFAULT NULL,
-  PRIMARY KEY (`id`) USING BTREE,
-  KEY `creator` (`creator`) USING BTREE,
-  KEY `modifier` (`modifier`) USING BTREE,
-  KEY `handler` (`handler`) USING BTREE,
+  `tag` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `creator` (`creator`),
+  KEY `modifier` (`modifier`),
+  KEY `handler` (`handler`),
   CONSTRAINT `issue_record_ibfk_1` FOREIGN KEY (`creator`) REFERENCES `user` (`id`),
   CONSTRAINT `issue_record_ibfk_2` FOREIGN KEY (`modifier`) REFERENCES `user` (`id`),
   CONSTRAINT `issue_record_ibfk_3` FOREIGN KEY (`handler`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of issue_record
--- ----------------------------
-BEGIN;
-INSERT INTO `issue_record` VALUES (1, '2019-09-04 06:59:30', '2019-09-04 14:59:29', 1, 'T1', 2, NULL, 1, NULL, 1152, NULL, NULL, NULL, 0, 0, 0, NULL, '缺陷测试', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 25, NULL, NULL);
-INSERT INTO `issue_record` VALUES (2, '2019-09-04 06:59:39', '2019-09-04 14:59:38', 1, 'T1', 2, NULL, 1, NULL, 1152, 1152, NULL, NULL, 0, 0, 0, NULL, '缺陷测试', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 25, 1, NULL);
-INSERT INTO `issue_record` VALUES (3, '2019-09-06 07:39:14', '2019-09-06 15:39:13', 2, 'T2', 2, '1', 2, 1, 1152, NULL, 1152, 0, 0, 2, 1, NULL, '标题： 【功能点】 主要问题描述，如果是偶现请备注', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, 1, 15, 1, NULL);
-INSERT INTO `issue_record` VALUES (4, '2019-09-06 07:44:16', '2019-09-06 15:44:15', 2, 'T2', 2, '1', 2, 1, 1152, 1152, 1152, 0, 0, 2, 1, NULL, '标题： 【功能点】 主要问题描述，如果是偶现请备注', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, 1, 15, 2, NULL);
-INSERT INTO `issue_record` VALUES (5, '2019-09-06 07:44:26', '2019-09-06 15:44:25', 2, 'T2', 2, '1', 2, 1, 1152, 1152, 1152, 0, 0, 2, 1, NULL, '【功能点】 主要问题描述，如果是偶现请备注', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, 1, 15, 2, NULL);
-INSERT INTO `issue_record` VALUES (6, '2019-09-06 08:10:20', '2019-09-06 16:10:20', 3, 'T3', 2, '6', 2, 4, 1152, NULL, 1155, 0, 0, 1, 1, NULL, 'issue列表页分页功能错误', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 20, 5, NULL);
-INSERT INTO `issue_record` VALUES (7, '2019-09-06 08:10:27', '2019-09-06 16:10:27', 3, 'T3', 2, '6', 2, 4, 1152, 1152, 1155, 0, 0, 1, 1, NULL, 'issue列表页分页功能错误', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 20, 5, NULL);
-INSERT INTO `issue_record` VALUES (8, '2019-09-06 08:11:14', '2019-09-06 16:11:14', 4, 'T4', 2, '6', 2, 3, 1152, NULL, 1155, 0, 0, 2, 2, NULL, 'taskcase无法导出excel', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 15, 4, NULL);
-INSERT INTO `issue_record` VALUES (9, '2019-09-06 08:11:59', '2019-09-06 16:11:59', 5, 'T5', 2, '6', 2, 4, 1152, NULL, 1155, 1, 0, 3, 2, NULL, '搜索界面显示优化建议', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 10, 3, NULL);
-INSERT INTO `issue_record` VALUES (10, '2019-09-06 08:12:06', '2019-09-06 16:12:06', 5, 'T5', 2, '6', 2, 4, 1152, 1152, 1155, 1, 0, 3, 2, NULL, '搜索界面显示优化建议', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 3, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '0:00:07', NULL, NULL, 10, 3, NULL);
-INSERT INTO `issue_record` VALUES (11, '2019-09-06 08:12:10', '2019-09-06 16:12:09', 4, 'T4', 2, '6', 2, 3, 1152, 1152, 1155, 0, 0, 2, 2, NULL, 'taskcase无法导出excel', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 4, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 15, 4, NULL);
-INSERT INTO `issue_record` VALUES (12, '2019-09-06 08:14:42', '2019-09-06 16:14:42', 6, 'T6', 2, '6', 2, 4, 1152, NULL, 1155, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (13, '2019-09-06 08:14:54', '2019-09-06 16:14:54', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1155, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (14, '2019-09-06 08:18:36', '2019-09-06 16:18:36', 7, 'T7', 2, '6', 2, 7, 1152, NULL, 1155, 0, 0, 2, 2, NULL, '按照标题搜索，不要区分大小写', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, NULL, NULL, NULL, NULL, NULL, 15, NULL, NULL);
-INSERT INTO `issue_record` VALUES (15, '2019-09-06 08:18:43', '2019-09-06 16:18:43', 7, 'T7', 2, '6', 2, 7, 1152, 1152, 1155, 0, 0, 2, 2, NULL, '按照标题搜索，不要区分大小写', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 15, NULL, NULL);
-INSERT INTO `issue_record` VALUES (16, '2019-09-10 08:13:33', '2019-09-10 16:13:32', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1155, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (17, '2019-09-10 08:13:37', '2019-09-10 16:13:37', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1155, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (18, '2019-09-10 08:31:47', '2019-09-10 16:31:46', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (19, '2019-09-10 08:33:15', '2019-09-10 16:33:15', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (20, '2019-09-10 08:33:49', '2019-09-10 16:33:48', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (21, '2019-09-10 08:36:49', '2019-09-10 16:36:48', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (22, '2019-09-10 08:36:49', '2019-09-10 16:36:49', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (23, '2019-09-10 08:37:23', '2019-09-10 16:37:23', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (24, '2019-09-10 08:37:26', '2019-09-10 16:37:25', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (25, '2019-09-10 09:22:32', '2019-09-10 17:22:31', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (26, '2019-09-10 09:22:34', '2019-09-10 17:22:34', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (27, '2019-09-10 09:27:42', '2019-09-10 17:27:41', 3, 'T3', 2, '6', 2, 4, 1152, 1152, 1155, 0, 0, 1, 1, NULL, 'issue列表页分页功能错误', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 3, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '4 days, 1:17:21', NULL, NULL, 20, 5, NULL);
-INSERT INTO `issue_record` VALUES (28, '2019-09-10 10:28:01', '2019-09-10 18:28:01', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (29, '2019-09-10 10:28:03', '2019-09-10 18:28:02', 6, 'T6', 2, '6', 2, 4, 1152, 1152, 1152, 0, 0, 2, 1, NULL, 'issue列表字段不符合设计要求', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', '点点点', NULL, NULL, NULL, 15, 6, NULL);
-INSERT INTO `issue_record` VALUES (30, '2019-09-10 11:49:12', '2019-09-10 19:49:12', 7, 'T7', 2, '6', 2, 7, 1152, 1152, 1155, 0, 0, 2, 2, NULL, '按照标题搜索，不要区分大小写', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 3, 0, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '4 days, 3:30:36', NULL, NULL, 15, NULL, NULL);
-INSERT INTO `issue_record` VALUES (31, '2019-09-10 11:49:14', '2019-09-10 19:49:13', 5, 'T5', 2, '6', 2, 4, 1152, 1152, 1155, 1, 0, 3, 2, NULL, '搜索界面显示优化建议', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 4, 0, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '0:00:07', '4 days, 3:37:07', NULL, 10, 3, NULL);
-INSERT INTO `issue_record` VALUES (32, '2019-09-10 11:49:15', '2019-09-10 19:49:15', 4, 'T4', 2, '6', 2, 3, 1152, 1152, 1155, 0, 0, 2, 2, NULL, 'taskcase无法导出excel', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 1, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, NULL, NULL, NULL, 15, 4, NULL);
-INSERT INTO `issue_record` VALUES (33, '2019-09-10 11:49:16', '2019-09-10 19:49:16', 4, 'T4', 2, '6', 2, 3, 1152, 1152, 1155, 0, 0, 2, 2, NULL, 'taskcase无法导出excel', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 3, 1, 0, NULL, '<p>标题：&nbsp;【功能点】&nbsp;主要问题描述，如果是偶现请备注<br><br>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '4 days, 3:38:02', NULL, NULL, 15, 4, NULL);
-INSERT INTO `issue_record` VALUES (34, '2019-09-10 11:49:18', '2019-09-10 19:49:17', 7, 'T7', 2, '6', 2, 7, 1152, 1152, 1155, 0, 0, 2, 2, NULL, '按照标题搜索，不要区分大小写', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 2, 1, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '4 days, 3:30:36', NULL, NULL, 15, NULL, NULL);
-INSERT INTO `issue_record` VALUES (35, '2019-09-10 11:49:19', '2019-09-10 19:49:18', 7, 'T7', 2, '6', 2, 7, 1152, 1152, 1155, 0, 0, 2, 2, NULL, '按照标题搜索，不要区分大小写', '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 3, 1, 0, NULL, '<p>描述：<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;环境：&nbsp;测试/线上<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;前提：&nbsp;前置条件<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;发生步骤：&nbsp;&nbsp;详细描述发生的步骤，<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;预期：&nbsp;预期表现形式<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;实际结果：</p>', NULL, '4 days, 3:30:42', NULL, NULL, 15, NULL, NULL);
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for jira
@@ -1072,7 +1008,7 @@ CREATE TABLE `jira` (
   `key_type` int(11) DEFAULT NULL,
   `key_Id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for jobs_record
@@ -1170,6 +1106,7 @@ CREATE TABLE `monkey` (
   `login_username` varchar(100) DEFAULT NULL,
   `login_password` varchar(100) DEFAULT NULL,
   `cancel_status` int(11) DEFAULT NULL,
+  `test_type` int(11) DEFAULT '1',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1261,6 +1198,7 @@ CREATE TABLE `monkey_package` (
   `user_id` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   `size` varchar(200) DEFAULT NULL,
+  `test_type` int(11) DEFAULT '1',
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -1323,6 +1261,44 @@ CREATE TABLE `pc` (
   `region` varchar(100) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for performance_test
+-- ----------------------------
+DROP TABLE IF EXISTS `performance_test`;
+CREATE TABLE `performance_test` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `creation_time` datetime DEFAULT NULL,
+  `modified_time` datetime DEFAULT NULL,
+  `performance_id` int(11) DEFAULT NULL,
+  `run_time` int(11) DEFAULT NULL,
+  `cpu_average` float(255,0) DEFAULT NULL,
+  `cpu_top` float(255,0) DEFAULT NULL,
+  `rss_average` float(255,0) DEFAULT NULL,
+  `rss_top` float(255,0) DEFAULT NULL,
+  `heap_size_average` float(255,0) DEFAULT NULL,
+  `heap_size_top` float(255,0) DEFAULT NULL,
+  `heap_alloc_average` float(255,0) DEFAULT NULL,
+  `heap_alloc_top` float(255,0) DEFAULT NULL,
+  `run_type` varchar(300) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Table structure for performance_test_log
+-- ----------------------------
+DROP TABLE IF EXISTS `performance_test_log`;
+CREATE TABLE `performance_test_log` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `performance_test_id` int(11) DEFAULT NULL,
+  `creation_time` datetime DEFAULT NULL,
+  `modified_time` datetime DEFAULT NULL,
+  `cpu` float(255,0) DEFAULT NULL,
+  `rss` float(255,0) DEFAULT NULL,
+  `heap_size` float(255,0) DEFAULT NULL,
+  `heap_alloc` float(255,0) DEFAULT NULL,
+  PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
@@ -1470,6 +1446,7 @@ CREATE TABLE `requirement` (
   `report_expect` text,
   `worth_sure` int(11) DEFAULT NULL,
   `expect_time` datetime DEFAULT NULL,
+  `tag` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
 
@@ -1539,6 +1516,7 @@ CREATE TABLE `requirement_record` (
   `report_real` text,
   `worth_sure` int(11) DEFAULT NULL,
   `expect_time` datetime DEFAULT NULL,
+  `tag` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
 
@@ -1659,18 +1637,13 @@ CREATE TABLE `role` (
   `weight` int(11) DEFAULT NULL,
   `comment` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
 BEGIN;
 INSERT INTO `role` VALUES (1, '2019-01-23 14:19:56', '2019-07-11 14:40:14', 'admin', 0, 1, '超级管理员');
-INSERT INTO `role` VALUES (2, '2019-01-23 14:19:56', '2019-07-10 14:56:30', 'dev', 0, 1, '开发');
-INSERT INTO `role` VALUES (3, '2019-01-23 14:19:56', '2019-07-10 14:56:33', 'test', 0, 1, '测试');
-INSERT INTO `role` VALUES (4, '2019-01-23 14:19:56', '2019-07-10 14:56:36', 'opt', 0, 1, '运维');
-INSERT INTO `role` VALUES (5, '2019-02-14 17:41:26', '2019-07-10 14:56:41', 'prod', 0, 1, '产品');
-INSERT INTO `role` VALUES (6, '2019-02-15 11:46:59', '2019-07-10 14:56:47', 'owner', 0, 1, '项目管理员');
 COMMIT;
 
 -- ----------------------------
@@ -1684,121 +1657,8 @@ CREATE TABLE `role_bind_ability` (
   `role_id` int(11) DEFAULT NULL,
   `ability_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3316 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of role_bind_ability
--- ----------------------------
-BEGIN;
-INSERT INTO `role_bind_ability` VALUES (280, '2019-08-21 19:28:24', '2019-08-21 19:28:24', 38, 8);
-INSERT INTO `role_bind_ability` VALUES (281, '2019-08-21 19:28:24', '2019-08-21 19:28:24', 38, 7);
-INSERT INTO `role_bind_ability` VALUES (2838, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 3);
-INSERT INTO `role_bind_ability` VALUES (2839, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 2);
-INSERT INTO `role_bind_ability` VALUES (2840, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 1);
-INSERT INTO `role_bind_ability` VALUES (2841, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 4);
-INSERT INTO `role_bind_ability` VALUES (2842, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 5);
-INSERT INTO `role_bind_ability` VALUES (2843, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 6);
-INSERT INTO `role_bind_ability` VALUES (2844, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 7);
-INSERT INTO `role_bind_ability` VALUES (2845, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 8);
-INSERT INTO `role_bind_ability` VALUES (2846, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 9);
-INSERT INTO `role_bind_ability` VALUES (2847, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 10);
-INSERT INTO `role_bind_ability` VALUES (2848, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 11);
-INSERT INTO `role_bind_ability` VALUES (2849, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 12);
-INSERT INTO `role_bind_ability` VALUES (2850, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 13);
-INSERT INTO `role_bind_ability` VALUES (2851, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 14);
-INSERT INTO `role_bind_ability` VALUES (2852, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 15);
-INSERT INTO `role_bind_ability` VALUES (2853, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 16);
-INSERT INTO `role_bind_ability` VALUES (2854, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 31);
-INSERT INTO `role_bind_ability` VALUES (2855, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 17);
-INSERT INTO `role_bind_ability` VALUES (2856, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 18);
-INSERT INTO `role_bind_ability` VALUES (2857, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 19);
-INSERT INTO `role_bind_ability` VALUES (2858, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 21);
-INSERT INTO `role_bind_ability` VALUES (2859, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 20);
-INSERT INTO `role_bind_ability` VALUES (2860, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 22);
-INSERT INTO `role_bind_ability` VALUES (2861, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 23);
-INSERT INTO `role_bind_ability` VALUES (2862, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 24);
-INSERT INTO `role_bind_ability` VALUES (2863, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 27);
-INSERT INTO `role_bind_ability` VALUES (2864, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 25);
-INSERT INTO `role_bind_ability` VALUES (2865, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 26);
-INSERT INTO `role_bind_ability` VALUES (2866, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 28);
-INSERT INTO `role_bind_ability` VALUES (2867, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 29);
-INSERT INTO `role_bind_ability` VALUES (2868, '2019-08-22 18:41:56', '2019-08-22 18:41:55', 6, 30);
-INSERT INTO `role_bind_ability` VALUES (3072, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 1);
-INSERT INTO `role_bind_ability` VALUES (3073, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 5);
-INSERT INTO `role_bind_ability` VALUES (3074, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 6);
-INSERT INTO `role_bind_ability` VALUES (3075, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 4);
-INSERT INTO `role_bind_ability` VALUES (3076, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 7);
-INSERT INTO `role_bind_ability` VALUES (3077, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 10);
-INSERT INTO `role_bind_ability` VALUES (3078, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 13);
-INSERT INTO `role_bind_ability` VALUES (3079, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 17);
-INSERT INTO `role_bind_ability` VALUES (3080, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 18);
-INSERT INTO `role_bind_ability` VALUES (3081, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 16);
-INSERT INTO `role_bind_ability` VALUES (3082, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 19);
-INSERT INTO `role_bind_ability` VALUES (3083, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 22);
-INSERT INTO `role_bind_ability` VALUES (3084, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 25);
-INSERT INTO `role_bind_ability` VALUES (3085, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 26);
-INSERT INTO `role_bind_ability` VALUES (3086, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 28);
-INSERT INTO `role_bind_ability` VALUES (3087, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 29);
-INSERT INTO `role_bind_ability` VALUES (3088, '2019-08-22 19:27:13', '2019-08-22 19:27:12', 5, 30);
-INSERT INTO `role_bind_ability` VALUES (3089, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 1);
-INSERT INTO `role_bind_ability` VALUES (3090, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 4);
-INSERT INTO `role_bind_ability` VALUES (3091, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 7);
-INSERT INTO `role_bind_ability` VALUES (3092, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 10);
-INSERT INTO `role_bind_ability` VALUES (3093, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 13);
-INSERT INTO `role_bind_ability` VALUES (3094, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 16);
-INSERT INTO `role_bind_ability` VALUES (3095, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 19);
-INSERT INTO `role_bind_ability` VALUES (3096, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 22);
-INSERT INTO `role_bind_ability` VALUES (3097, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 25);
-INSERT INTO `role_bind_ability` VALUES (3098, '2019-08-22 20:08:13', '2019-08-22 20:08:12', 4, 28);
-INSERT INTO `role_bind_ability` VALUES (3268, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 1);
-INSERT INTO `role_bind_ability` VALUES (3269, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 2);
-INSERT INTO `role_bind_ability` VALUES (3270, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 3);
-INSERT INTO `role_bind_ability` VALUES (3271, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 4);
-INSERT INTO `role_bind_ability` VALUES (3272, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 5);
-INSERT INTO `role_bind_ability` VALUES (3273, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 6);
-INSERT INTO `role_bind_ability` VALUES (3274, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 7);
-INSERT INTO `role_bind_ability` VALUES (3275, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 8);
-INSERT INTO `role_bind_ability` VALUES (3276, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 9);
-INSERT INTO `role_bind_ability` VALUES (3277, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 10);
-INSERT INTO `role_bind_ability` VALUES (3278, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 11);
-INSERT INTO `role_bind_ability` VALUES (3279, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 12);
-INSERT INTO `role_bind_ability` VALUES (3280, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 13);
-INSERT INTO `role_bind_ability` VALUES (3281, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 14);
-INSERT INTO `role_bind_ability` VALUES (3282, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 15);
-INSERT INTO `role_bind_ability` VALUES (3283, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 16);
-INSERT INTO `role_bind_ability` VALUES (3284, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 31);
-INSERT INTO `role_bind_ability` VALUES (3285, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 17);
-INSERT INTO `role_bind_ability` VALUES (3286, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 18);
-INSERT INTO `role_bind_ability` VALUES (3287, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 19);
-INSERT INTO `role_bind_ability` VALUES (3288, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 20);
-INSERT INTO `role_bind_ability` VALUES (3289, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 21);
-INSERT INTO `role_bind_ability` VALUES (3290, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 22);
-INSERT INTO `role_bind_ability` VALUES (3291, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 23);
-INSERT INTO `role_bind_ability` VALUES (3292, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 24);
-INSERT INTO `role_bind_ability` VALUES (3293, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 26);
-INSERT INTO `role_bind_ability` VALUES (3294, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 25);
-INSERT INTO `role_bind_ability` VALUES (3295, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 27);
-INSERT INTO `role_bind_ability` VALUES (3296, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 28);
-INSERT INTO `role_bind_ability` VALUES (3297, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 29);
-INSERT INTO `role_bind_ability` VALUES (3298, '2019-08-29 19:51:08', '2019-08-29 19:51:08', 3, 30);
-INSERT INTO `role_bind_ability` VALUES (3299, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 1);
-INSERT INTO `role_bind_ability` VALUES (3300, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 8);
-INSERT INTO `role_bind_ability` VALUES (3301, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 7);
-INSERT INTO `role_bind_ability` VALUES (3302, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 10);
-INSERT INTO `role_bind_ability` VALUES (3303, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 11);
-INSERT INTO `role_bind_ability` VALUES (3304, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 13);
-INSERT INTO `role_bind_ability` VALUES (3305, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 16);
-INSERT INTO `role_bind_ability` VALUES (3306, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 31);
-INSERT INTO `role_bind_ability` VALUES (3307, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 17);
-INSERT INTO `role_bind_ability` VALUES (3308, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 20);
-INSERT INTO `role_bind_ability` VALUES (3309, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 19);
-INSERT INTO `role_bind_ability` VALUES (3310, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 23);
-INSERT INTO `role_bind_ability` VALUES (3311, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 22);
-INSERT INTO `role_bind_ability` VALUES (3312, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 25);
-INSERT INTO `role_bind_ability` VALUES (3313, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 26);
-INSERT INTO `role_bind_ability` VALUES (3314, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 28);
-INSERT INTO `role_bind_ability` VALUES (3315, '2019-09-03 12:48:51', '2019-09-03 20:48:51', 2, 29);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for tag
@@ -1814,6 +1674,8 @@ CREATE TABLE `tag` (
   `description` text,
   `creator` varchar(300) DEFAULT NULL,
   `tag_type` int(11) DEFAULT NULL,
+  `reference_nums` int(11) DEFAULT '0',
+  `modifier` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
@@ -2064,194 +1926,7 @@ CREATE TABLE `track_user` (
   `info` text,
   `type` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=182 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of track_user
--- ----------------------------
-BEGIN;
-INSERT INTO `track_user` VALUES (1, '2019-09-03 03:01:47', '2019-09-03 03:01:46', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (2, '2019-09-03 03:18:03', '2019-09-03 03:18:02', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (3, '2019-09-03 03:39:12', '2019-09-03 03:39:12', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (4, '2019-09-03 03:42:20', '2019-09-03 03:42:19', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (5, '2019-09-03 03:53:41', '2019-09-03 03:53:40', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (6, '2019-09-03 03:55:45', '2019-09-03 03:55:44', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (7, '2019-09-03 05:57:40', '2019-09-03 05:57:39', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (8, '2019-09-03 06:00:27', '2019-09-03 06:00:26', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (9, '2019-09-03 06:00:44', '2019-09-03 06:00:44', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (10, '2019-09-03 06:07:10', '2019-09-03 06:07:10', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (11, '2019-09-03 06:11:30', '2019-09-03 06:11:30', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (12, '2019-09-03 06:31:37', '2019-09-03 06:31:37', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (13, '2019-09-03 06:31:42', '2019-09-03 06:31:42', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (14, '2019-09-03 06:31:43', '2019-09-03 06:31:43', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (15, '2019-09-03 06:31:44', '2019-09-03 06:31:44', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (16, '2019-09-03 06:31:45', '2019-09-03 06:31:45', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (17, '2019-09-03 06:33:11', '2019-09-03 06:33:11', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (18, '2019-09-03 06:33:13', '2019-09-03 06:33:12', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (19, '2019-09-03 06:33:14', '2019-09-03 06:33:13', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (20, '2019-09-03 06:33:15', '2019-09-03 06:33:14', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (21, '2019-09-03 06:33:16', '2019-09-03 06:33:15', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (22, '2019-09-03 06:33:17', '2019-09-03 06:33:16', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (23, '2019-09-03 06:33:18', '2019-09-03 06:33:17', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (24, '2019-09-03 06:33:18', '2019-09-03 06:33:18', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (25, '2019-09-03 07:35:58', '2019-09-03 07:35:57', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (26, '2019-09-03 07:36:47', '2019-09-03 07:36:47', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (27, '2019-09-03 08:00:10', '2019-09-03 08:00:09', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (28, '2019-09-03 08:05:51', '2019-09-03 08:05:51', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (29, '2019-09-03 08:25:57', '2019-09-03 08:25:56', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (30, '2019-09-03 08:44:14', '2019-09-03 08:44:13', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (31, '2019-09-03 09:01:39', '2019-09-03 09:01:38', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (32, '2019-09-03 09:06:01', '2019-09-03 09:06:00', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (33, '2019-09-03 09:10:06', '2019-09-03 09:10:06', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (34, '2019-09-03 09:23:16', '2019-09-03 09:23:15', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (35, '2019-09-03 09:24:19', '2019-09-03 09:24:18', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (36, '2019-09-03 09:24:55', '2019-09-03 09:24:54', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (37, '2019-09-03 09:42:46', '2019-09-03 09:42:46', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (38, '2019-09-03 09:46:19', '2019-09-03 09:46:18', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (39, '2019-09-03 09:51:47', '2019-09-03 09:51:46', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (40, '2019-09-03 09:54:05', '2019-09-03 09:54:04', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (41, '2019-09-03 09:54:41', '2019-09-03 09:54:40', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (42, '2019-09-03 09:54:51', '2019-09-03 09:54:51', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (43, '2019-09-03 09:57:59', '2019-09-03 09:57:59', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (44, '2019-09-03 10:00:25', '2019-09-03 10:00:25', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (45, '2019-09-03 10:02:04', '2019-09-03 10:02:03', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (46, '2019-09-03 10:02:32', '2019-09-03 10:02:31', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (47, '2019-09-03 10:02:54', '2019-09-03 10:02:54', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (48, '2019-09-03 10:04:45', '2019-09-03 10:04:44', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (49, '2019-09-03 11:06:08', '2019-09-03 11:06:08', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (50, '2019-09-03 11:06:19', '2019-09-03 11:06:19', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (51, '2019-09-03 11:13:07', '2019-09-03 11:13:07', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (52, '2019-09-03 11:14:13', '2019-09-03 11:14:12', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (53, '2019-09-03 11:19:38', '2019-09-03 11:19:38', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (54, '2019-09-03 11:20:34', '2019-09-03 11:20:33', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (55, '2019-09-03 11:26:50', '2019-09-03 11:26:50', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (56, '2019-09-03 11:31:58', '2019-09-03 11:31:57', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (57, '2019-09-03 11:33:37', '2019-09-03 11:33:36', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (58, '2019-09-03 11:36:19', '2019-09-03 11:36:19', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (59, '2019-09-03 11:36:48', '2019-09-03 11:36:48', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (60, '2019-09-03 11:44:45', '2019-09-03 11:44:45', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (61, '2019-09-03 11:45:18', '2019-09-03 11:45:17', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (62, '2019-09-03 11:46:10', '2019-09-03 11:46:09', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (63, '2019-09-03 11:46:12', '2019-09-03 11:46:12', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (64, '2019-09-03 11:46:25', '2019-09-03 11:46:25', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (65, '2019-09-03 11:47:33', '2019-09-03 11:47:32', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (66, '2019-09-03 11:47:40', '2019-09-03 11:47:39', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (67, '2019-09-03 11:50:14', '2019-09-03 11:50:14', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (68, '2019-09-03 11:52:46', '2019-09-03 11:52:46', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (69, '2019-09-03 11:52:48', '2019-09-03 11:52:47', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (70, '2019-09-03 11:52:51', '2019-09-03 11:52:51', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (71, '2019-09-03 11:54:16', '2019-09-03 11:54:15', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (72, '2019-09-03 11:55:21', '2019-09-03 11:55:20', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (73, '2019-09-03 12:06:38', '2019-09-03 12:06:37', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (74, '2019-09-03 12:16:28', '2019-09-03 12:16:28', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (75, '2019-09-03 12:19:14', '2019-09-03 12:19:14', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (76, '2019-09-03 12:20:05', '2019-09-03 12:20:05', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (77, '2019-09-03 12:23:02', '2019-09-03 12:23:01', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (78, '2019-09-03 12:25:39', '2019-09-03 12:25:39', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (79, '2019-09-03 12:30:25', '2019-09-03 12:30:24', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (80, '2019-09-03 12:33:33', '2019-09-03 12:33:32', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (81, '2019-09-03 12:33:33', '2019-09-03 12:33:33', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (82, '2019-09-03 12:35:02', '2019-09-03 12:35:02', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (83, '2019-09-03 12:35:31', '2019-09-03 12:35:31', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (84, '2019-09-03 12:48:14', '2019-09-03 20:48:13', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (85, '2019-09-03 12:51:26', '2019-09-03 20:51:26', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (86, '2019-09-03 12:56:13', '2019-09-03 20:56:13', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (87, '2019-09-04 02:37:34', '2019-09-04 10:37:33', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (88, '2019-09-04 02:42:37', '2019-09-04 10:42:37', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (89, '2019-09-04 02:55:46', '2019-09-04 10:55:46', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (90, '2019-09-04 03:10:24', '2019-09-04 11:10:24', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (91, '2019-09-04 03:11:04', '2019-09-04 11:11:04', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (92, '2019-09-04 03:23:58', '2019-09-04 11:23:57', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (93, '2019-09-04 03:29:33', '2019-09-04 11:29:33', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (94, '2019-09-04 03:45:44', '2019-09-04 11:45:43', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (95, '2019-09-04 06:54:21', '2019-09-04 14:54:20', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (96, '2019-09-04 12:19:57', '2019-09-04 20:19:57', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (97, '2019-09-05 02:32:26', '2019-09-05 10:32:26', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (98, '2019-09-06 02:20:37', '2019-09-06 10:20:37', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (99, '2019-09-06 07:21:16', '2019-09-06 15:21:15', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (100, '2019-09-06 08:29:14', '2019-09-06 16:29:13', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (101, '2019-09-06 10:29:21', '2019-09-06 18:29:21', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (102, '2019-09-06 10:29:55', '2019-09-06 18:29:54', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (103, '2019-09-06 10:30:34', '2019-09-06 18:30:33', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (104, '2019-09-09 08:03:49', '2019-09-09 16:03:49', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (105, '2019-09-10 03:32:20', '2019-09-10 11:32:20', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (106, '2019-09-10 04:00:29', '2019-09-10 12:00:28', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (107, '2019-09-10 06:44:06', '2019-09-10 14:44:06', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (108, '2019-09-10 07:23:41', '2019-09-10 15:23:41', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (109, '2019-09-10 07:34:17', '2019-09-10 15:34:16', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (110, '2019-09-10 07:37:25', '2019-09-10 15:37:25', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (111, '2019-09-10 07:47:22', '2019-09-10 15:47:21', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (112, '2019-09-10 08:13:03', '2019-09-10 16:13:02', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (113, '2019-09-10 08:26:22', '2019-09-10 16:26:21', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (114, '2019-09-10 08:27:28', '2019-09-10 16:27:27', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (115, '2019-09-10 08:28:27', '2019-09-10 16:28:27', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (116, '2019-09-10 08:34:49', '2019-09-10 16:34:49', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (117, '2019-09-10 08:35:02', '2019-09-10 16:35:02', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (118, '2019-09-10 08:35:36', '2019-09-10 16:35:36', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (119, '2019-09-10 08:36:26', '2019-09-10 16:36:25', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (120, '2019-09-10 08:39:21', '2019-09-10 16:39:20', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (121, '2019-09-10 08:39:46', '2019-09-10 16:39:45', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (122, '2019-09-10 08:46:55', '2019-09-10 16:46:55', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (123, '2019-09-10 08:48:36', '2019-09-10 16:48:35', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (124, '2019-09-10 08:49:37', '2019-09-10 16:49:37', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (125, '2019-09-10 08:56:28', '2019-09-10 16:56:27', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (126, '2019-09-10 09:00:11', '2019-09-10 17:00:11', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (127, '2019-09-10 09:08:23', '2019-09-10 17:08:23', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (128, '2019-09-10 09:11:21', '2019-09-10 17:11:21', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (129, '2019-09-10 09:20:34', '2019-09-10 17:20:33', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (130, '2019-09-10 09:23:37', '2019-09-10 17:23:37', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (131, '2019-09-10 09:25:26', '2019-09-10 17:25:26', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (132, '2019-09-10 09:26:51', '2019-09-10 17:26:50', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (133, '2019-09-10 09:27:23', '2019-09-10 17:27:23', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (134, '2019-09-10 09:31:51', '2019-09-10 17:31:50', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (135, '2019-09-10 09:42:08', '2019-09-10 17:42:08', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (136, '2019-09-10 09:47:31', '2019-09-10 17:47:30', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (137, '2019-09-10 09:51:21', '2019-09-10 17:51:21', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (138, '2019-09-10 09:55:01', '2019-09-10 17:55:00', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (139, '2019-09-10 09:56:41', '2019-09-10 17:56:41', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (140, '2019-09-10 09:57:36', '2019-09-10 17:57:35', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (141, '2019-09-10 10:00:44', '2019-09-10 18:00:44', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (142, '2019-09-10 10:01:23', '2019-09-10 18:01:22', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (143, '2019-09-10 10:02:24', '2019-09-10 18:02:23', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (144, '2019-09-10 10:02:28', '2019-09-10 18:02:27', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (145, '2019-09-10 10:02:42', '2019-09-10 18:02:42', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (146, '2019-09-10 10:03:00', '2019-09-10 18:03:00', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (147, '2019-09-10 10:05:54', '2019-09-10 18:05:53', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (148, '2019-09-10 10:06:22', '2019-09-10 18:06:22', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (149, '2019-09-10 10:06:47', '2019-09-10 18:06:47', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (150, '2019-09-10 10:07:08', '2019-09-10 18:07:07', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (151, '2019-09-10 10:09:37', '2019-09-10 18:09:37', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (152, '2019-09-10 10:10:22', '2019-09-10 18:10:21', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (153, '2019-09-10 10:16:52', '2019-09-10 18:16:52', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (154, '2019-09-10 10:17:21', '2019-09-10 18:17:20', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (155, '2019-09-10 10:25:11', '2019-09-10 18:25:11', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (156, '2019-09-10 10:25:32', '2019-09-10 18:25:32', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (157, '2019-09-10 10:27:50', '2019-09-10 18:27:49', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (158, '2019-09-10 10:28:46', '2019-09-10 18:28:46', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (159, '2019-09-10 10:33:11', '2019-09-10 18:33:10', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (160, '2019-09-10 10:34:44', '2019-09-10 18:34:43', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (161, '2019-09-10 10:45:39', '2019-09-10 18:45:38', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (162, '2019-09-10 10:57:12', '2019-09-10 18:57:12', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (163, '2019-09-10 11:03:01', '2019-09-10 19:03:01', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (164, '2019-09-10 11:05:30', '2019-09-10 19:05:29', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (165, '2019-09-10 11:11:12', '2019-09-10 19:11:12', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (166, '2019-09-10 11:14:30', '2019-09-10 19:14:29', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (167, '2019-09-10 11:17:03', '2019-09-10 19:17:02', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (168, '2019-09-10 11:21:10', '2019-09-10 19:21:09', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (169, '2019-09-10 11:21:33', '2019-09-10 19:21:33', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (170, '2019-09-10 11:30:26', '2019-09-10 19:30:25', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (171, '2019-09-10 11:32:04', '2019-09-10 19:32:04', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (172, '2019-09-10 11:35:00', '2019-09-10 19:34:59', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (173, '2019-09-10 11:35:19', '2019-09-10 19:35:18', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (174, '2019-09-10 11:43:45', '2019-09-10 19:43:45', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (175, '2019-09-10 11:44:43', '2019-09-10 19:44:43', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (176, '2019-09-10 11:45:24', '2019-09-10 19:45:24', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (177, '2019-09-10 11:47:21', '2019-09-10 19:47:21', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (178, '2019-09-10 11:47:52', '2019-09-10 19:47:51', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (179, '2019-09-10 12:14:15', '2019-09-10 20:14:15', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (180, '2019-09-10 12:22:51', '2019-09-10 20:22:50', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-INSERT INTO `track_user` VALUES (181, '2019-09-10 12:29:58', '2019-09-10 20:29:57', 'admin', NULL, 0, NULL, NULL, 1, '', 'admin', 1152, NULL, NULL, NULL);
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -2272,13 +1947,13 @@ CREATE TABLE `user` (
   `ext` text,
   `picture` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=1156 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
 BEGIN;
-INSERT INTO `user` VALUES (1152, NULL, '2019-09-02 03:39:01', 'admin', 'admin', NULL, 'b8d65d4bd2d9416ec6300da8797e0284', 0, NULL, NULL, 1, NULL, NULL);
+INSERT INTO `user` VALUES (1, NULL, '2019-09-02 03:39:01', 'admin', 'admin', NULL, 'b8d65d4bd2d9416ec6300da8797e0284', 0, NULL, NULL, 1, NULL, NULL);
 COMMIT;
 
 -- ----------------------------
@@ -2292,17 +1967,7 @@ CREATE TABLE `user_bind_project` (
   `user_id` int(11) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of user_bind_project
--- ----------------------------
-BEGIN;
-INSERT INTO `user_bind_project` VALUES (1, '2019-09-03 12:49:24', '2019-09-03 20:49:23', 1153, 2);
-INSERT INTO `user_bind_project` VALUES (2, '2019-09-03 13:00:10', '2019-09-03 21:00:10', 1154, 2);
-INSERT INTO `user_bind_project` VALUES (3, '2019-09-03 13:00:10', '2019-09-03 21:00:10', 1155, 2);
-INSERT INTO `user_bind_project` VALUES (4, '2019-09-03 13:00:10', '2019-09-03 21:00:10', 1152, 2);
-COMMIT;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user_bind_role
@@ -2316,18 +1981,13 @@ CREATE TABLE `user_bind_role` (
   `role_id` int(11) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user_bind_role
 -- ----------------------------
 BEGIN;
-INSERT INTO `user_bind_role` VALUES (1, NULL, '2019-09-03 12:28:31', 1152, 1, 0);
-INSERT INTO `user_bind_role` VALUES (2, '2019-09-03 12:49:28', '2019-09-03 20:49:27', 1153, 3, 2);
-INSERT INTO `user_bind_role` VALUES (4, '2019-09-03 13:00:49', '2019-09-03 21:00:48', 1152, 3, 2);
-INSERT INTO `user_bind_role` VALUES (5, '2019-09-03 13:00:49', '2019-09-03 21:00:48', 1152, 1, 2);
-INSERT INTO `user_bind_role` VALUES (6, '2019-09-03 13:00:53', '2019-09-03 21:00:53', 1155, 2, 2);
-INSERT INTO `user_bind_role` VALUES (7, '2019-09-03 13:00:57', '2019-09-03 21:00:56', 1154, 3, 2);
+INSERT INTO `user_bind_role` VALUES (1, NULL, '2019-09-03 12:28:31', 1, 1, 0);
 COMMIT;
 
 -- ----------------------------
