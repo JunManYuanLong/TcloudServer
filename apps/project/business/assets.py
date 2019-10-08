@@ -52,8 +52,10 @@ class PhoneBusiness(object):
         '!borrow_id|!creator_id|!device_source|!device_belong'
     )
     def query_all_json(cls, page_size, page_index):
-        ret = cls._query().filter(Phone.status == Phone.ACTIVE). \
-            order_by(desc(Phone.id)).limit(int(page_size)).offset(int(page_index - 1) * int(page_size)).all()
+        ret = cls._query().filter(
+            Phone.status == Phone.ACTIVE).order_by(
+            desc(Phone.id)).limit(int(page_size)).offset(
+            int(page_index - 1) * int(page_size)).all()
         return ret
 
     @classmethod
@@ -66,14 +68,14 @@ class PhoneBusiness(object):
         '?id|!name|!asset_id|!vendor|!device_number|!os|!cpu|!core|!ram|!rom|!resolution|!buy_date|!region|!status|'
         '!borrow_id|!creator_id|!device_source|!device_belong'
     )
-    def query_json_by_id(cls, id):
+    def query_json_by_id(cls, pid):
         return cls._query().filter(
-            Phone.id == id, Phone.status == Phone.ACTIVE).all()
+            Phone.id == pid, Phone.status == Phone.ACTIVE).all()
 
     @classmethod
-    def get_phone_by_id(cls, id):
+    def get_phone_by_id(cls, pid):
         users = user_trpc.requests(method='get', path='/user')
-        phone = cls.query_json_by_id(id)
+        phone = cls.query_json_by_id(pid)
 
         if len(phone) <= 0:
             return 101, 'phone not exist!'
@@ -97,21 +99,21 @@ class PhoneBusiness(object):
     def get_phone_all(cls, page_size, page_index):
 
         # 通过设备名称进行搜索
-        name = request.args.get('name') or ''
+        name = request.args.get('name', '')
         # 通过制造商进行搜索
-        vendor = request.args.get('vendor') or ''
+        vendor = request.args.get('vendor', '')
         # 通过系统进行搜索
-        os = request.args.get('os') or ''
+        os = request.args.get('os', '')
         # 通过分辨率进行搜索
-        resolution = request.args.get('resolution') or ''
+        resolution = request.args.get('resolution', '')
         # 通过借用人进行搜索
         borrower_id = request.args.get('borrower_id')
         # 通过持有人进行搜索
         creator_id = request.args.get('creator_id')
         # 通过 归属
-        device_belong = request.args.get('device_belong') or ''
+        device_belong = request.args.get('device_belong', '')
         # 通过 来源
-        device_source = request.args.get('device_source') or ''
+        device_source = request.args.get('device_source', '')
         # 通过 归属人
         # 获取所有 手机设备列表
         phones, count = cls.search_phone_all(name, vendor, os, resolution, borrower_id, device_belong,
@@ -145,7 +147,7 @@ class PhoneBusiness(object):
                 phone['creator_nickname'] = creator
                 # 有此条借用记录
                 if phone_borrow:
-                    user_list = [int(id) for id in phone_borrow.user_list.split(',') if id != '']
+                    user_list = [int(uid) for uid in phone_borrow.user_list.split(',') if uid != '']
                     # 有需要确认的用户
                     if phone_borrow.confirm_userid != 0:
                         confirm_user_nickname = users.get(phone_borrow.confirm_userid).get('nickname')
@@ -162,7 +164,6 @@ class PhoneBusiness(object):
                     phone['borrow_status'] = f'[{borrower}] 持有'
             except Exception as e:
                 current_app.logger.error(e)
-                current_app.logger.error(traceback.format_exc())
                 phone['borrow_status'] = '未知'
                 phone['borrow_nickname'] = '未知'
 
@@ -207,7 +208,6 @@ class PhoneBusiness(object):
             return data, count
         except Exception as e:
             current_app.logger.error(e)
-            current_app.logger.error(traceback.format_exc())
 
     @classmethod
     def get_holder_json(cls):
@@ -229,7 +229,6 @@ class PhoneBusiness(object):
             return data_all
         except Exception as e:
             current_app.logger.error(e)
-            current_app.logger.error(traceback.format_exc())
 
     @classmethod
     def can_move_status(cls, phone_id):

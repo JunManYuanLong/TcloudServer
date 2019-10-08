@@ -1,0 +1,14 @@
+apidoc.json
+docker-compose.yml
+Dockerfile
+LICENSE
+Pipfile
+README.md
+requirement.txt
+start.sh
+deploy
+.github
+.gitignore
+.DS_Store
+__pycache__/
+.git

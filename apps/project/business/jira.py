@@ -194,7 +194,8 @@ class JiraBusiness(object):
             case_ids=None,
             expect_time=None,
             creator=cls.get_creator(issue),
-            modifier=cls.get_modifier(modifier) if modifier is not None else None
+            modifier=cls.get_modifier(modifier) if modifier is not None else None,
+            tag=None,
         )
 
     @classmethod
@@ -203,7 +204,7 @@ class JiraBusiness(object):
         params = []
         for key in ['title', 'project_id', 'version', 'handler', 'priority', 'requirement_type', 'attach',
                     'board_status', 'description', 'comment', 'jira_id', 'worth', 'report_time', 'report_expect',
-                    'report_real', 'worth_sure', 'case_ids', "expect_time", 'creator']:
+                    'report_real', 'worth_sure', 'case_ids', "tag", "expect_time", 'creator']:
             value = requirement_dict.get(key)
             params.append(value)
         return RequirementBusiness.requirement_create(*params)
@@ -214,7 +215,8 @@ class JiraBusiness(object):
         params = []
         for key in ["title", "project_id", "version", "board_status", "handler", "description", "comment",
                     "priority", "requirement_type", "attach", "parent_id", "jira_id", "worth", "report_time",
-                    "report_expect", "report_real", "worth_sure", "case_ids", "expect_time", "creator", "modifier", ]:
+                    "report_expect", "report_real", "worth_sure", "case_ids", "tag", "expect_time", "creator",
+                    "modifier", ]:
             value = requirement_dict.get(key)
             if value is None:
                 params.append(getattr(requirement, key, None))

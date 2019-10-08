@@ -100,6 +100,8 @@ class TagBusiness(object):
     def delete(cls, tag_id):
         try:
             tag = Tag.query.get(tag_id)
+            if tag is None:
+                raise CannotFindObjectException
             if tag.reference_nums > 0:
                 raise RemoveObjectException('有关联的项目，不可删除')
             tag.status = tag.DISABLE
@@ -113,22 +115,32 @@ class TagBusiness(object):
     def less_reference(cls, tags):
         if tags:
             tag_list = tags.split(',')
+            session_list = []
             for tagid in tag_list:
                 tag = Tag.query.get(tagid)
-                with db.auto_commit():
-                    if tag.reference_nums > 0:
-                        tag.reference_nums -= 1
-                        db.session.add(tag)
+                if tag is None:
+                    continue
+                if tag.reference_nums > 0:
+                    tag.reference_nums -= 1
+                    session_list.append(tag)
+            if session_list:
+                db.session.add_all(session_list)
+                db.session.commit()
 
     @classmethod
     def add_reference(cls, tags):
         if tags:
             tag_list = tags.split(',')
+            session_list = []
             for tagid in tag_list:
                 tag = Tag.query.get(tagid)
-                with db.auto_commit():
-                    tag.reference_nums += 1
-                    db.session.add(tag)
+                if tag is None:
+                    continue
+                tag.reference_nums += 1
+                session_list.append(tag)
+            if session_list:
+                db.session.add_all(session_list)
+                db.session.commit()
 
     @classmethod
     def change_reference(cls, old_tags, new_tags):
