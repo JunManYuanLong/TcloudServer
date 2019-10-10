@@ -13,6 +13,8 @@ services:
       MYSQL_ROOT_PASSWORD: "tc123456"
     volumes:
       - "./init:/docker-entrypoint-initdb.d/"
+      - "./volumes/mysql:/var/lib/mysql"
+      - "./tcloud.cnf:/etc/mysql/conf.d/tcloud.cnf"
     ports:
       - 3306:3306
 
