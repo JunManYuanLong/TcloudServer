@@ -1,7 +1,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-CREATE DATABASE demo;
-use demo;
+CREATE DATABASE demo1;
+use demo1;
 -- ----------------------------
 -- Table structure for ability
 -- ----------------------------
@@ -70,16 +70,8 @@ CREATE TABLE `board_config` (
   `project_id` varchar(20) NOT NULL DEFAULT '',
   `hasconfig` tinyint(1) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of board_config
--- ----------------------------
-BEGIN;
-INSERT INTO `board_config` VALUES (1, '1,2,3,4,6,5', '0,1,2,4,5,6,3', '2019-09-03 12:49:31', '2019-09-03 20:49:31', NULL, '2', NULL);
-INSERT INTO `board_config` VALUES (2, '1,2,3,4,6,5', '0,1,2,4,5,6,3', '2019-09-06 08:19:21', '2019-09-06 16:19:21', NULL, '3', NULL);
-INSERT INTO `board_config` VALUES (3, '1,2,3,4,6,5', '0,1,2,4,5,6,3', '2019-09-10 08:29:44', '2019-09-10 16:29:43', NULL, '4', NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for case
@@ -104,20 +96,6 @@ CREATE TABLE `case` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of case
--- ----------------------------
-BEGIN;
-INSERT INTO `case` VALUES (1, '2019-09-03 12:50:01', '2019-09-03 20:50:00', 'TC1', 1, '1', NULL, '测试用例', NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 0, 1152, 1, NULL);
-INSERT INTO `case` VALUES (2, '2019-09-04 06:56:37', '2019-09-04 14:56:36', 'TC2', 1, '1', NULL, '测试用例2', '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 0, 1152, 0, NULL);
-INSERT INTO `case` VALUES (3, '2019-09-04 06:56:49', '2019-09-04 14:56:48', 'TC3', 1, '1', NULL, '测试用例3', '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 0, 1152, 1, NULL);
-INSERT INTO `case` VALUES (4, '2019-09-04 06:56:58', '2019-09-04 14:56:57', 'TC4', 1, '1', NULL, '测试用例4', '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 0, 1152, 2, NULL);
-INSERT INTO `case` VALUES (5, '2019-09-06 07:48:26', '2019-09-06 15:48:26', 'TC5', 7, '1', NULL, '新建一条流程', '当前在测试环境，用例管理模块', '{\"step_result\":[{\"step\":\"点击新建按钮\",\"expect\":\"弹出新建流程的弹窗页面\"},{\"step\":\"一次输入必填项，点击保存按钮\",\"expect\":\"流程新建成功，跳转到该流程的详情页面\"}]}', 1, 0, 1152, 1, NULL);
-INSERT INTO `case` VALUES (6, '2019-09-06 07:52:20', '2019-09-06 15:52:20', 'TC6', 7, '1', NULL, '删除一条流程', NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击确定\",\"expect\":\"删除成功\"}]}', 1, 0, 1152, 2, NULL);
-INSERT INTO `case` VALUES (7, '2019-09-06 07:53:13', '2019-09-06 15:53:12', 'TC7', 7, '1', NULL, '取消删除流程', NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击取消按钮\",\"expect\":\"删除确认框收起，没有执行删除操作\"}]}', 1, 0, 1152, 1, NULL);
-INSERT INTO `case` VALUES (8, '2019-09-06 08:01:26', '2019-09-06 16:01:25', 'TC8', 4, '1', NULL, 'issue字段检查', NULL, '{\"step_result\":[{\"step\":\"检查issue列表的字段\",\"expect\":\"字段包含：ID、标题、创建人、处理人、状态、优先级、级别、issue分数、创建时间、更新时间。。。\"}]}', 1, 0, 1152, 2, NULL);
-INSERT INTO `case` VALUES (9, '2019-09-10 09:03:24', '2019-09-10 17:03:24', 'TC9', 15, '1,3', NULL, '1', NULL, '{\"step_result\":[{\"step\":\"2\",\"expect\":\"3\"},{\"step\":\"4\",\"expect\":\"5\"}]}', 1, 0, 1152, 1, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for ci_data
@@ -205,7 +183,7 @@ INSERT INTO `config` VALUES (9, '2019-05-05 15:53:04', '2019-06-24 12:39:36', 's
 INSERT INTO `config` VALUES (10, NULL, '2019-06-20 14:14:25', 'tcloud', 1, 'http://tcloud-demo.innotechx.com/#', NULL, NULL);
 INSERT INTO `config` VALUES (15, NULL, '2019-06-20 14:14:17', 'tcloud', 2, 'http://tcloud-demo.innotechx.com/#', NULL, NULL);
 INSERT INTO `config` VALUES (16, '2019-05-24 17:54:08', '2019-07-26 16:35:33', 'jenkins', 1, '{\"4\":[{\"id\":0,\"name\":\"回归测试\",\"job\":\"regression_test\"},{\"id\":1,\"name\":\"回归测试\",\"job\":\"regression_test\"},{\"id\":2,\"name\":\"单个接口\",\"job\":\"singel_api_dev\"}],\"1\":[{\"id\":1,\"name\":\"回归测试\",\"job\":\"regression_test\"}]}', NULL, NULL);
-INSERT INTO `config` VALUES (17, '2019-05-24 20:10:50', '2019-07-22 10:43:34', 'jenkins', 2, '{\"url\":\"http://ci.automancloud.com\",\"user_id\":\"aaa\",\"api_token\":\"yourtoken\"}', 'jenkins 账号信息', NULL);
+INSERT INTO `config` VALUES (17, '2019-05-24 20:10:50', '2019-07-22 10:43:34', 'jenkins', 2, '{\"url\":\"http://ci.xx.com\",\"user_id\":\"aaa\",\"api_token\":\"yourtoken\"}', 'jenkins 账号信息', NULL);
 INSERT INTO `config` VALUES (18, '2019-06-14 11:19:56', '2019-06-13 18:59:35', 'asset', 1, '{\"operation_dict\":{\"name\":\"名称\",\"asset_id\":\"资产编号\",\"status\":\"状态\",\"borrow_id\":\"持有者\"},\"status\":{\"0\":\"不可用\",\"1\":\"可用\"}}', '资产的转移记录', NULL);
 INSERT INTO `config` VALUES (19, '2019-06-14 14:19:56', '2019-06-14 14:08:15', 'credit', 1, '{\"operation_dict\":{\"score\": \"信用积分\"},\"status\":{\"0\":\"不可用\",\"1\":\"可用\"}}', '信用积分记录', NULL);
 INSERT INTO `config` VALUES (20, '2019-06-17 19:43:09', '2019-07-02 14:27:40', 'deploy', 1, '{\"operation_dict\":[{\"4\":\"4\"},{\"1\":\"4\"}]}', NULL, NULL);
@@ -467,14 +445,8 @@ CREATE TABLE `feedback` (
   `comment` text,
   `weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of feedback
--- ----------------------------
-BEGIN;
-INSERT INTO `feedback` VALUES (1, '2019-09-06 07:37:31', '2019-09-06 15:37:30', '10000000000', 1152, 0, '平台不错', 1);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for flow_assemble
@@ -573,18 +545,8 @@ CREATE TABLE `flow_info` (
   `platform` varchar(300) DEFAULT NULL,
   `dependence` text,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of flow_info
--- ----------------------------
-BEGIN;
-INSERT INTO `flow_info` VALUES (1, '2019-09-06 08:02:52', '2019-09-06 16:09:08', '搜索优化上线提测', 1, '3', 2, '3,4,5,6,8,9,11,13,14,16', NULL, NULL, '2019-09-06 08:09:08', 2, NULL, 1152, '[1152, 1155]', '[1154]', '[1154]', '[1155]', '{\"process\": 100, \"current_step\": \"16\", \"current_step_name\": \"\\u5b8c\\u6210\", \"steps\": [{\"id\": 3, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u81ea\\u6d4b\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:03:28\"}, {\"id\": 4, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u6d4b\\u8bd5\\u73af\\u5883\\u6d4b\\u8bd5\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:03:38\"}, {\"id\": 5, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>PM\\u9a8c\\u6536\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:03:46\"}, {\"id\": 6, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>[\\u4f9d\\u8d56kafka]\\uff1a</p><p>[PR]:</p><p>[\\u6570\\u636e\\u5e93\\u53d8\\u52a8]\\uff1a</p><p>[\\u4f9d\\u8d56ab\\u5b9e\\u9a8c]:</p><p>[\\u4f9d\\u8d56\\u914d\\u7f6e]:</p><p>[\\u670d\\u52a1\\u7aef\\u4e0a\\u7ebf\\u987a\\u5e8f]</p><p>[OMS/MMS]</p><p>[\\u9700\\u6c42JIRA]</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:08:20\"}, {\"id\": 8, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u9884\\u53d1\\u5e03\\u73af\\u5883\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:08:31\"}, {\"id\": 9, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>PM\\u9884\\u53d1\\u5e03\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:08:39\"}, {\"id\": 11, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>ok</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:08:43\"}, {\"id\": 13, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>QA\\u7ebf\\u4e0a\\u73af\\u5883\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:08:58\"}, {\"id\": 14, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>PM\\u7ebf\\u4e0a\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:09:04\"}, {\"id\": 16, \"name\": \"\\u641c\\u7d22\\u4f18\\u5316\\u4e0a\\u7ebf\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>ok</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:09:08\"}], \"step_tab\": [{\"step_tab_id\": \"1\", \"step_tab_name\": \"\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u4e0b\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u6d4b\\u8bd5,\\u5f00\\u53d1\"}]}', 2, NULL, '[{\"id\":3,\"title\":\"搜索页面优化\",\"jira_id\":\"\"}]', '[1]', '暂无');
-INSERT INTO `flow_info` VALUES (2, '2019-09-06 08:05:08', '2019-09-06 16:25:28', 'issue增加一个字段提测', 1, '6', 1, '3,4,5,8,9,10,13,14,15,16', NULL, NULL, NULL, 2, NULL, 1152, '[1155]', '[1154]', '[1154]', '[1155, 1152]', '{\"process\": 80, \"current_step\": \"15\", \"current_step_name\": \"\\u5168\\u91cf\\u53d1\\u5305\", \"steps\": [{\"id\": 3, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u81ea\\u6d4b\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:05:42\"}, {\"id\": 4, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"2\", \"comment\": \"<p>\\u5192\\u70df\\u4e0d\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:05:48\"}, {\"id\": 3, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u81ea\\u6d4b\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:24:11\"}, {\"id\": 4, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u6d4b\\u8bd5\\u73af\\u5883\\u6d4b\\u8bd5\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:24:21\"}, {\"id\": 5, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>PM\\u9a8c\\u6536\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:24:28\"}, {\"id\": 8, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>QA\\u9884\\u53d1\\u5e03\\u9a8c\\u6536\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:24:41\"}, {\"id\": 9, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>PM\\u9884\\u53d1\\u5e03\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:24:54\"}, {\"id\": 10, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u7070\\u5ea6\\u53d1\\u5305OK</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:25:07\"}, {\"id\": 13, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>QA\\u7ebf\\u4e0a\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:25:19\"}, {\"id\": 14, \"name\": \"issue\\u589e\\u52a0\\u4e00\\u4e2a\\u5b57\\u6bb5\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>PM\\u7ebf\\u4e0a\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:25:28\"}], \"step_tab\": [{\"step_tab_id\": \"1\", \"step_tab_name\": \"\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u4e0b\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u5f00\\u53d1\"}, {\"step_tab_id\": \"2\", \"step_tab_name\": \"\\u4e0d\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u6d41\\u7a0b\\u7b2c\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u5f00\\u53d1\"}, {\"step_tab_id\": \"3\", \"step_tab_name\": \"\\u8df3\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u4e0b\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u5f00\\u53d1\"}]}', 0, NULL, '[{\"id\":6,\"title\":\"issue增加一个字段\",\"jira_id\":\"\"}]', '[1]', '数据库依赖');
-INSERT INTO `flow_info` VALUES (3, '2019-09-06 08:06:35', '2019-09-06 16:23:53', '分页优化提测', 1, '5', 5, '2,4,7,11,12,16', NULL, NULL, NULL, 2, NULL, 1152, '[1155]', '[1154]', '[1154]', '[1152]', '{\"process\": 50, \"current_step\": \"11\", \"current_step_name\": \"\\u6b63\\u5f0f\\u4e0a\\u7ebf\", \"steps\": [{\"id\": 2, \"name\": \"\\u5206\\u9875\\u4f18\\u5316\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u81ea\\u6d4b\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:23:36\"}, {\"id\": 4, \"name\": \"\\u5206\\u9875\\u4f18\\u5316\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u6d4b\\u8bd5\\u73af\\u5883\\u6d4b\\u8bd5\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:23:44\"}, {\"id\": 7, \"name\": \"\\u5206\\u9875\\u4f18\\u5316\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u9884\\u53d1\\u5e03\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:23:53\"}], \"step_tab\": [{\"step_tab_id\": \"6\", \"step_tab_name\": \"\\u5907\\u6ce8\", \"step_tab_result\": \"\\u4f1a\\u505c\\u7559\\u5728\\u5f53\\u524d\\u6b65\\u9aa4\", \"step_tab_user\": \"admin,\\u5f00\\u53d1\"}, {\"step_tab_id\": \"1\", \"step_tab_name\": \"\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u4e0b\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u5f00\\u53d1\"}, {\"step_tab_id\": \"2\", \"step_tab_name\": \"\\u4e0d\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u6d41\\u7a0b\\u7b2c\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u5f00\\u53d1\"}, {\"step_tab_id\": \"3\", \"step_tab_name\": \"\\u8df3\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u4e0b\\u4e00\\u6b65\", \"step_tab_user\": \"admin\"}]}', 0, 1, '[{\"id\":5,\"title\":\"分页优化\",\"jira_id\":\"\"}]', '[1]', '');
-INSERT INTO `flow_info` VALUES (4, '2019-09-06 08:07:27', '2019-09-06 16:23:27', '增加taskcase导出功能', 1, '4', 1, '3,4,5,8,9,10,13,14,15,16', NULL, NULL, NULL, 2, NULL, 1152, '[1155]', '[1154]', '[1154]', '[1152]', '{\"process\": 20, \"current_step\": \"5\", \"current_step_name\": \"PM\\u9a8c\\u6536\", \"steps\": [{\"id\": 3, \"name\": \"\\u589e\\u52a0taskcase\\u5bfc\\u51fa\\u529f\\u80fd\", \"result\": \"1\", \"comment\": \"<p>\\u81ea\\u6d4b\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:23:19\"}, {\"id\": 4, \"name\": \"\\u589e\\u52a0taskcase\\u5bfc\\u51fa\\u529f\\u80fd\", \"result\": \"1\", \"comment\": \"<p>\\u6d4b\\u8bd5\\u73af\\u5883\\u9a8c\\u8bc1\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:23:27\"}], \"step_tab\": [{\"step_tab_id\": \"1\", \"step_tab_name\": \"\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u4e0b\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u6d4b\\u8bd5\"}, {\"step_tab_id\": \"2\", \"step_tab_name\": \"\\u4e0d\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u6d41\\u7a0b\\u7b2c\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u6d4b\\u8bd5\"}, {\"step_tab_id\": \"3\", \"step_tab_name\": \"\\u8df3\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u4e0b\\u4e00\\u6b65\", \"step_tab_user\": \"admin\"}]}', 0, NULL, '[{\"id\":4,\"title\":\"增加taskcase导出功能\",\"jira_id\":\"\"}]', '[2, 4]', '上线依赖1\n上线依赖2\n上线依赖3\n');
-INSERT INTO `flow_info` VALUES (5, '2019-09-06 08:22:59', '2019-09-06 16:23:08', '缺陷支持修改版本提测', 1, '2', 1, '3,4,5,8,9,10,13,14,15,16', NULL, NULL, NULL, 2, NULL, 1152, '[1155]', '[1154]', '[1154]', '[1152]', '{\"process\": 10, \"current_step\": \"4\", \"current_step_name\": \"\\u529f\\u80fd\\u6d4b\\u8bd5\", \"steps\": [{\"id\": 3, \"name\": \"\\u7f3a\\u9677\\u652f\\u6301\\u4fee\\u6539\\u7248\\u672c\\u63d0\\u6d4b\", \"result\": \"1\", \"comment\": \"<p>\\u81ea\\u6d4b\\u901a\\u8fc7</p>\", \"user_id\": 1152, \"user_name\": \"admin\", \"creation_time\": \"2019-09-06 08:23:08\"}], \"step_tab\": [{\"step_tab_id\": \"5\", \"step_tab_name\": \"\\u81ea\\u52a8\\u5316\\u6d4b\\u8bd5\", \"step_tab_result\": \"\\u4f1a\\u505c\\u7559\\u5728\\u5f53\\u524d\\u6b65\\u9aa4\", \"step_tab_user\": \"admin,\\u6d4b\\u8bd5\"}, {\"step_tab_id\": \"1\", \"step_tab_name\": \"\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u4e0b\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u6d4b\\u8bd5\"}, {\"step_tab_id\": \"2\", \"step_tab_name\": \"\\u4e0d\\u901a\\u8fc7\", \"step_tab_result\": \"\\u4f1a\\u8df3\\u8f6c\\u5230\\u6d41\\u7a0b\\u7b2c\\u4e00\\u6b65\", \"step_tab_user\": \"admin,\\u6d4b\\u8bd5\"}]}', 0, 1, '[{\"id\":2,\"title\":\"云测平台3.0版本需求\",\"jira_id\":\"\"}]', '[1]', '');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for flow_record
@@ -606,39 +568,8 @@ CREATE TABLE `flow_record` (
   `weight` int(11) DEFAULT NULL,
   `comment` text,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of flow_record
--- ----------------------------
-BEGIN;
-INSERT INTO `flow_record` VALUES (1, '2019-09-06 08:03:29', '2019-09-06 16:03:28', 1, NULL, 1152, 3, 4, '1', '搜索优化上线提测', 2, NULL, 1, '<p>自测通过</p>');
-INSERT INTO `flow_record` VALUES (2, '2019-09-06 08:03:38', '2019-09-06 16:03:38', 1, NULL, 1152, 4, 5, '1', '搜索优化上线提测', 2, NULL, 1, '<p>测试环境测试通过</p>');
-INSERT INTO `flow_record` VALUES (3, '2019-09-06 08:03:46', '2019-09-06 16:03:46', 1, NULL, 1152, 5, 6, '1', '搜索优化上线提测', 2, NULL, 1, '<p>PM验收通过</p>');
-INSERT INTO `flow_record` VALUES (4, '2019-09-06 08:05:42', '2019-09-06 16:05:42', 2, NULL, 1152, 3, 4, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>自测通过</p>');
-INSERT INTO `flow_record` VALUES (5, '2019-09-06 08:05:49', '2019-09-06 16:05:48', 2, NULL, 1152, 4, 3, '2', 'issue增加一个字段提测', 2, NULL, 1, '<p>冒烟不通过</p>');
-INSERT INTO `flow_record` VALUES (6, '2019-09-06 08:08:21', '2019-09-06 16:08:20', 1, NULL, 1152, 6, 8, '1', '搜索优化上线提测', 2, NULL, 1, '<p>[依赖kafka]：</p><p>[PR]:</p><p>[数据库变动]：</p><p>[依赖ab实验]:</p><p>[依赖配置]:</p><p>[服务端上线顺序]</p><p>[OMS/MMS]</p><p>[需求JIRA]</p>');
-INSERT INTO `flow_record` VALUES (7, '2019-09-06 08:08:31', '2019-09-06 16:08:31', 1, NULL, 1152, 8, 9, '1', '搜索优化上线提测', 2, NULL, 1, '<p>预发布环境验证通过</p>');
-INSERT INTO `flow_record` VALUES (8, '2019-09-06 08:08:39', '2019-09-06 16:08:39', 1, NULL, 1152, 9, 11, '1', '搜索优化上线提测', 2, NULL, 1, '<p>PM预发布验证通过</p>');
-INSERT INTO `flow_record` VALUES (9, '2019-09-06 08:08:43', '2019-09-06 16:08:43', 1, NULL, 1152, 11, 13, '1', '搜索优化上线提测', 2, NULL, 1, '<p>ok</p>');
-INSERT INTO `flow_record` VALUES (10, '2019-09-06 08:08:58', '2019-09-06 16:08:58', 1, NULL, 1152, 13, 14, '1', '搜索优化上线提测', 2, NULL, 1, '<p>QA线上环境验证通过</p>');
-INSERT INTO `flow_record` VALUES (11, '2019-09-06 08:09:05', '2019-09-06 16:09:04', 1, NULL, 1152, 14, 16, '1', '搜索优化上线提测', 2, NULL, 1, '<p>PM线上验证通过</p>');
-INSERT INTO `flow_record` VALUES (12, '2019-09-06 08:09:08', '2019-09-06 16:09:08', 1, NULL, 1152, 16, 16, '1', '搜索优化上线提测', 2, NULL, 1, '<p>ok</p>');
-INSERT INTO `flow_record` VALUES (13, '2019-09-06 08:23:09', '2019-09-06 16:23:08', 5, NULL, 1152, 3, 4, '1', '缺陷支持修改版本提测', 2, NULL, 1, '<p>自测通过</p>');
-INSERT INTO `flow_record` VALUES (14, '2019-09-06 08:23:19', '2019-09-06 16:23:19', 4, NULL, 1152, 3, 4, '1', '增加taskcase导出功能', 2, NULL, 1, '<p>自测通过</p>');
-INSERT INTO `flow_record` VALUES (15, '2019-09-06 08:23:27', '2019-09-06 16:23:27', 4, NULL, 1152, 4, 5, '1', '增加taskcase导出功能', 2, NULL, 1, '<p>测试环境验证通过</p>');
-INSERT INTO `flow_record` VALUES (16, '2019-09-06 08:23:37', '2019-09-06 16:23:36', 3, NULL, 1152, 2, 4, '1', '分页优化提测', 2, NULL, 1, '<p>自测通过</p>');
-INSERT INTO `flow_record` VALUES (17, '2019-09-06 08:23:45', '2019-09-06 16:23:44', 3, NULL, 1152, 4, 7, '1', '分页优化提测', 2, NULL, 1, '<p>测试环境测试通过</p>');
-INSERT INTO `flow_record` VALUES (18, '2019-09-06 08:23:53', '2019-09-06 16:23:53', 3, NULL, 1152, 7, 11, '1', '分页优化提测', 2, NULL, 1, '<p>预发布验证通过</p>');
-INSERT INTO `flow_record` VALUES (19, '2019-09-06 08:24:11', '2019-09-06 16:24:11', 2, NULL, 1152, 3, 4, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>自测通过</p>');
-INSERT INTO `flow_record` VALUES (20, '2019-09-06 08:24:21', '2019-09-06 16:24:21', 2, NULL, 1152, 4, 5, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>测试环境测试通过</p>');
-INSERT INTO `flow_record` VALUES (21, '2019-09-06 08:24:29', '2019-09-06 16:24:28', 2, NULL, 1152, 5, 8, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>PM验收通过</p>');
-INSERT INTO `flow_record` VALUES (22, '2019-09-06 08:24:42', '2019-09-06 16:24:41', 2, NULL, 1152, 8, 9, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>QA预发布验收通过</p>');
-INSERT INTO `flow_record` VALUES (23, '2019-09-06 08:24:55', '2019-09-06 16:24:54', 2, NULL, 1152, 9, 10, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>PM预发布验证通过</p>');
-INSERT INTO `flow_record` VALUES (24, '2019-09-06 08:25:08', '2019-09-06 16:25:07', 2, NULL, 1152, 10, 13, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>灰度发包OK</p>');
-INSERT INTO `flow_record` VALUES (25, '2019-09-06 08:25:20', '2019-09-06 16:25:19', 2, NULL, 1152, 13, 14, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>QA线上验证通过</p>');
-INSERT INTO `flow_record` VALUES (26, '2019-09-06 08:25:28', '2019-09-06 16:25:28', 2, NULL, 1152, 14, 15, '1', 'issue增加一个字段提测', 2, NULL, 1, '<p>PM线上验证通过</p>');
-COMMIT;
 
 -- ----------------------------
 -- Table structure for flow_source
@@ -654,14 +585,8 @@ CREATE TABLE `flow_source` (
   `source_type` int(11) DEFAULT NULL,
   `comment` text,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of flow_source
--- ----------------------------
-BEGIN;
-INSERT INTO `flow_source` VALUES (1, '2019-09-05 02:33:35', '2019-09-10 16:39:20', 2, 1152, '[]', 1, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for interface_api_msg
@@ -690,16 +615,8 @@ CREATE TABLE `interface_api_msg` (
   `project_id` int(11) DEFAULT NULL COMMENT '所属的项目id',
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of interface_api_msg
--- ----------------------------
-BEGIN;
-INSERT INTO `interface_api_msg` VALUES (1, '2019-09-06 08:35:42', '2019-09-06 16:42:14', 1, '百度', NULL, 'data', '0', NULL, NULL, 'GET', '[{\"key\":null,\"param_type\":\"string\",\"remark\":null,\"value\":null}]', '', '[{\"key\":\"prod\",\"value\":\"pc_his\"},{\"key\":\"from\",\"value\":\"pc_web\"},{\"key\":\"json\",\"value\":\"1\"},{\"key\":\"sid\",\"value\":\"1463_21086_29073_29523_29518_29721_29568_29220_29460_22158\"},{\"key\":\"hisdata\",\"value\":\"%5B%7B%22time%22%3A1567222515%2C%22kw%22%3A%22%E5%AE%89%E5%BE%BD%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8%E7%BD%91%E4%B8%8A%E8%90%A5%E4%B8%9A%E5%8E%85%22%7D%2C%7B%22time%22%3A1567396095%2C%22kw%22%3A%22%E9%A5%BF%E4%BA%86%E4%B9%88%E7%BA%A2%E5%8C%85%E5%85%91%E6%8D%A2%E7%A0%81%22%7D%2C%7B%22time%22%3A1567410346%2C%22kw%22%3A%22%E4%B8%AD%E5%9B%BD%E7%9F%B3%E6%B2%B9%E5%92%8C%E4%B8%AD%E5%9B%BD%E7%9F%B3%E5%8C%96%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%22%7D%2C%7B%22time%22%3A1567410358%2C%22kw%22%3A%22%E4%B8%AD%E5%9B%BD%E7%9F%B3%E6%B2%B9%E5%92%8C%E4%B8%AD%E5%9B%BD%E7%9F%B3%E5%8C%96%E5%93%AA%E4%B8%AA%E6%B2%B9%E5%A5%BD%22%7D%2C%7B%22time%22%3A1567426398%2C%22kw%22%3A%22%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E7%94%B5%E8%84%91%E6%9F%A5%E7%9C%8B%E6%89%8B%E6%9C%BAapp%E5%86%85%E5%AD%97%E4%BD%93%E5%A4%A7%E5%B0%8F%22%7D%2C%7B%22time%22%3A1567476192%2C%22kw%22%3A%22%E5%91%A8%E7%90%A6%22%7D%2C%7B%22time%22%3A1567503035%2C%22kw%22%3A%22%E5%B0%8F%E7%B1%B3max4%22%7D%2C%7B%22time%22%3A1567517532%2C%22kw%22%3A%22jenkins%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%22%2C%22fq%22%3A2%7D%2C%7B%22time%22%3A1567657102%2C%22kw%22%3A%22%E7%89%A9%E8%81%94%E7%BD%91%E6%98%AF%E4%BB%80%E4%B9%88%22%7D%2C%7B%22time%22%3A1567670897%2C%22kw%22%3A%22airtest%20ide%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94adb%20airtest%E6%85%A2%22%7D%5D\"},{\"key\":\"req\",\"value\":\"2\"},{\"key\":\"csor\",\"value\":\"0\"},{\"key\":\"cb\",\"value\":\"jQuery110206396234958706419_1567758662752\"},{\"key\":\"_\",\"value\":\"1567758662753\"},{\"key\":null,\"value\":null}]', '/sugrec', '[{\"key\":null,\"remark\":null,\"value\":null}]', '[{\"key\":null,\"value\":null}]', '[{\"key\":null,\"value\":null}]', 1, 1, 0);
-INSERT INTO `interface_api_msg` VALUES (2, '2019-09-06 08:39:54', '2019-09-10 19:19:08', 2, '百度一下', NULL, 'data', '0', NULL, NULL, 'GET', '[{\"key\":null,\"param_type\":\"string\",\"remark\":null,\"value\":null}]', '', '[{\"key\":\"ie\",\"value\":\"utf-8\"},{\"key\":\"csq\",\"value\":\"1\"},{\"key\":\"pstg\",\"value\":\"20\"},{\"key\":\"mod\",\"value\":\"2\"},{\"key\":\"isbd\",\"value\":\"1\"},{\"key\":\"cqid\",\"value\":\"f00b9f0b0000d646\"},{\"key\":\"istc\",\"value\":\"769\"},{\"key\":\"ver\",\"value\":\"QtdvTgpZOrXaje7b6aDYyu9W1bV9WSGUDoG\"},{\"key\":\"chk\",\"value\":\"5d721a70\"},{\"key\":\"isid\",\"value\":\"DFA262942D061518\"},{\"key\":\"ie\",\"value\":\"utf-8\"},{\"key\":\"f\",\"value\":\"8\"},{\"key\":\"rsv_bp\",\"value\":\"1\"},{\"key\":\"rsv_idx\",\"value\":\"1\"},{\"key\":\"tn\",\"value\":\"baidu\"},{\"key\":\"wd\",\"value\":\"11\"},{\"key\":\"rsv_pq\",\"value\":\"905b042e000228aa\"},{\"key\":\"rsv_t\",\"value\":\"5e541XNlvvE%2FkL3KCcr30HbBLcp7tfrEPdWwwpuMe%2FqCtz7oBMUW4nVX5wo\"},{\"key\":\"rqlang\",\"value\":\"cn\"},{\"key\":\"rsv_enter\",\"value\":\"0\"},{\"key\":\"rsv_dl\",\"value\":\"tb\"},{\"key\":\"rsv_sug3\",\"value\":\"3\"},{\"key\":\"rsv_sug1\",\"value\":\"3\"},{\"key\":\"rsv_sug7\",\"value\":\"101\"},{\"key\":\"prefixsug\",\"value\":\"11\"},{\"key\":\"rsp\",\"value\":\"0\"},{\"key\":\"inputT\",\"value\":\"4603\"},{\"key\":\"rsv_sug4\",\"value\":\"7457\"},{\"key\":\"f4s\",\"value\":\"1\"},{\"key\":\"_ck\",\"value\":\"952.1.82.32.24.693.35\"},{\"key\":\"rsv_isid\",\"value\":\"1463_21086_29073_29523_29518_29721_29568_29220_29460_22158\"},{\"key\":\"isnop\",\"value\":\"1\"},{\"key\":\"rsv_stat\",\"value\":\"-2\"},{\"key\":\"rsv_bp\",\"value\":\"1\"},{\"key\":null,\"value\":null}]', '/s', '[{\"key\":null,\"remark\":null,\"value\":null}]', '[{\"key\":null,\"value\":null}]', '[{\"key\":null,\"value\":null}]', 1, 1, 0);
-INSERT INTO `interface_api_msg` VALUES (3, '2019-09-10 11:18:20', '2019-09-10 19:18:20', 3, 'baidu', NULL, 'data', '0', NULL, NULL, 'GET', '[{\"key\":null,\"value\":null,\"param_type\":\"string\",\"remark\":null}]', '', '[{\"key\":\"\",\"value\":\"\"}]', 'baidu.com', '[{\"key\":null,\"value\":null,\"remark\":null}]', '[{\"key\":null,\"value\":null}]', '[{\"key\":null,\"value\":null}]', 1, 1, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for interface_case
@@ -719,14 +636,8 @@ CREATE TABLE `interface_case` (
   `case_set_id` int(11) DEFAULT NULL COMMENT '所属的用例集id',
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of interface_case
--- ----------------------------
-BEGIN;
-INSERT INTO `interface_case` VALUES (1, '2019-09-06 08:40:57', '2019-09-06 16:42:05', 1, '百度', '', '[]', '[{\"key\":\"\",\"remark\":\"\",\"value\":\"\"}]', 1, 1, 1, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for interface_case_data
@@ -755,15 +666,8 @@ CREATE TABLE `interface_case_data` (
   `api_msg_id` int(11) DEFAULT NULL,
   `execute_status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of interface_case_data
--- ----------------------------
-BEGIN;
-INSERT INTO `interface_case_data` VALUES (1, '2019-09-06 08:40:57', '2019-09-06 16:40:56', 0, 'true', '百度', NULL, NULL, 1, '[{\"key\": \"prod\", \"value\": \"pc_his\"}, {\"key\": \"from\", \"value\": \"pc_web\"}, {\"key\": \"json\", \"value\": \"1\"}, {\"key\": \"sid\", \"value\": \"1463_21086_29073_29523_29518_29721_29568_29220_29460_22158\"}, {\"key\": \"hisdata\", \"value\": \"%5B%7B%22time%22%3A1567222515%2C%22kw%22%3A%22%E5%AE%89%E5%BE%BD%E4%B8%AD%E5%9B%BD%E7%A7%BB%E5%8A%A8%E7%BD%91%E4%B8%8A%E8%90%A5%E4%B8%9A%E5%8E%85%22%7D%2C%7B%22time%22%3A1567396095%2C%22kw%22%3A%22%E9%A5%BF%E4%BA%86%E4%B9%88%E7%BA%A2%E5%8C%85%E5%85%91%E6%8D%A2%E7%A0%81%22%7D%2C%7B%22time%22%3A1567410346%2C%22kw%22%3A%22%E4%B8%AD%E5%9B%BD%E7%9F%B3%E6%B2%B9%E5%92%8C%E4%B8%AD%E5%9B%BD%E7%9F%B3%E5%8C%96%E6%9C%89%E4%BB%80%E4%B9%88%E5%8C%BA%E5%88%AB%22%7D%2C%7B%22time%22%3A1567410358%2C%22kw%22%3A%22%E4%B8%AD%E5%9B%BD%E7%9F%B3%E6%B2%B9%E5%92%8C%E4%B8%AD%E5%9B%BD%E7%9F%B3%E5%8C%96%E5%93%AA%E4%B8%AA%E6%B2%B9%E5%A5%BD%22%7D%2C%7B%22time%22%3A1567426398%2C%22kw%22%3A%22%E5%A6%82%E4%BD%95%E9%80%9A%E8%BF%87%E7%94%B5%E8%84%91%E6%9F%A5%E7%9C%8B%E6%89%8B%E6%9C%BAapp%E5%86%85%E5%AD%97%E4%BD%93%E5%A4%A7%E5%B0%8F%22%7D%2C%7B%22time%22%3A1567476192%2C%22kw%22%3A%22%E5%91%A8%E7%90%A6%22%7D%2C%7B%22time%22%3A1567503035%2C%22kw%22%3A%22%E5%B0%8F%E7%B1%B3max4%22%7D%2C%7B%22time%22%3A1567517532%2C%22kw%22%3A%22jenkins%E8%AE%BE%E7%BD%AE%E5%AE%9A%E6%97%B6%E4%BB%BB%E5%8A%A1%22%2C%22fq%22%3A2%7D%2C%7B%22time%22%3A1567657102%2C%22kw%22%3A%22%E7%89%A9%E8%81%94%E7%BD%91%E6%98%AF%E4%BB%80%E4%B9%88%22%7D%2C%7B%22time%22%3A1567670897%2C%22kw%22%3A%22airtest%20ide%E4%B8%BA%E4%BB%80%E4%B9%88%E6%AF%94adb%20airtest%E6%85%A2%22%7D%5D\"}, {\"key\": \"req\", \"value\": \"2\"}, {\"key\": \"csor\", \"value\": \"0\"}, {\"key\": \"cb\", \"value\": \"jQuery110206396234958706419_1567758662752\"}, {\"key\": \"_\", \"value\": \"1567758662753\"}, {\"key\": null, \"value\": null}]', '[true, true]', '[true, true]', '', '[true, true]', '[{\"key\": null, \"remark\": null, \"value\": null}]', '[true, true]', '[{\"key\": null, \"value\": null}]', '[true, true]', 1, 1, 0);
-INSERT INTO `interface_case_data` VALUES (2, '2019-09-06 08:40:57', '2019-09-06 16:40:56', 1, 'true', '百度一下', NULL, NULL, 1, '[{\"key\": \"ie\", \"value\": \"utf-8\"}, {\"key\": \"csq\", \"value\": \"1\"}, {\"key\": \"pstg\", \"value\": \"20\"}, {\"key\": \"mod\", \"value\": \"2\"}, {\"key\": \"isbd\", \"value\": \"1\"}, {\"key\": \"cqid\", \"value\": \"f00b9f0b0000d646\"}, {\"key\": \"istc\", \"value\": \"769\"}, {\"key\": \"ver\", \"value\": \"QtdvTgpZOrXaje7b6aDYyu9W1bV9WSGUDoG\"}, {\"key\": \"chk\", \"value\": \"5d721a70\"}, {\"key\": \"isid\", \"value\": \"DFA262942D061518\"}, {\"key\": \"ie\", \"value\": \"utf-8\"}, {\"key\": \"f\", \"value\": \"8\"}, {\"key\": \"rsv_bp\", \"value\": \"1\"}, {\"key\": \"rsv_idx\", \"value\": \"1\"}, {\"key\": \"tn\", \"value\": \"baidu\"}, {\"key\": \"wd\", \"value\": \"11\"}, {\"key\": \"rsv_pq\", \"value\": \"905b042e000228aa\"}, {\"key\": \"rsv_t\", \"value\": \"5e541XNlvvE%2FkL3KCcr30HbBLcp7tfrEPdWwwpuMe%2FqCtz7oBMUW4nVX5wo\"}, {\"key\": \"rqlang\", \"value\": \"cn\"}, {\"key\": \"rsv_enter\", \"value\": \"0\"}, {\"key\": \"rsv_dl\", \"value\": \"tb\"}, {\"key\": \"rsv_sug3\", \"value\": \"3\"}, {\"key\": \"rsv_sug1\", \"value\": \"3\"}, {\"key\": \"rsv_sug7\", \"value\": \"101\"}, {\"key\": \"prefixsug\", \"value\": \"11\"}, {\"key\": \"rsp\", \"value\": \"0\"}, {\"key\": \"inputT\", \"value\": \"4603\"}, {\"key\": \"rsv_sug4\", \"value\": \"7457\"}, {\"key\": \"f4s\", \"value\": \"1\"}, {\"key\": \"_ck\", \"value\": \"952.1.82.32.24.693.35\"}, {\"key\": \"rsv_isid\", \"value\": \"1463_21086_29073_29523_29518_29721_29568_29220_29460_22158\"}, {\"key\": \"isnop\", \"value\": \"1\"}, {\"key\": \"rsv_stat\", \"value\": \"-2\"}, {\"key\": \"rsv_bp\", \"value\": \"1\"}, {\"key\": null, \"value\": null}]', '[true, true]', '[true, true]', '', '[true, true]', '[{\"key\": null, \"remark\": null, \"value\": null}]', '[true, true]', '[{\"key\": null, \"value\": null}]', '[true, true]', 1, 2, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for interface_case_set
@@ -778,14 +682,8 @@ CREATE TABLE `interface_case_set` (
   `project_id` int(11) DEFAULT NULL COMMENT '所属的项目id',
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of interface_case_set
--- ----------------------------
-BEGIN;
-INSERT INTO `interface_case_set` VALUES (1, '2019-09-06 08:40:27', '2019-09-06 16:40:26', 1, '百度', 1, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for interface_config
@@ -818,14 +716,8 @@ CREATE TABLE `interface_module` (
   `weight` int(11) DEFAULT NULL,
   `status` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of interface_module
--- ----------------------------
-BEGIN;
-INSERT INTO `interface_module` VALUES (1, '2019-09-06 08:34:06', '2019-09-06 16:34:05', 1, '百度', 1, 1, 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for interface_project
@@ -851,15 +743,8 @@ CREATE TABLE `interface_project` (
   `all_project_id` int(11) DEFAULT NULL COMMENT '项目的总id',
   `user_id` int(11) DEFAULT NULL COMMENT '所属的用户id',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of interface_project
--- ----------------------------
-BEGIN;
-INSERT INTO `interface_project` VALUES (1, '2019-09-06 08:32:51', '2019-09-06 16:32:51', 'baidu', '', 0, 1, NULL, '[\"https://www.baidu.com\"]', '[]', '[]', '[]', 'first', NULL, '[]', '[]', 2, 1152);
-INSERT INTO `interface_project` VALUES (2, '2019-09-10 08:50:21', '2019-09-10 16:50:21', 'test01', '', 0, 1, NULL, '[]', '[]', '[]', '[]', 'first', NULL, '[]', '[]', 2, 1155);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for interface_report
@@ -1448,20 +1333,8 @@ CREATE TABLE `requirement` (
   `expect_time` datetime DEFAULT NULL,
   `tag` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of requirement
--- ----------------------------
-BEGIN;
-INSERT INTO `requirement` VALUES (1, '2019-09-04 06:59:08', '2019-09-04 14:59:07', '需求测试', 2, NULL, NULL, 1152, 1152, NULL, 1, 0, '<p>需求测试</p>', NULL, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement` VALUES (2, '2019-09-06 07:40:32', '2019-09-06 15:55:52', '云测平台3.0版本需求', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、UI页面优化</p><p>2、导出功能增加筛选的功能</p><p>3、bug fix</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 1, '180', NULL, '<p>高价值的预期值：次日留存达到XXX</p>', 2, NULL);
-INSERT INTO `requirement` VALUES (3, '2019-09-06 07:55:06', '2019-09-06 15:56:01', '搜索页面优化', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、当前搜索页面会由于浏览器的缩放，导致搜索词和输入框有点挤，优化一下</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement` VALUES (4, '2019-09-06 07:58:05', '2019-09-06 16:12:20', '增加taskcase导出功能', 2, '2', 0, 1152, 1152, 1152, 4, 0, '<p>增加taskcase导出功能</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement` VALUES (5, '2019-09-06 07:58:40', '2019-09-06 16:04:14', '分页优化', 2, '2', 1, 1152, 1152, 1152, 2, 0, '<p>分页优化</p>', 2, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement` VALUES (6, '2019-09-06 07:59:37', '2019-09-10 18:04:28', 'issue增加一个字段', 2, '2', 0, 1152, 1152, 1152, 2, 0, '<p>issue增加一个字段</p>', 0, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement` VALUES (7, '2019-09-06 08:21:29', '2019-09-06 16:21:28', '缺陷支持修改版本', 2, '1', 1, 1152, 1152, 1155, 1, 0, '<p>需求的具体描述</p><p>需求的具体描述</p><p>需求的具体描述</p><p>需求的具体描述</p><p>需求的具体描述</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for requirement_bind_case
@@ -1475,14 +1348,8 @@ CREATE TABLE `requirement_bind_case` (
   `modified_time` timestamp NULL DEFAULT NULL,
   `status` int(11) DEFAULT '0',
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of requirement_bind_case
--- ----------------------------
-BEGIN;
-INSERT INTO `requirement_bind_case` VALUES (1, 6, 8, '2019-09-06 08:01:38', '2019-09-06 16:01:38', 0);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for requirement_record
@@ -1518,33 +1385,8 @@ CREATE TABLE `requirement_record` (
   `expect_time` datetime DEFAULT NULL,
   `tag` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=21 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of requirement_record
--- ----------------------------
-BEGIN;
-INSERT INTO `requirement_record` VALUES (1, '2019-09-04 06:59:08', '2019-09-04 14:59:07', 1, '需求测试', 2, NULL, NULL, 1152, 1152, NULL, 1, 0, '<p>需求测试</p>', NULL, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (2, '2019-09-06 07:40:32', '2019-09-06 15:40:31', 2, '需求标题', 2, '2', 1, 1152, 1152, 1152, 0, 0, NULL, 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 1, NULL, '<p>高价值的预期值：次日留存达到XXX</p>', NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (3, '2019-09-06 07:41:02', '2019-09-06 15:41:02', 2, '需求标题', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、需求描述</p><p>2、需求详情</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 1, '180', '<p>高价值的预期值：次日留存达到XXX</p>', NULL, 2, NULL);
-INSERT INTO `requirement_record` VALUES (4, '2019-09-06 07:41:41', '2019-09-06 15:41:40', 2, '云测平台3.0版本需求', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、需求描述</p><p>2、需求详情</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 1, '180', '<p>高价值的预期值：次日留存达到XXX</p>', NULL, 2, NULL);
-INSERT INTO `requirement_record` VALUES (5, '2019-09-06 07:43:29', '2019-09-06 15:43:28', 2, '云测平台3.0版本需求', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、UI页面优化</p><p>2、导出功能增加筛选的功能</p><p>3、bug fix</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 1, '180', '<p>高价值的预期值：次日留存达到XXX</p>', NULL, 2, NULL);
-INSERT INTO `requirement_record` VALUES (6, '2019-09-06 07:55:06', '2019-09-06 15:55:06', 3, '搜索页面优化', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、当前搜索页面会由于浏览器的缩放，导致搜索词和输入框有点挤，优化一下</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (7, '2019-09-06 07:55:52', '2019-09-06 15:55:52', 2, '云测平台3.0版本需求', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、UI页面优化</p><p>2、导出功能增加筛选的功能</p><p>3、bug fix</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 1, '180', '<p>高价值的预期值：次日留存达到XXX</p>', NULL, 2, NULL);
-INSERT INTO `requirement_record` VALUES (8, '2019-09-06 07:56:01', '2019-09-06 15:56:01', 3, '搜索页面优化', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、当前搜索页面会由于浏览器的缩放，导致搜索词和输入框有点挤，优化一下</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (9, '2019-09-06 07:58:05', '2019-09-06 15:58:04', 4, '增加taskcase导出功能', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>增加taskcase导出功能</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (10, '2019-09-06 07:58:40', '2019-09-06 15:58:40', 5, '分页优化', 2, '2', 1, 1152, 1152, 1152, 2, 0, '<p>分页优化</p>', 2, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (11, '2019-09-06 07:59:37', '2019-09-06 15:59:37', 6, 'issue增加一个字段', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>issue增加一个字段</p>', 0, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (12, '2019-09-06 08:01:38', '2019-09-06 16:01:38', 6, 'issue增加一个字段', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>issue增加一个字段</p>', 0, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (13, '2019-09-06 08:04:14', '2019-09-06 16:04:14', 6, 'issue增加一个字段', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>issue增加一个字段</p>', 0, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (14, '2019-09-06 08:04:14', '2019-09-06 16:04:14', 5, '分页优化', 2, '2', 1, 1152, 1152, 1152, 2, 0, '<p>分页优化</p>', 2, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (15, '2019-09-06 08:04:14', '2019-09-06 16:04:14', 4, '增加taskcase导出功能', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>增加taskcase导出功能</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (16, '2019-09-06 08:12:20', '2019-09-06 16:12:20', 4, '增加taskcase导出功能', 2, '2', 0, 1152, 1152, 1152, 4, 0, '<p>增加taskcase导出功能</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (17, '2019-09-06 08:21:29', '2019-09-06 16:21:28', 7, '缺陷支持修改版本', 2, '1', 1, 1152, 1152, 1155, 1, 0, '<p>需求的具体描述</p><p>需求的具体描述</p><p>需求的具体描述</p><p>需求的具体描述</p><p>需求的具体描述</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (18, '2019-09-10 10:04:25', '2019-09-10 18:04:24', 6, 'issue增加一个字段', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>issue增加一个字段</p>', 0, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (19, '2019-09-10 10:04:27', '2019-09-10 18:04:27', 6, 'issue增加一个字段', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>issue增加一个字段</p>', 0, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_record` VALUES (20, '2019-09-10 10:04:29', '2019-09-10 18:04:28', 6, 'issue增加一个字段', 2, '2', 0, 1152, 1152, 1152, 2, 0, '<p>issue增加一个字段</p>', 0, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 2, NULL, 2, NULL, NULL, NULL, NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for requirement_review
@@ -1579,18 +1421,8 @@ CREATE TABLE `requirement_review` (
   `report_expect` text,
   `worth_sure` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of requirement_review
--- ----------------------------
-BEGIN;
-INSERT INTO `requirement_review` VALUES (1, '2019-09-06 07:55:48', '2019-09-06 15:55:52', 1, 2, '云测平台3.0版本需求', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、UI页面优化</p><p>2、导出功能增加筛选的功能</p><p>3、bug fix</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 1, '180', NULL, '<p>高价值的预期值：次日留存达到XXX</p>', 2);
-INSERT INTO `requirement_review` VALUES (2, '2019-09-06 07:55:58', '2019-09-06 15:56:01', 2, 3, '搜索页面优化', 2, '2', 1, 1152, 1152, 1152, 0, 0, '<p>1、当前搜索页面会由于浏览器的缩放，导致搜索词和输入框有点挤，优化一下</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_review` VALUES (3, '2019-09-06 08:04:10', '2019-09-06 16:04:14', 3, 4, '增加taskcase导出功能', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>增加taskcase导出功能</p>', 1, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_review` VALUES (4, '2019-09-06 08:04:10', '2019-09-06 16:04:14', 3, 5, '分页优化', 2, '2', 1, 1152, 1152, 1152, 2, 0, '<p>分页优化</p>', 2, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL);
-INSERT INTO `requirement_review` VALUES (5, '2019-09-06 08:04:10', '2019-09-06 16:04:14', 3, 6, 'issue增加一个字段', 2, '2', 0, 1152, 1152, 1152, 1, 0, '<p>issue增加一个字段</p>', 0, '{\"images\":[],\"files\":[],\"videos\":[]}', NULL, 1, 0, 1, NULL, 2, NULL, NULL, NULL, NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for review
@@ -1613,16 +1445,8 @@ CREATE TABLE `review` (
   `review_status` int(11) DEFAULT NULL,
   `version_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of review
--- ----------------------------
-BEGIN;
-INSERT INTO `review` VALUES (1, '2019-09-06 07:55:48', '2019-09-06 15:55:52', NULL, '2', 2, 1152, 1152, 'admin', 0, NULL, '', 1, 2, 2);
-INSERT INTO `review` VALUES (2, '2019-09-06 07:55:58', '2019-09-06 15:56:01', NULL, '3', 2, 1152, 1152, 'admin', 0, NULL, '', 1, 2, 2);
-INSERT INTO `review` VALUES (3, '2019-09-06 08:04:10', '2019-09-06 16:04:14', NULL, '4,5,6', 2, 1152, 1152, 'admin', 0, NULL, '', 1, 2, 2);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for role
@@ -1706,17 +1530,8 @@ CREATE TABLE `task` (
   `tag` varchar(300) DEFAULT NULL,
   `attachment` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of task
--- ----------------------------
-BEGIN;
-INSERT INTO `task` VALUES (1, '2019-09-04 06:57:22', '2019-09-04 14:57:21', '测试任务', '', NULL, '自动化测试', '功能测试', 0, 1152, 1152, 2, '2019-09-04 00:00:00', '2019-09-05 00:00:00', 2, 1, NULL, '[4, 3, 2, 1]', NULL, '', NULL);
-INSERT INTO `task` VALUES (2, '2019-09-04 12:34:04', '2019-09-04 20:34:03', '任务一', '1、\n2、', NULL, '人工测试', '功能测试', 0, 1152, 1154, 2, '2019-09-04 00:00:00', '2019-09-06 00:00:00', 2, 2, NULL, '[4, 3, 2, 1]', NULL, '', NULL);
-INSERT INTO `task` VALUES (3, '2019-09-04 12:34:31', '2019-09-10 16:37:25', '任务二', '1、\n2、', '', '人工测试', '兼容性测试', 0, 1152, 1154, 2, '2019-09-04 00:00:00', '2019-09-06 00:00:00', 2, 2, NULL, '[4, 3, 2, 1]', '{\"image\":\"\",\"files\":[]}', '', NULL);
-INSERT INTO `task` VALUES (4, '2019-09-06 08:13:28', '2019-09-10 17:57:31', '流程管理模块执行用例', '流程管理模块执行用例', '', '人工测试', '功能测试', 0, 1152, 1154, 1, '2019-09-05 00:00:00', '2019-09-06 00:00:00', 2, 2, NULL, '[7, 6, 5]', '{\"image\":\"\",\"files\":[]}', '', NULL);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for task_case
@@ -1746,28 +1561,8 @@ CREATE TABLE `task_case` (
   `version` int(11) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of task_case
--- ----------------------------
-BEGIN;
-INSERT INTO `task_case` VALUES (1, '2019-09-04 06:57:22', '2019-09-04 14:58:10', 1, NULL, NULL, 1152, 2, NULL, '测试用例4', 'TC4', 1, NULL, '1', NULL, '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 4, NULL, 1, 2);
-INSERT INTO `task_case` VALUES (2, '2019-09-04 06:57:22', '2019-09-04 14:58:09', 1, NULL, NULL, 1152, 1, NULL, '测试用例3', 'TC3', 1, NULL, '1', NULL, '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 3, NULL, 1, 2);
-INSERT INTO `task_case` VALUES (3, '2019-09-04 06:57:22', '2019-09-04 14:58:08', 1, NULL, NULL, 1152, 0, NULL, '测试用例2', 'TC2', 1, NULL, '1', NULL, '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 3, NULL, 1, 2);
-INSERT INTO `task_case` VALUES (4, '2019-09-04 06:57:22', '2019-09-04 14:58:07', 1, NULL, NULL, 1152, 1, NULL, '测试用例', 'TC1', 1, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 3, NULL, 1, 2);
-INSERT INTO `task_case` VALUES (5, '2019-09-04 12:34:04', '2019-09-04 20:34:03', 2, NULL, NULL, NULL, 2, NULL, '测试用例4', 'TC4', 1, NULL, '1', NULL, '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (6, '2019-09-04 12:34:04', '2019-09-04 20:34:03', 2, NULL, NULL, NULL, 1, NULL, '测试用例3', 'TC3', 1, NULL, '1', NULL, '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (7, '2019-09-04 12:34:04', '2019-09-04 20:34:04', 2, NULL, NULL, NULL, 0, NULL, '测试用例2', 'TC2', 1, NULL, '1', NULL, '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (8, '2019-09-04 12:34:04', '2019-09-04 20:34:04', 2, NULL, NULL, NULL, 1, NULL, '测试用例', 'TC1', 1, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (9, '2019-09-04 12:34:31', '2019-09-04 20:38:02', 3, NULL, NULL, NULL, 2, NULL, '测试用例4', 'TC4', 1, NULL, '1', NULL, '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 4, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (10, '2019-09-04 12:34:31', '2019-09-04 20:38:01', 3, NULL, NULL, NULL, 1, NULL, '测试用例3', 'TC3', 1, NULL, '1', NULL, '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (11, '2019-09-04 12:34:31', '2019-09-04 20:38:00', 3, NULL, NULL, NULL, 0, NULL, '测试用例2', 'TC2', 1, NULL, '1', NULL, '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (12, '2019-09-04 12:34:31', '2019-09-04 20:37:59', 3, NULL, NULL, NULL, 1, NULL, '测试用例', 'TC1', 1, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (13, '2019-09-06 08:13:28', '2019-09-06 16:13:39', 4, NULL, NULL, NULL, 1, NULL, '取消删除流程', 'TC7', 7, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击取消按钮\",\"expect\":\"删除确认框收起，没有执行删除操作\"}]}', 1, 4, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (14, '2019-09-06 08:13:28', '2019-09-06 16:13:35', 4, NULL, NULL, NULL, 2, NULL, '删除一条流程', 'TC6', 7, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击确定\",\"expect\":\"删除成功\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case` VALUES (15, '2019-09-06 08:13:28', '2019-09-06 16:13:34', 4, NULL, NULL, NULL, 1, NULL, '新建一条流程', 'TC5', 7, NULL, '1', NULL, '当前在测试环境，用例管理模块', '{\"step_result\":[{\"step\":\"点击新建按钮\",\"expect\":\"弹出新建流程的弹窗页面\"},{\"step\":\"一次输入必填项，点击保存按钮\",\"expect\":\"流程新建成功，跳转到该流程的详情页面\"}]}', 1, 3, NULL, 2, 2);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for task_case_record
@@ -1798,40 +1593,8 @@ CREATE TABLE `task_case_record` (
   `version` int(11) DEFAULT NULL,
   `project_id` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of task_case_record
--- ----------------------------
-BEGIN;
-INSERT INTO `task_case_record` VALUES (1, '2019-09-04 06:57:22', '2019-09-04 14:57:21', 1, 1, NULL, NULL, NULL, 2, NULL, '测试用例4', 'TC4', 1, NULL, '1', NULL, '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 0, NULL, 1, 2);
-INSERT INTO `task_case_record` VALUES (2, '2019-09-04 06:57:22', '2019-09-04 14:57:21', 2, 1, NULL, NULL, NULL, 1, NULL, '测试用例3', 'TC3', 1, NULL, '1', NULL, '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 0, NULL, 1, 2);
-INSERT INTO `task_case_record` VALUES (3, '2019-09-04 06:57:22', '2019-09-04 14:57:21', 3, 1, NULL, NULL, NULL, 0, NULL, '测试用例2', 'TC2', 1, NULL, '1', NULL, '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 0, NULL, 1, 2);
-INSERT INTO `task_case_record` VALUES (4, '2019-09-04 06:57:22', '2019-09-04 14:57:21', 4, 1, NULL, NULL, NULL, 1, NULL, '测试用例', 'TC1', 1, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 0, NULL, 1, 2);
-INSERT INTO `task_case_record` VALUES (5, '2019-09-04 06:58:07', '2019-09-04 14:58:07', 4, 1, NULL, NULL, NULL, 1, NULL, '测试用例', 'TC1', 1, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 3, NULL, 1, 2);
-INSERT INTO `task_case_record` VALUES (6, '2019-09-04 06:58:08', '2019-09-04 14:58:08', 3, 1, NULL, NULL, NULL, 0, NULL, '测试用例2', 'TC2', 1, NULL, '1', NULL, '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 3, NULL, 1, 2);
-INSERT INTO `task_case_record` VALUES (7, '2019-09-04 06:58:10', '2019-09-04 14:58:09', 2, 1, NULL, NULL, NULL, 1, NULL, '测试用例3', 'TC3', 1, NULL, '1', NULL, '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 3, NULL, 1, 2);
-INSERT INTO `task_case_record` VALUES (8, '2019-09-04 06:58:11', '2019-09-04 14:58:10', 1, 1, NULL, NULL, NULL, 2, NULL, '测试用例4', 'TC4', 1, NULL, '1', NULL, '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 4, NULL, 1, 2);
-INSERT INTO `task_case_record` VALUES (9, '2019-09-04 12:34:04', '2019-09-04 20:34:03', 5, 2, NULL, NULL, NULL, 2, NULL, '测试用例4', 'TC4', 1, NULL, '1', NULL, '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (10, '2019-09-04 12:34:04', '2019-09-04 20:34:03', 6, 2, NULL, NULL, NULL, 1, NULL, '测试用例3', 'TC3', 1, NULL, '1', NULL, '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (11, '2019-09-04 12:34:04', '2019-09-04 20:34:04', 7, 2, NULL, NULL, NULL, 0, NULL, '测试用例2', 'TC2', 1, NULL, '1', NULL, '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (12, '2019-09-04 12:34:04', '2019-09-04 20:34:04', 8, 2, NULL, NULL, NULL, 1, NULL, '测试用例', 'TC1', 1, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (13, '2019-09-04 12:34:31', '2019-09-04 20:34:31', 9, 3, NULL, NULL, NULL, 2, NULL, '测试用例4', 'TC4', 1, NULL, '1', NULL, '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (14, '2019-09-04 12:34:31', '2019-09-04 20:34:31', 10, 3, NULL, NULL, NULL, 1, NULL, '测试用例3', 'TC3', 1, NULL, '1', NULL, '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (15, '2019-09-04 12:34:31', '2019-09-04 20:34:31', 11, 3, NULL, NULL, NULL, 0, NULL, '测试用例2', 'TC2', 1, NULL, '1', NULL, '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (16, '2019-09-04 12:34:31', '2019-09-04 20:34:31', 12, 3, NULL, NULL, NULL, 1, NULL, '测试用例', 'TC1', 1, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (17, '2019-09-04 12:37:59', '2019-09-04 20:37:59', 12, 3, NULL, NULL, NULL, 1, NULL, '测试用例', 'TC1', 1, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"11\",\"expect\":\"22\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (18, '2019-09-04 12:38:01', '2019-09-04 20:38:00', 11, 3, NULL, NULL, NULL, 0, NULL, '测试用例2', 'TC2', 1, NULL, '1', NULL, '2', '{\"step_result\":[{\"step\":\"2\",\"expect\":\"2\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (19, '2019-09-04 12:38:02', '2019-09-04 20:38:01', 10, 3, NULL, NULL, NULL, 1, NULL, '测试用例3', 'TC3', 1, NULL, '1', NULL, '3', '{\"step_result\":[{\"step\":\"3\",\"expect\":\"3\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (20, '2019-09-04 12:38:03', '2019-09-04 20:38:02', 9, 3, NULL, NULL, NULL, 2, NULL, '测试用例4', 'TC4', 1, NULL, '1', NULL, '4', '{\"step_result\":[{\"step\":\"4\",\"expect\":\"4\"}]}', 1, 4, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (21, '2019-09-06 08:13:28', '2019-09-06 16:13:27', 13, 4, NULL, NULL, NULL, 1, NULL, '取消删除流程', 'TC7', 7, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击取消按钮\",\"expect\":\"删除确认框收起，没有执行删除操作\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (22, '2019-09-06 08:13:28', '2019-09-06 16:13:27', 14, 4, NULL, NULL, NULL, 2, NULL, '删除一条流程', 'TC6', 7, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击确定\",\"expect\":\"删除成功\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (23, '2019-09-06 08:13:28', '2019-09-06 16:13:27', 15, 4, NULL, NULL, NULL, 1, NULL, '新建一条流程', 'TC5', 7, NULL, '1', NULL, '当前在测试环境，用例管理模块', '{\"step_result\":[{\"step\":\"点击新建按钮\",\"expect\":\"弹出新建流程的弹窗页面\"},{\"step\":\"一次输入必填项，点击保存按钮\",\"expect\":\"流程新建成功，跳转到该流程的详情页面\"}]}', 1, 0, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (24, '2019-09-06 08:13:35', '2019-09-06 16:13:34', 15, 4, NULL, NULL, NULL, 1, NULL, '新建一条流程', 'TC5', 7, NULL, '1', NULL, '当前在测试环境，用例管理模块', '{\"step_result\":[{\"step\":\"点击新建按钮\",\"expect\":\"弹出新建流程的弹窗页面\"},{\"step\":\"一次输入必填项，点击保存按钮\",\"expect\":\"流程新建成功，跳转到该流程的详情页面\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (25, '2019-09-06 08:13:36', '2019-09-06 16:13:35', 14, 4, NULL, NULL, NULL, 2, NULL, '删除一条流程', 'TC6', 7, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击确定\",\"expect\":\"删除成功\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (26, '2019-09-06 08:13:37', '2019-09-06 16:13:36', 13, 4, NULL, NULL, NULL, 1, NULL, '取消删除流程', 'TC7', 7, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击取消按钮\",\"expect\":\"删除确认框收起，没有执行删除操作\"}]}', 1, 3, NULL, 2, 2);
-INSERT INTO `task_case_record` VALUES (27, '2019-09-06 08:13:39', '2019-09-06 16:13:39', 13, 4, NULL, NULL, NULL, 1, NULL, '取消删除流程', 'TC7', 7, NULL, '1', NULL, NULL, '{\"step_result\":[{\"step\":\"点击流程列表后面的删除按钮\",\"expect\":\"弹出删除确认框\"},{\"step\":\"点击取消按钮\",\"expect\":\"删除确认框收起，没有执行删除操作\"}]}', 1, 4, NULL, 2, 2);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for task_tag
@@ -2010,15 +1773,8 @@ CREATE TABLE `version` (
   `comment` varchar(300) DEFAULT NULL,
   `weight` int(11) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
--- ----------------------------
--- Records of version
--- ----------------------------
-BEGIN;
-INSERT INTO `version` VALUES (1, '2019-09-03 12:50:21', '2019-09-03 20:50:20', '1.0.0', 2, '2019-09-03 00:00:00', '2019-10-16 00:00:00', NULL, 1152, 0, 0, '1.0.0', NULL, 1);
-INSERT INTO `version` VALUES (2, '2019-09-04 12:33:11', '2019-09-10 17:30:31', '1.0.1', 2, '2019-09-04 00:00:00', '2019-09-06 00:00:00', '2019-09-10 09:30:31', 1152, 1, 0, '1.0.1版本', NULL, 1);
-COMMIT;
 
 -- ----------------------------
 -- Table structure for virtual_asset

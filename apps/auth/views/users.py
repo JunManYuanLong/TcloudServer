@@ -177,8 +177,6 @@ def user_detail_modify_handler(user_id):
     """
     project_id = request.args.get('project_id')
     oldpassword, newpassword = parse_json_form('modifypassword')
-    if user_id == 1156 or user_id == 1152:
-        return {'code': 0, 'data': [], 'message': '别搞事，弟弟'}
     ret = UserBusiness.modify_password(user_id, oldpassword, newpassword, project_id)
     return json_detail_render(ret)
 
@@ -228,8 +226,6 @@ def user_reset_handler():
     """
     project_id = request.args.get('project_id')
     userid, newpassword = parse_json_form('resetpassword')
-    if userid == 1156 or userid == 1152:
-        return {'code': 0, 'data': [], 'message': '别搞事，弟弟'}
     ret, msg = UserBusiness.reset_password(userid, newpassword, project_id)
 
     return json_detail_render(ret, message=msg)
