@@ -1,7 +1,7 @@
 SET NAMES utf8mb4;
 SET FOREIGN_KEY_CHECKS = 0;
-CREATE DATABASE demo1;
-use demo1;
+CREATE DATABASE demo;
+use demo;
 -- ----------------------------
 -- Table structure for ability
 -- ----------------------------
