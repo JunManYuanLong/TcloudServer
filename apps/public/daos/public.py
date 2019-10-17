@@ -9,11 +9,14 @@ import requests
 from flask import current_app
 from sqlalchemy import func
 
-from apps.public.models.public import Config
-from library.api.db import db
+from apps.public.models.public import Config, RouteStatistics
+from apps.public.settings.config import (
+    OSSAccessKeySecret, OSSAccessKeyId, OSSHost, CMSHost, WX_MESSAGE_URL, USER_ONLINE,
+    ROUTE_STATISTICS,
+)
+from library.api.db import db, t_redis
 from library.api.exceptions import CannotFindObjectException
 from library.trpc import Trpc
-from public_config import OSSAccessKeySecret, OSSAccessKeyId, OSSHost, CMSHost, WX_MESSAGE_URL
 
 user_trpc = Trpc('auth')
 
@@ -160,3 +163,53 @@ def get_flow_config(project_id):
     except json.JSONDecodeError as e:
         current_app.logger.error(e)
         return 101, config
+
+
+def get_count_online():
+    # 最近十分钟在线用户
+    ud_online = t_redis.keys(f'{USER_ONLINE}*')
+    ul = [int(u.replace(USER_ONLINE, '')) for u in ud_online]
+    users = user_trpc.requests(method='get', path='/user', query={'base_info': True})
+    users_dict = {user.get('userid'): user.get('nickname') for user in users}
+    ol_users = [users_dict.get(u) for u in ul]
+    count = len(ul)
+    return 0, {'count': count, 'users': ol_users}
+
+
+def get_statistics_route():
+    # 待修改成缓存类型接口
+    # 接口调用次数
+    routes = t_redis.keys(f'{ROUTE_STATISTICS}*')
+    data = {}
+    for r in routes:
+        r_info = t_redis.hgetall(r)
+        r_name = r.replace(ROUTE_STATISTICS, '')
+        data[r_name] = r_info
+        add_list = []
+        for k, v in r_info.items():
+            k_info = k.split(']')
+            method = k_info[0].replace('[', '')
+            route = k_info[1]
+            ret = RouteStatistics.query.filter_by(service=r_name,
+                                                  route=route,
+                                                  method=method).first()
+            if ret:
+                ret.count = v
+            else:
+                ret = RouteStatistics(
+                    service=r_name,
+                    route=route,
+                    method=method,
+                    count=int(v)
+                )
+            add_list.append(ret)
+        with db.auto_commit():
+            db.session.add_all(add_list)
+    return 0, data
+
+
+def get_statistics_route_job():
+    with db.app.app_context():
+        db.app.logger.info('get_statistics_route_job start')
+        get_statistics_route()
+        db.app.logger.info('get_statistics_route_job stop')
