@@ -1,7 +1,11 @@
 from flask import Blueprint, request, current_app
 
 from apps.auth.auth_require import required
-from apps.public.daos.public import get_config, send_wxmessage, get_token, update_config, get_flow_config, create_config
+from apps.public.daos.public import (
+    get_config, send_wxmessage, get_token, update_config, get_flow_config,
+    create_config, get_count_online,
+    get_statistics_route,
+)
 from apps.public.extentions import validation, parse_json_form
 
 public = Blueprint('public', __name__)
@@ -412,3 +416,63 @@ def flow_query_type_handler():
         'code': code,
         'data': flow_config,
     }
+
+
+@public.route('/online/', methods=['GET'])
+def online_count():
+    """
+    @api {get} /v1/public/online/ 获取 在线人数
+    @apiName GetOnline
+    @apiGroup 公共
+    @apiDescription 获取10分钟内在线人数
+    @apiSuccessExample {json} Success-Response:
+     HTTP/1.1 200 OK
+     {
+        "code": 0,
+        "data": {
+            "count": 3
+        },
+        "message": "ok"
+    }
+    """
+    code, data = get_count_online()
+    return {'code': code, 'data': data}
+
+
+@public.route('/route/statistics/', methods=['GET'])
+def route_statistics():
+    """
+    @api {get} /v1/route/statistics/ 获取 各个接口的调用次数
+    @apiName GetRouteStatistics
+    @apiGroup 公共
+    @apiDescription 获取各个接口的调用次数
+    @apiSuccessExample {json} Success-Response:
+     HTTP/1.1 200 OK
+     {
+        "code": 0,
+        "data": {
+            "boardconfig": {
+                "4": "3"
+            },
+            "datashow": {
+                "correction/first": "2",
+                "fields": "2",
+                "resource/22": "1",
+                "resource/upload/22": "1",
+                "response/kernel": "2"
+            },
+            "public": {
+                "config": "9",
+                "config/5": "1",
+                "flow": "1",
+                "online": "5",
+                "ossauth": "15",
+                "projectconfig": "1",
+                "route/statistics": "4"
+            }
+        },
+        "message": "ok"
+    }
+    """
+    code, data = get_statistics_route()
+    return {'code': code, 'data': data}

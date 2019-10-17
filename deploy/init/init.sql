@@ -587,6 +587,22 @@ CREATE TABLE `flow_source` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Table structure for guest
+-- ----------------------------
+DROP TABLE IF EXISTS `guest`;
+CREATE TABLE `guest` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `ip` varchar(30) DEFAULT NULL,
+  `platform` varchar(30) DEFAULT NULL,
+  `browser` varchar(30) DEFAULT NULL,
+  `version` varchar(30) DEFAULT NULL,
+  `string` varchar(100) DEFAULT NULL,
+  `count` int(11) DEFAULT '1',
+  `creation_time` datetime DEFAULT NULL,
+  `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for interface_api_msg
@@ -1483,6 +1499,20 @@ CREATE TABLE `role_bind_ability` (
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
+-- ----------------------------
+-- Table structure for route_statistics
+-- ----------------------------
+DROP TABLE IF EXISTS `route_statistics`;
+CREATE TABLE `route_statistics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `route` varchar(100) DEFAULT NULL,
+  `service` varchar(30) DEFAULT NULL,
+  `count` int(11) DEFAULT '1',
+  `creation_time` datetime DEFAULT NULL,
+  `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  `method` varchar(30) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for tag

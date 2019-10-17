@@ -7,3 +7,10 @@ class Config(EntityModel):
     content = db.Column(db.Text)  # 内容
     description = db.Column(db.Text)  # 描述
     projectid = db.Column(db.Integer)  # 项目id
+
+
+class RouteStatistics(EntityModel):
+    route = db.Column(db.String(100))  # 接口
+    service = db.Column(db.String(30))  # 服务
+    method = db.Column(db.String(30))  # 请求方式
+    count = db.Column(db.Integer, default=1)  # 次数

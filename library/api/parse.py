@@ -6,11 +6,12 @@ from public_config import SALT, MSG_MAP
 
 
 def format_response(res):
-    if 'code' not in res.keys():
+    res_keys = res.keys()
+    if 'code' not in res_keys:
         res['code'] = 0
-    if 'message' not in res.keys():
+    if 'message' not in res_keys:
         res['message'] = MSG_MAP.get(res['code'], '')
-    if 'data' not in res.keys():
+    if 'data' not in res_keys:
         res['data'] = []
     return res
 
