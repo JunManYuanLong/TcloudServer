@@ -597,7 +597,7 @@ CREATE TABLE `guest` (
   `platform` varchar(30) DEFAULT NULL,
   `browser` varchar(30) DEFAULT NULL,
   `version` varchar(30) DEFAULT NULL,
-  `string` varchar(100) DEFAULT NULL,
+  `string` text,
   `count` int(11) DEFAULT '1',
   `creation_time` datetime DEFAULT NULL,
   `modified_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
