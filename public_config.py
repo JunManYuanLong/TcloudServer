@@ -170,3 +170,6 @@ TCLOUD_FILE_TEMP_PATH = '/tmp/tcloud'
 TCDEVICE_PIC = 'http://picture-url.test/devices_pic/default.png'
 
 TCDEVICE_TIMEOUT = 3
+
+ROUTE_STATISTICS = 'route_'
+USER_ONLINE = 'ol_'
