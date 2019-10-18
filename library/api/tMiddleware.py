@@ -20,9 +20,10 @@ def record_track(path, method):
     if path != '/favicon.ico':
         pl = path.rstrip('/').replace('/v1/', '').split('/', 1)
         t_redis.hincrby(ROUTE_STATISTICS + pl[0], f"[{method}]{pl[-1] if len(pl) > 1 else '/'}", 1)
-    #     ip = request.headers['Remoteip']
-    #     user_agent = request.user_agent
-    #     record_guest(ip, user_agent)
+        # ip = request.headers['Remoteip'] if 'Remoteip' in request.headers else request.remote_addr
+        # if ip != '127.0.0.1':
+            # user_agent = request.user_agent
+            # record_guest(ip, user_agent)
 
 
 # 记录十分钟内在线用户
