@@ -20,7 +20,7 @@ def record_track(path, method):
     if path != '/favicon.ico':
         pl = path.rstrip('/').replace('/v1/', '').split('/', 1)
         t_redis.hincrby(ROUTE_STATISTICS + pl[0], f"[{method}]{pl[-1] if len(pl) > 1 else '/'}", 1)
-    #     ip = request.remote_addr
+    #     ip = request.headers['Remoteip']
     #     user_agent = request.user_agent
     #     record_guest(ip, user_agent)
 

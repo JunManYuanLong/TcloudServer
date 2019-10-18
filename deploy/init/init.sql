@@ -1477,13 +1477,18 @@ CREATE TABLE `role` (
   `weight` int(11) DEFAULT NULL,
   `comment` varchar(300) DEFAULT NULL,
   PRIMARY KEY (`id`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of role
 -- ----------------------------
 BEGIN;
 INSERT INTO `role` VALUES (1, '2019-01-23 14:19:56', '2019-07-11 14:40:14', 'admin', 0, 1, '超级管理员');
+INSERT INTO `role` VALUES (2, '2019-01-23 14:19:56', '2019-07-10 14:56:30', 'dev', 0, 1, '开发');
+INSERT INTO `role` VALUES (3, '2019-01-23 14:19:56', '2019-07-10 14:56:33', 'test', 0, 1, '测试');
+INSERT INTO `role` VALUES (4, '2019-01-23 14:19:56', '2019-07-10 14:56:36', 'opt', 0, 1, '运维');
+INSERT INTO `role` VALUES (5, '2019-02-14 17:41:26', '2019-07-10 14:56:41', 'prod', 0, 1, '产品');
+INSERT INTO `role` VALUES (6, '2019-02-15 11:46:59', '2019-07-10 14:56:47', 'owner', 0, 1, '项目管理员');
 COMMIT;
 
 -- ----------------------------
