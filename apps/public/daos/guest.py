@@ -13,7 +13,8 @@ def get_guest_info():
         Guest.count
     ).all()
     data = row2list(guest_query)
-    return 0, data
+    total = len(data)
+    return 0, data, total
 
 
 def record_guest(ip, user_agent):
