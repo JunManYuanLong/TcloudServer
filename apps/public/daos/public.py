@@ -14,7 +14,8 @@ from apps.public.settings.config import (
     OSSAccessKeySecret, OSSAccessKeyId, OSSHost, CMSHost, WX_MESSAGE_URL, USER_ONLINE,
     ROUTE_STATISTICS,
 )
-from library.api.db import db, t_redis
+from library.api.db import db
+# from library.api.db import t_redis
 from library.api.exceptions import CannotFindObjectException
 from library.trpc import Trpc
 
