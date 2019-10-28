@@ -1,3 +1,5 @@
+from sqlalchemy import desc
+
 from apps.public.models.guest import Guest
 from library.api.db import db
 from library.api.render import row2list
