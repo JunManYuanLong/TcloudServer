@@ -3,7 +3,7 @@ from library.api.db import db
 from library.api.render import row2list
 
 
-def get_guest_info():
+def get_guest_info(page_size, page_index):
     guest_query = Guest.query.add_columns(
         Guest.ip,
         Guest.platform,
@@ -11,9 +11,11 @@ def get_guest_info():
         Guest.string,
         Guest.version,
         Guest.count
-    ).all()
-    data = row2list(guest_query)
-    total = len(data)
+    )
+    total = guest_query.count()
+    guest_info = guest_query.order_by(
+        desc(Guest.id)).limit(int(page_size)).offset(int(page_index - 1) * int(page_size)).all()
+    data = row2list(guest_info)
     return 0, data, total
 
 
