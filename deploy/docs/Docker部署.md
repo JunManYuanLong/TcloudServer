@@ -76,6 +76,7 @@ SQLALCHEMY_DATABASE_URI = 'mysql://root:tc123456@mysql:3306/demo?charset=utf8'
 
 ```
 $ sudo docker-compose up -d kong_database
+$ sudo chmod -R 777 ./kong_database // 不加可能后面会有 network error 的错误
 $ sudo docker-compose run --rm kong kong migrations bootstrap
 ```
 
