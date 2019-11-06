@@ -78,7 +78,7 @@ SQLALCHEMY_DATABASE_URI = 'mysql://root:tc123456@mysql:3306/demo?charset=utf8'
 $ sudo docker-compose up -d kong_database
 // 容器启动以后，数据库会本地挂载到 ./volumes/kong_database 里面
 // 但由于权限问题，初始化数据库会失败，所以要先对该文件赋予权限
-$ sudo cd ./volumes && chmod -R 777 kong_database
+$ sudo chmod -R 777 ./volumes/kong_database
 $ sudo docker-compose run --rm kong kong migrations bootstrap
 ```
 
