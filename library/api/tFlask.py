@@ -1,5 +1,4 @@
 from flask import Flask, jsonify
-from gunicorn.six import iteritems
 
 from library.api.db import db
 # from library.api.db import cache
@@ -40,9 +39,9 @@ class TFlask(Flask):
                     super(Application, self).__init__()
 
                 def load_config(self):
-                    config = dict([(key, value) for key, value in iteritems(self.options)
+                    config = dict([(key, value) for key, value in self.options.items()
                                    if key in self.cfg.settings and value is not None])
-                    for key, value in iteritems(config):
+                    for key, value in config.items():
                         self.cfg.set(key.lower(), value)
 
                 def load(self):
