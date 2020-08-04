@@ -1,7 +1,7 @@
 # Tcloud
 感觉项目不错的点个star，项目持续更新，如有疑问可联系QQ群：839084842
 
-前端传送门：https://github.com/bigbaser/Tcloud
+前端传送门：https://github.com/JunManYuanLong/Tcloud
 
 线上demo地址：http://tcloud-demo.innotechx.com/#/login （账号：admin 密码：123456）
 
@@ -66,7 +66,7 @@
 [快速安装](https://github.com/bigbaser/TcloudServer/wiki/部署)
 
 # 五、LICESE
-See [LICESEN](https://github.com/bigbaser/TcloudServer/blob/master/LICENSE)
+See [LICESEN](https://github.com/JunManYuanLong/TcloudServer/blob/master/LICENSE)
 
 
 #### 联系我们
