@@ -1,10 +1,10 @@
 # Monkey 配置
 
-> https://github.com/tsbxmw/monkey_tcloud
+> https://github.com/JunManYuanLong/monkey_tcloud
 
 http://assets.processon.com/chart_image/5dccc8d9e4b048f2dc8c85d8.png
 
-![](https://github.com/tsbxmw/monkey_tcloud/blob/master/doc/monkey_framework.png)
+![](https://github.com/JunManYuanLong/monkey_tcloud/blob/master/doc/monkey_framework.png)
 
 ## Tcloud 配置
 
