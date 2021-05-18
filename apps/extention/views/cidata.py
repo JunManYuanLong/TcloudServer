@@ -72,12 +72,12 @@ def job_list(ci_id):
                 "job_accuracy": "0.7814",
                 "job_count": 883,
                 "number": 135,
-                "report": "http://ctsssource.oss-cn-shanghai.aliyuncs.com/api_report/2019-07-23/1563857285.html",
+                "report": "http://host:port/report.html",
                 "run_date": "Tue, 23 Jul 2019 12:48:00 GMT",
                 "run_time": "3232.939",
                 "start_name": "timer",
                 "status": 0,
-                "url": "http://ci.automancloud.com/job/mengtui_activity_api/135/"
+                "url": "http://ci.tcloud.com/job/tcloud_activity_api/135/"
             }
         ],
         "message": "ok",
@@ -112,7 +112,7 @@ def description_list(ci_id):
         "data": [
             {
                 "error_count": 1,
-                "error_message": "['oom:\\n', '// OOM: com.mengtuiapp.mall(pid 28586)(dump time: 2019-07-03 12:13:56)]",
+                "error_message": "['oom:\\n', '// OOM: com.tcloud(dump time: 2019-07-03 12:13:56)]",
                 "error_type": "OOM",
                 "id": 5,
                 "monkey_id": 29
@@ -190,9 +190,9 @@ def gain_report():
             {
                 "id": 1,
                 "isexcuting": false,
-                "job": "mengtui_regression_test",
-                "name": "萌推回归测试",
-                "url": "http://ctsssource.oss-cn-shanghai.aliyuncs.com/api_report/2019-07-26/1564128677.html"
+                "job": "tcloud_regression_test",
+                "name": "Tcloud回归测试",
+                "url": "http://host:port/report.html"
             }
         ],
         "message": "ok"
@@ -223,8 +223,8 @@ def gain_config_info():
         "data": [
             {
                 "id": 1,
-                "job": "mengtui_regression_test",
-                "name": "萌推回归测试"
+                "job": "tcloud_regression_test",
+                "name": "Tcloud回归测试"
             }
         ],
         "message": "ok"
