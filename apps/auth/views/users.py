@@ -29,7 +29,7 @@ def user_list_handler():
         "code": 0,
         "data": [
             {
-                "nickname": "朱林林",
+                "nickname": "朱XX",
                 "picture": "",
                 "role": [
                     {
@@ -39,7 +39,7 @@ def user_list_handler():
                     }
                 ],
                 "userid": 106,
-                "username": "zhulinlin@innotechx.com",
+                "username": "zhulinlin@tcloud.com",
                 "userweight": 1
             }
         ],
@@ -83,7 +83,7 @@ def user_index_handler():
         "nickname":"zhangdashan",
         "password":"Aa123456",
         "roleids":[],
-        "email":"zhangsan@innotechx.com",
+        "email":"zhangsan@tcloud.com",
         "telephone":"13131313131"
     }
     @apiSuccessExample {json} Success-Response:
@@ -116,7 +116,7 @@ def user_detail_handler(user_id):
         "data": [
             {
                 "nickname": "张宇",
-                "picture": "https://p.qlogo.cn/bizmail/WRZVs2uMphoxc2918UvZzL31u6A9ibTNuqnIibzJ4GxjWIVVDxHvUGuA/0",
+                "picture": "https://p.tcloud.cn/bizmail/WRZVs2uMphoxc2918UvZzL31u6A9ibTNuqnIibzJ4GxjWIVVDxHvUGuA/0",
                 "role": [
                     {
                         "comment": "超级管理员",
@@ -125,7 +125,7 @@ def user_detail_handler(user_id):
                     }
                 ],
                 "userid": 96,
-                "username": "zhangyu02@innotechx.com",
+                "username": "zhangyu02@tcloud.com",
                 "userweight": 1
             }
         ],
@@ -282,7 +282,7 @@ def login_handler():
      {
         "code": 0,
         "data": {
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndpZ2dlbnMiLCJ1c2VyaWQiOj"
+            "token": "tokenxxxx.xxxxx"
         },
         "message": "ok"
     }
@@ -308,7 +308,7 @@ def renew_token_handler():
      {
         "code": 0,
         "data": {
-            "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6IndpZ2dlbnMiLCJ1"
+            "token": "tokenxxxx.xxxxx"
         },
         "message": "ok"
     }
@@ -335,8 +335,8 @@ def query_user_by_project_handler(pid):
         "code": 0,
         "data": [
             {
-                "nickname": "周培丽hello",
-                "picture": "http://p.qlogo.cn/bizmail/DLjOz7icMnHySKca5HDofMyDUHdjCM28iauyRdCl1DKx9uaJibfqpViang/0",
+                "nickname": "周pl hello",
+                "picture": "http://p.tcloud.cn/bizmail/DLjOz7icMnHySKca5HDofMyDUHdjCM28iauyRdCl1DKx9uaJibfqpViang/0",
                 "role": [
                     {
                         "comment": "超级管理员",
@@ -556,7 +556,7 @@ def project_role_list_user():
         "code": 0,
         "data": [
             {
-                "nickname": "吴茂澍",
+                "nickname": "吴mm",
                 "project": [
                     {
                         "id": 4,
@@ -571,7 +571,7 @@ def project_role_list_user():
                     }
                 ],
                 "userid": 110,
-                "username": "wumaoshu@innotechx.com",
+                "username": "wumaoshu@tcloud.com",
                 "userweight": 1
             }
         ],
@@ -600,8 +600,8 @@ def project_single_role_list_user(user_id):
         "code":0,
         "data":[
             {
-                "email":"wangjinlong@innotechx.com",
-                "nickname":"王金龙",
+                "email":"wangjinlong@tcloud.com",
+                "nickname":"wiggens",
                 "project":[
                     {
                         "id":11,
@@ -683,7 +683,7 @@ def user_all_list():
         "data": [
             {
                 "id": 117,
-                "nickname": "李晓龙"
+                "nickname": "李小龙"
             },
         ],
         "message": "ok"
