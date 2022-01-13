@@ -1,7 +1,7 @@
 version: '3.5'
 services:
   tcloud:
-    image: h1.ywopt.com/ywopt.com/tcloud:demo
+    image: ccr.ccs.tencentyun.com/bigertest/tcloudserver:latest
     restart: always
     volumes:
       - "./local_config.py:/tcloud/local_config.py"
