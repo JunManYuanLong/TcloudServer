@@ -12,13 +12,24 @@ Response: 当服务500，返回None，当出现超时会重复三次，其他错
           服务200时，返回序列化的json对象(字典)  其中一种格式为：{'code': 0, 'data': [], 'message': 'ok'}
 
 """
+import logging
 import os
-from datetime import datetime
+import os.path
+import time
 from os.path import dirname
 
 import requests
 
 from public_config import TSECRET
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
+logfile = "trpc_" + time.strftime('%Y%m%d%H%M', time.localtime(time.time())) + ".log"
+fh = logging.FileHandler(logfile)
+fh.setLevel(logging.DEBUG)
+formatter = logging.Formatter("%(asctime)s - %(filename)s[line:%(lineno)d] - %(levelname)s: %(message)s")
+fh.setFormatter(formatter)
+logger.addHandler(fh)
 
 
 class Trpc:
@@ -44,6 +55,7 @@ class Trpc:
                     return None
                 if r.status_code == 200:
                     result = r.json()
+                    logger.info(result)
                     if result['code'] == 0:
                         return result['data']
                     else:
@@ -51,13 +63,10 @@ class Trpc:
                 elif r.status_code == 500:
                     return None
             except requests.Timeout:
-                now_time = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-                with open('trpc.log', 'a') as f:
-                    f.write(f"[{now_time}]{self.base_url} {path} 服务出现超时，method:{method}, query:{query}, body:{body}\n")
+                logger.error(f"{self.base_url} {path} 服务出现超时，"
+                             f"method:{method}, query:{query}, body:{body}\n")
             except Exception as e:
-                now_time = datetime.strftime(datetime.now(), '%Y-%m-%d %H:%M:%S')
-                with open('trpc.log', 'a') as f:
-                    f.write(
-                        f'[{now_time}]{self.base_url} {path} 服务出现异常, method:{method}, query:{query}, body:{body}, 错误：{e}\n')
+                logger.error(f'{self.base_url} {path} 服务出现异常, '
+                             f'method:{method}, query:{query}, body:{body}, 错误：{e}\n')
                 return None
         return None
